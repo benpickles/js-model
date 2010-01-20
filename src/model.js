@@ -5,7 +5,7 @@ var Model = function(name, methods) {
     this.attributes = attributes || {};
     this.changes = {};
     this.errors = [];
-    $().trigger(this._name + ':initialize', [this]);
+    this.trigger('initialize');
   };
 
   model.prototype = $.extend({
@@ -27,7 +27,7 @@ var Model = function(name, methods) {
     },
 
     changed: function() {
-      $().trigger(this._name + ':changed', [this]);
+      this.trigger('changed');
       return this;
     },
 
@@ -37,7 +37,7 @@ var Model = function(name, methods) {
     },
 
     destroy: function() {
-      $().trigger(this._name +  ':destroy', [this]);
+      this.trigger('destroy');
       return this;
     },
 
@@ -56,7 +56,7 @@ var Model = function(name, methods) {
       this.attributes = $.extend(this.attributes, this.changes);
       this.clearChanges();
 
-      $().trigger(this._name + ':save', [this]);
+      this.trigger('save');
 
       return true;
     },
@@ -72,8 +72,13 @@ var Model = function(name, methods) {
       return params;
     },
 
+    trigger: function(name) {
+      $().trigger([this._name, name].join(':'), [this]);
+    },
+
     valid: function() {
-      return this.validate().errors.length == 0;
+      this.validate();
+      return this.errors.length == 0;
     },
 
     validate: function() {
