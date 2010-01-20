@@ -25,3 +25,8 @@ task :minify do
     end
   end
 end
+
+desc 'Run tests.'
+task :test do
+  `open test/index.html`
+end
