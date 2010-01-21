@@ -5,7 +5,7 @@ var ModelCollection = function() {
 ModelCollection.prototype = {
   add: function(model) {
     this.collection.push(model);
-    return true;
+    return this;
   },
 
   all: function() {
