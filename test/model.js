@@ -80,9 +80,6 @@ test("events", function() {
   var Post = Model("post");
   var state;
 
-  $().bind("post:changed", function() {
-    state = "changed";
-  });
   $().bind("post:initialize", function() {
     state = "initialized";
   });
@@ -97,8 +94,4 @@ test("events", function() {
   post.save();
 
   equal("saved", state);
-
-  post.changed();
-
-  equal("changed", state);
 });

@@ -125,22 +125,27 @@ To add your own validations you should define a custom `validate` method that ad
 If the model is valid `save` will merge any `changes` with `attributes`.
 
     var post = new Post({ title: "Foo" })
-    post.save()                 // => false
 
-    post.attributes             // => { title: "Foo" }
-    post.changes                // => { title: "Bar" }
+    // Post requires title to be "Bar" - see above
+    post.save()                 // => false
 
     // Make the model valid and save
     post.attr("title", "Bar")
+    post.attributes             // => { title: "Foo" }
+    post.changes                // => { title: "Bar" }
     post.save()                 // => true
 
     post.attributes             // => { title: "Bar" }
     post.changes                // => {}
 
-### Listeners
+### Events
 
-Through its lifetime a model will trigger a number of events for you to bind to:
+Through its lifetime a model will trigger some events for you to bind to:
 
  * `model_name:initialize`
  * `model_name:save`
- * `model_name:changed`
+
+Custom events can also be triggered by calling `trigger()`:
+
+    post.trigger("foo")
+    // => "post:foo" event triggered

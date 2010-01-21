@@ -26,11 +26,6 @@ var Model = function(name, methods) {
       };
     },
 
-    changed: function() {
-      this.trigger('changed');
-      return this;
-    },
-
     clearChanges: function() {
       this.changes = {};
       return this;
@@ -74,6 +69,7 @@ var Model = function(name, methods) {
 
     trigger: function(name) {
       $().trigger([this._name, name].join(':'), [this]);
+      return this;
     },
 
     valid: function() {
