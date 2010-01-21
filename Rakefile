@@ -1,4 +1,5 @@
-task :default => :minify
+desc 'Run test task.'
+task :default => :test
 
 desc 'Create minified versions of source files.'
 task :minify do
