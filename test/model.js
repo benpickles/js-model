@@ -80,10 +80,10 @@ test("events", function() {
   var Post = Model("post");
   var state;
 
-  $().bind("post:initialize", function() {
+  $(document).bind("post:initialize", function() {
     state = "initialized";
   });
-  $().bind("post:save", function() {
+  $(document).bind("post:save", function() {
     state = "saved";
   });
 

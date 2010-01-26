@@ -68,7 +68,7 @@ var Model = function(name, methods) {
     },
 
     trigger: function(name) {
-      $().trigger([this._name, name].join(':'), [this]);
+      $(document).trigger([this._name, name].join(':'), [this]);
       return this;
     },
 
