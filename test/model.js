@@ -86,12 +86,16 @@ test("events", function() {
   $(document).bind("post:save", function() {
     state = "saved";
   });
+  $(document).bind("post:custom", function() {
+    state = "custom";
+  });
 
   var post = new Post({ title: "Foo", body: "..." });
-
   equal("initialized", state);
 
   post.save();
-
   equal("saved", state);
+
+  post.trigger("custom");
+  equal("custom", state);
 });
