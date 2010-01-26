@@ -5,12 +5,12 @@ test("attributes", function() {
   var post;
 
   post = new Post();
-  same({}, post.attributes);
+  same(post.attributes, {});
 
   post = new Post({ title: "Foo", body: "..." });
-  same({ title: "Foo", body: "..." }, post.attributes);
+  same(post.attributes, { title: "Foo", body: "..." });
 
-  equals("Foo", post.attr("title"));
+  equals(post.attr("title"), "Foo");
 });
 
 test("attr and changes", function() {
@@ -21,25 +21,25 @@ test("attr and changes", function() {
   post.attr("title", "Bar");
 
   // Check attributes and changes.
-  equals("Bar", post.attr("title"));
-  same({ title: "Foo", body: "..." }, post.attributes, "attributes should be unchanged");
-  same({ title: "Bar" }, post.changes);
+  equals(post.attr("title"), "Bar");
+  same(post.attributes, { title: "Foo", body: "..." }, "attributes should be unchanged");
+  same(post.changes, { title: "Bar" });
 
   post.clearChanges();
 
-  equals("Foo", post.attr("title"));
-  same({}, post.changes);
+  equals(post.attr("title"), "Foo");
+  same(post.changes, {});
 
   // Set again
   post.attr("title", "Bar");
 
-  same({ title: "Foo", body: "..." }, post.attributes);
-  same({ title: "Bar" }, post.changes);
+  same(post.attributes, { title: "Foo", body: "..." });
+  same(post.changes, { title: "Bar" });
 
   post.save();
 
-  same({ title: "Bar", body: "..." }, post.attributes);
-  same({}, post.changes);
+  same(post.attributes, { title: "Bar", body: "..." });
+  same(post.changes, {});
 });
 
 test("custom methods", function() {
@@ -51,7 +51,7 @@ test("custom methods", function() {
 
   var post = new Post();
 
-  equal("foo", post.foo());
+  equals(post.foo(), "foo");
 });
 
 test("validations/save", function() {
@@ -73,7 +73,7 @@ test("validations/save", function() {
 
   ok(post.valid());
   ok(post.save());
-  same({}, post.changes);
+  same(post.changes, {});
 });
 
 test("events", function() {
@@ -91,11 +91,11 @@ test("events", function() {
   });
 
   var post = new Post({ title: "Foo", body: "..." });
-  equal("initialized", state);
+  equals(state, "initialized");
 
   post.save();
-  equal("saved", state);
+  equals(state, "saved");
 
   post.trigger("custom");
-  equal("custom", state);
+  equals(state, "custom");
 });

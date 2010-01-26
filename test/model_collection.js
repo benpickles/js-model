@@ -7,17 +7,17 @@ test("ModelCollection", function() {
   var post1 = new Post({ id: 1 });
   var post2 = new Post({ id: 2 });
 
-  same([], PostCollection.all());
-  equal(null, PostCollection.find(1));
-  equal(null, PostCollection.first());
+  same(PostCollection.all(), []);
+  equals(PostCollection.find(1), null);
+  equals(PostCollection.first(), null);
 
   PostCollection.add(post1).add(post2);
 
-  same([post1, post2], PostCollection.all());
-  same(post1, PostCollection.find(1));
-  same(post2, PostCollection.find(2));
-  same(null, PostCollection.find(3));
-  same(post1, PostCollection.first());
+  same(PostCollection.all(), [post1, post2]);
+  same(PostCollection.find(1), post1);
+  same(PostCollection.find(2), post2);
+  same(PostCollection.find(3), null);
+  same(PostCollection.first(), post1);
 });
 
 test("Custom methods", function() {
@@ -27,5 +27,5 @@ test("Custom methods", function() {
     }
   });
 
-  equal("foo", PostCollection.foo());
+  equals(PostCollection.foo(), "foo");
 });
