@@ -26,13 +26,31 @@ var Model = function(name, methods) {
       };
     },
 
+    callPersistMethod: function(method, success, failure) {
+      if (this.persistence) {
+        var self = this;
+        var wrappedSuccess = function() {
+          // Run the supplied callback.
+          if (success) success.apply(self, arguments);
+
+          // Now trigger an event.
+          self.trigger(method);
+        };
+
+        this.persistence[method](this, wrappedSuccess, failure);
+      } else {
+        // No persistence adapter is defined, just trigger the event.
+        this.trigger(method);
+      };
+    },
+
     clearChanges: function() {
       this.changes = {};
       return this;
     },
 
-    destroy: function() {
-      this.trigger('destroy');
+    destroy: function(success, failure) {
+      this.callPersistMethod("destroy", success, failure);
       return this;
     },
 
@@ -44,14 +62,15 @@ var Model = function(name, methods) {
       return this.id() == null;
     },
 
-    save: function() {
+    save: function(success, failure) {
       if (!this.valid()) return false;
 
       // Merge any changes into attributes and clear changes.
       this.attributes = $.extend(this.attributes, this.changes);
       this.clearChanges();
 
-      this.trigger(this.newRecord() ? "create" : "update");
+      var method = this.newRecord() ? "create" : "update";
+      this.callPersistMethod(method, success, failure);
 
       return true;
     },

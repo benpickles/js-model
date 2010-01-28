@@ -138,6 +138,27 @@ If the model is valid `save` will merge any `changes` with `attributes`.
     post.attributes             // => { title: "Bar" }
     post.changes                // => {}
 
+### Persistence
+
+It's easy to persist a model's data to the server by defining an adapter when creating the class - a simple REST adapter is provided.
+
+    var Post = Model("post", {
+      persistence: ModelRestAdapter("/posts")
+    })
+
+    var post = new Post({ title: "Foo" })
+    post.newRecord()  // => true
+
+    post.save()
+    // Ajax POST request made to /posts
+
+    // The model's newly assigned id is extracted from the Ajax response
+    post.id()         // => 1
+    post.newRecord()  // => false
+
+    post.attr("title", "Bar").save()
+    // Ajax PUT request made to /posts/1
+
 ### Events
 
 Through its lifetime a model will trigger some events for you to bind to:
