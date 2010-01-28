@@ -143,7 +143,9 @@ If the model is valid `save` will merge any `changes` with `attributes`.
 Through its lifetime a model will trigger some events for you to bind to:
 
  * `model_name:initialize`
- * `model_name:save`
+ * `model_name:create`
+ * `model_name:update`
+ * `model_name:destroy`
 
 Custom events can also be triggered by calling `trigger()`:
 

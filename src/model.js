@@ -51,7 +51,7 @@ var Model = function(name, methods) {
       this.attributes = $.extend(this.attributes, this.changes);
       this.clearChanges();
 
-      this.trigger('save');
+      this.trigger(this.newRecord() ? "create" : "update");
 
       return true;
     },

@@ -83,19 +83,32 @@ test("events", function() {
   $(document).bind("post:initialize", function() {
     state = "initialized";
   });
-  $(document).bind("post:save", function() {
-    state = "saved";
+  $(document).bind("post:create", function() {
+    state = "created";
+  });
+  $(document).bind("post:update", function() {
+    state = "updated";
   });
   $(document).bind("post:custom", function() {
     state = "custom";
+  });
+  $(document).bind("post:destroy", function() {
+    state = "destroyed";
   });
 
   var post = new Post({ title: "Foo", body: "..." });
   equals(state, "initialized");
 
   post.save();
-  equals(state, "saved");
+  equals(state, "created");
+
+  post.attributes.id = 1;
+  post.save();
+  equals(state, "updated");
 
   post.trigger("custom");
   equals(state, "custom");
+
+  post.destroy();
+  equals(state, "destroyed");
 });
