@@ -25,7 +25,7 @@ test("attr and changes", function() {
   same(post.attributes, { title: "Foo", body: "..." }, "attributes should be unchanged");
   same(post.changes, { title: "Bar" });
 
-  equal(post.clearChanges(), post, "returns self");
+  equal(post.reset(), post, "returns self");
 
   equals(post.attr("title"), "Foo");
   same(post.changes, {});

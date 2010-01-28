@@ -66,7 +66,7 @@ Attributes set with the `attr` method are written to an intermediary object rath
     post.attr("title", "Bar")
     post.attributes             // => { title: "Foo" }
     post.changes                // => { title: "Bar" }
-    post.clearChanges()
+    post.reset()
     post.changes                // => {}
 
 ### Custom Methods

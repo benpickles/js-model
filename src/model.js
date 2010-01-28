@@ -50,11 +50,6 @@ var Model = function(name, methods) {
       };
     },
 
-    clearChanges: function() {
-      this.changes = {};
-      return this;
-    },
-
     destroy: function(success, failure) {
       this.callPersistMethod("destroy", success, failure);
       return this;
@@ -68,12 +63,17 @@ var Model = function(name, methods) {
       return this.id() == null;
     },
 
+    reset: function() {
+      this.changes = {};
+      return this;
+    },
+
     save: function(success, failure) {
       if (!this.valid()) return false;
 
       // Merge any changes into attributes and clear changes.
       this.attributes = $.extend(this.attributes, this.changes);
-      this.clearChanges();
+      this.reset();
 
       var method = this.newRecord() ? "create" : "update";
       this.callPersistMethod(method, success, failure);
