@@ -32,6 +32,33 @@ test("Model.Collection", function() {
   ok(!PostCollection.remove(null));
 });
 
+test("detect, select", function() {
+  var Post = Model('post');
+  var PostCollection = Model.Collection();
+
+  var post1 = new Post({ id: 1, title: "Foo" });
+  var post2 = new Post({ id: 2, title: "Bar" });
+  var post3 = new Post({ id: 3, title: "Bar" });
+
+  PostCollection.add(post1).add(post2).add(post3);
+
+  equal(PostCollection.detect(function(model) {
+    return model.attr("title") == "Bar";
+  }), post2);
+
+  equal(PostCollection.detect(function(model) {
+    return model.attr("title") == "Baz";
+  }), null);
+
+  same(PostCollection.select(function(model) {
+    return model.attr("title") == "Bar";
+  }), [post2, post3]);
+
+  same(PostCollection.select(function(model) {
+    return model.attr("title") == "Baz";
+  }), []);
+})
+
 test("Custom methods", function() {
   var PostCollection = Model.Collection({
     foo: function() {

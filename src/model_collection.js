@@ -15,10 +15,14 @@ Model.Collection = function(methods) {
       return this.collection;
     },
 
+    detect: function(func) {
+      return _.detect(this.collection, func) || null;
+    },
+
     find: function(id) {
-      return _.detect(this.collection, function(model) {
+      return this.detect(function(model) {
         return model.id() == id;
-      }) || null;
+      });
     },
 
     first: function() {
@@ -34,6 +38,10 @@ Model.Collection = function(methods) {
       } else {
         return false;
       };
+    },
+
+    select: function(func) {
+      return _.select(this.collection, func);
     }
   }, methods);
 
