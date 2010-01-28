@@ -1,8 +1,8 @@
-module("ModelCollection");
+module("Model.Collection");
 
-test("ModelCollection", function() {
+test("Model.Collection", function() {
   var Post = Model('post');
-  var PostCollection = ModelCollection();
+  var PostCollection = Model.Collection();
 
   var post1 = new Post({ id: 1 });
   var post2 = new Post({ id: 2 });
@@ -15,23 +15,25 @@ test("ModelCollection", function() {
   PostCollection.add(post1).add(post2).add(post3);
 
   same(PostCollection.all(), [post1, post2, post3]);
-  same(PostCollection.find(1), post1);
-  same(PostCollection.find(2), post2);
-  same(PostCollection.find(3), post3);
-  same(PostCollection.find(4), null);
-  same(PostCollection.first(), post1);
+  equal(PostCollection.find(1), post1);
+  equal(PostCollection.find(2), post2);
+  equal(PostCollection.find(3), post3);
+  equal(PostCollection.find(4), null);
+  equal(PostCollection.first(), post1);
 
-  PostCollection.remove(2);
+  ok(PostCollection.remove(2));
 
   same(PostCollection.all(), [post1, post3]);
-  same(PostCollection.find(1), post1);
-  same(PostCollection.find(2), null);
-  same(PostCollection.find(3), post3);
-  same(PostCollection.find(4), null);
+  equal(PostCollection.find(1), post1);
+  equal(PostCollection.find(2), null);
+  equal(PostCollection.find(3), post3);
+  equal(PostCollection.find(4), null);
+
+  ok(!PostCollection.remove(null));
 });
 
 test("Custom methods", function() {
-  var PostCollection = ModelCollection({
+  var PostCollection = Model.Collection({
     foo: function() {
       return "foo";
     }

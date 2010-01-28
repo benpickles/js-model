@@ -35,7 +35,7 @@ var Model = function(name, methods) {
     callPersistMethod: function(method, success, failure) {
       var self = this;
 
-      // Automatically manage adding and removing from a ModelCollection if
+      // Automatically manage adding and removing from a Model.Collection if
       // one is defined.
       var manageCollection = function() {
         if (!self.collection) return;

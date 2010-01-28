@@ -1,4 +1,4 @@
-var ModelCollection = function(methods) {
+Model.Collection = function(methods) {
   // Constructor.
   var model_collection = function() {
     this.collection = [];

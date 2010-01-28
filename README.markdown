@@ -143,7 +143,7 @@ If the model is valid `save` will merge any `changes` with `attributes`.
 It's easy to persist a model's data to the server by defining an adapter when creating the class - a simple REST adapter is provided.
 
     var Post = Model("post", {
-      persistence: ModelRestAdapter("/posts")
+      persistence: Model.RestAdapter("/posts")
     })
 
     var post = new Post({ title: "Foo" })

@@ -126,7 +126,7 @@ test("events", function() {
 });
 
 test("collection", function() {
-  var PostCollection = ModelCollection();
+  var PostCollection = Model.Collection();
   var Post = Model("post", {
     collection: PostCollection
   });

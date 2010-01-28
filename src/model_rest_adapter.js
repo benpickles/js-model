@@ -1,4 +1,4 @@
-var ModelRestAdapter = function(resource) {
+Model.RestAdapter = function(resource) {
   var model_resource = function() {
     this.resource = resource;
   };
