@@ -18,14 +18,14 @@ test("attr and changes", function() {
   var post = new Post({ title: "Foo", body: "..." });
 
   // Set attribute using attr.
-  post.attr("title", "Bar");
+  equal(post.attr("title", "Bar"), post, "returns self");
 
   // Check attributes and changes.
   equals(post.attr("title"), "Bar");
   same(post.attributes, { title: "Foo", body: "..." }, "attributes should be unchanged");
   same(post.changes, { title: "Bar" });
 
-  post.clearChanges();
+  equal(post.clearChanges(), post, "returns self");
 
   equals(post.attr("title"), "Foo");
   same(post.changes, {});
@@ -36,9 +36,19 @@ test("attr and changes", function() {
   same(post.attributes, { title: "Foo", body: "..." });
   same(post.changes, { title: "Bar" });
 
-  post.save();
+  ok(post.save());
 
   same(post.attributes, { title: "Bar", body: "..." });
+  same(post.changes, {});
+
+  equal(post.attr({ title: "Foo", bar: "Bar" }), post, "returns self");
+
+  same(post.attributes, { title: "Bar", body: "..." });
+  same(post.changes, { title: "Foo", bar: "Bar" });
+
+  ok(post.save());
+
+  same(post.attributes, { bar: "Bar", body: "...", title: "Foo" });
   same(post.changes, {});
 });
 

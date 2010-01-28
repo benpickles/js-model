@@ -19,6 +19,12 @@ var Model = function(name, methods) {
           this.changes[name] = value;
         };
         return this;
+      } else if (typeof name == "object") {
+        // Mass-assign attributes.
+        for (var key in name) {
+          this.attr(key, name[key]);
+        };
+        return this;
       } else {
         // Changes take precedent over attributes.
         var change = this.changes[name];
