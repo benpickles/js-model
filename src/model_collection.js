@@ -26,7 +26,7 @@ var ModelCollection = function(methods) {
     },
 
     remove: function(id) {
-      var ids = _.pluck(this.collection, 'id');
+      var ids = _.invoke(this.collection, 'id');
       var index = _.indexOf(ids, id);
       if (index > -1) {
         this.collection.splice(index, 1);
