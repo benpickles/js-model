@@ -122,3 +122,21 @@ test("events", function() {
   post.destroy();
   equals(state, "destroyed");
 });
+
+test("collection", function() {
+  var PostCollection = ModelCollection();
+  var Post = Model("post", {
+    collection: PostCollection
+  });
+
+  ok(PostCollection.first() == null, "collection starts empty");
+
+  var post = new Post();
+  ok(PostCollection.first() == null, "collection is unaffected");
+
+  post.save();
+  same(PostCollection.first(), post, "post added to collection automatically");
+
+  post.destroy();
+  ok(PostCollection.first() == null, "post removed from collection automatically");
+});

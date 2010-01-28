@@ -33,9 +33,23 @@ var Model = function(name, methods) {
     },
 
     callPersistMethod: function(method, success, failure) {
+      var self = this;
+
+      // Automatically manage adding and removing from a ModelCollection if
+      // one is defined.
+      var manageCollection = function() {
+        if (!self.collection) return;
+        if (method == "create") {
+          self.collection.add(self);
+        } else if (method == "destroy") {
+          self.collection.remove(self.id());
+        };
+      };
+
       if (this.persistence) {
-        var self = this;
         var wrappedSuccess = function() {
+          manageCollection();
+
           // Run the supplied callback.
           if (success) success.apply(self, arguments);
 
@@ -45,6 +59,7 @@ var Model = function(name, methods) {
 
         this.persistence[method](this, wrappedSuccess, failure);
       } else {
+        manageCollection();
         // No persistence adapter is defined, just trigger the event.
         this.trigger(method);
       };
