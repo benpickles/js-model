@@ -163,12 +163,12 @@ It's easy to persist a model's data to the server by defining an adapter when cr
 
 Through its lifetime a model will trigger some events for you to bind to:
 
- * `model_name:initialize`
- * `model_name:create`
- * `model_name:update`
- * `model_name:destroy`
+ * `initialize.model_name`
+ * `create.model_name`
+ * `update.model_name`
+ * `destroy.model_name`
 
 Custom events can also be triggered by calling `trigger()`:
 
     post.trigger("foo")
-    // => "post:foo" event triggered
+    // => "foo.post" event triggered

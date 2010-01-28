@@ -90,19 +90,19 @@ test("events", function() {
   var Post = Model("post");
   var state;
 
-  $(document).bind("post:initialize", function() {
+  $(document).bind("initialize.post", function() {
     state = "initialized";
   });
-  $(document).bind("post:create", function() {
+  $(document).bind("create.post", function() {
     state = "created";
   });
-  $(document).bind("post:update", function() {
+  $(document).bind("update.post", function() {
     state = "updated";
   });
-  $(document).bind("post:custom", function() {
+  $(document).bind("custom.post", function() {
     state = "custom";
   });
-  $(document).bind("post:destroy", function() {
+  $(document).bind("destroy.post", function() {
     state = "destroyed";
   });
 
@@ -121,6 +121,8 @@ test("events", function() {
 
   post.destroy();
   equals(state, "destroyed");
+
+  $(document).unbind('.post');
 });
 
 test("collection", function() {
