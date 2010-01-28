@@ -50,11 +50,16 @@ var Model = function(name, methods) {
         var wrappedSuccess = function() {
           manageCollection();
 
+          // Store the return value of the success callback.
+          var value;
+
           // Run the supplied callback.
-          if (success) success.apply(self, arguments);
+          if (success) value = success.apply(self, arguments);
 
           // Now trigger an event.
           self.trigger(method);
+
+          return value;
         };
 
         this.persistence[method](this, wrappedSuccess, failure);

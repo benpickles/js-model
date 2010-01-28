@@ -142,3 +142,50 @@ test("collection", function() {
   post.destroy();
   ok(PostCollection.first() == null, "post removed from collection automatically");
 });
+
+test("persistence adapter", function() {
+  var results = [];
+  var post;
+
+  var TestPersistanceAdapter = {
+    create: function(model, success, failure) {
+      equal(model, post);
+      results.push("create");
+      results.push(success());
+      results.push(failure());
+    },
+
+    destroy: function(model, success, failure) {
+      equal(model, post);
+      results.push("destroy");
+      results.push(success());
+      results.push(failure());
+    },
+
+    update: function(model, success, failure) {
+      equal(model, post);
+      results.push("update");
+      results.push(success());
+      results.push(failure());
+    }
+  };
+
+  var Post = Model("post", {
+    persistence: TestPersistanceAdapter
+  });
+
+  var success = function() { return "success"; };
+  var failure = function() { return "failure"; };
+
+  post = new Post();
+  post.save(success, failure);
+  post.attributes.id = 1;
+  post.save(success, failure);
+  post.destroy(success, failure);
+
+  same(results, [
+    "create", "success", "failure",
+    "update", "success", "failure",
+    "destroy", "success", "failure"
+  ]);
+});
