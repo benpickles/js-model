@@ -1,9 +1,9 @@
-Model.RestAdapter = function(resource) {
+Model.RestAdapter = function(resource, methods) {
   var model_resource = function() {
     this.resource = resource;
   };
 
-  model_resource.prototype = {
+  model_resource.prototype = $.extend({
     create: function(model, success, failure) {
       var self = this;
       var wrappedSuccess = function(model, xhr) {
@@ -53,7 +53,7 @@ Model.RestAdapter = function(resource) {
         }
       });
     }
-  };
+  }, methods);
 
   return new model_resource();
 };
