@@ -42,20 +42,32 @@ test("detect, select", function() {
 
   PostCollection.add(post1).add(post2).add(post3);
 
-  equal(PostCollection.detect(function(model) {
-    return model.attr("title") == "Bar";
+  var indexes = [];
+
+  equal(PostCollection.detect(function(i) {
+    indexes.push(i)
+    return this.attr("title") == "Bar";
   }), post2);
 
-  equal(PostCollection.detect(function(model) {
-    return model.attr("title") == "Baz";
+  same(indexes, [0, 1]);
+  indexes = [];
+
+  equal(PostCollection.detect(function(i) {
+    indexes.push(i)
+    return this.attr("title") == "Baz";
   }), null);
 
-  same(PostCollection.select(function(model) {
-    return model.attr("title") == "Bar";
+  same(indexes, [0, 1, 2]);
+  indexes = [];
+
+  same(PostCollection.select(function(i) {
+    indexes.push(i)
+    return this.attr("title") == "Bar";
   }), [post2, post3]);
 
-  same(PostCollection.select(function(model) {
-    return model.attr("title") == "Baz";
+  same(PostCollection.select(function(i) {
+    indexes.push(i)
+    return this.attr("title") == "Baz";
   }), []);
 })
 

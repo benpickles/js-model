@@ -16,12 +16,14 @@ Model.Collection = function(methods) {
     },
 
     detect: function(func) {
-      return _.detect(this.collection, func) || null;
+      return _.detect(this.collection, function(model, i) {
+        return func.call(model, i);
+      }) || null;
     },
 
     find: function(id) {
-      return this.detect(function(model) {
-        return model.id() == id;
+      return this.detect(function() {
+        return this.id() == id;
       });
     },
 
@@ -41,7 +43,9 @@ Model.Collection = function(methods) {
     },
 
     select: function(func) {
-      return _.select(this.collection, func);
+      return _.select(this.collection, function(model, i) {
+        return func.call(model, i);
+      });
     }
   }, methods);
 
