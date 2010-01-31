@@ -143,11 +143,11 @@ test("collection", function() {
   ok(PostCollection.first() == null, "post removed from collection automatically");
 });
 
-test("persistence adapter", function() {
+test("persistence", function() {
   var results = [];
   var post;
 
-  var TestPersistanceAdapter = {
+  var TestPersistance = {
     create: function(model, success, failure) {
       equal(model, post);
       results.push("create");
@@ -171,7 +171,7 @@ test("persistence adapter", function() {
   };
 
   var Post = Model("post", {
-    persistence: TestPersistanceAdapter
+    persistence: TestPersistance
   });
 
   var success = function() { return "success"; };

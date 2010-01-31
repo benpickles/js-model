@@ -1,4 +1,4 @@
-Model.RestAdapter = function(resource, methods) {
+Model.RestPersistence = function(resource, methods) {
   var model_resource = function() {
     this.resource = resource;
   };
