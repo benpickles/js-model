@@ -5,14 +5,12 @@ Model.RestPersistence = function(resource, methods) {
 
   model_resource.prototype = $.extend({
     create: function(model, success, failure) {
-      var self = this;
-      var wrappedSuccess = function(model, xhr) {
-        // Set model's id from the returned location header.
-        model.attributes.id =
-          self.idFromLocation(xhr.getResponseHeader('Location'));
+      var wrappedSuccess = function(data) {
+        // Remote data is the definitive source.
+        this.update(data);
 
         // Now run the supplied success callback.
-        if (success) success(model, xhr);
+        if (success) success.apply(this, arguments);
       };
 
       return this.xhr('POST', this.create_path(model), model, wrappedSuccess, failure);
@@ -26,13 +24,16 @@ Model.RestPersistence = function(resource, methods) {
       return this.xhr('DELETE', this.update_path(model), null, success, failure);
     },
 
-    idFromLocation: function(location) {
-      var id = location.match(/\/(\d+)$/)[1];
-      return id ? parseInt(id) : null;
-    },
-
     update: function(model, success, failure) {
-      return this.xhr('PUT', this.update_path(model), model, success, failure);
+      var wrappedSuccess = function(data) {
+        // Remote data is the definitive source.
+        this.update(data);
+
+        // Now run the supplied success callback.
+        if (success) success.apply(this, arguments);
+      };
+
+      return this.xhr('PUT', this.update_path(model), model, wrappedSuccess, failure);
     },
 
     update_path: function(model) {
@@ -43,13 +44,13 @@ Model.RestPersistence = function(resource, methods) {
       return $.ajax({
         type: method,
         url: url,
+        dataType: "json",
         data: model ? model.toParam() : null,
-        complete: function(xhr, status) {
-          if (success && status == "success") {
-            success(model, xhr);
-          } else if (failure) {
-            failure(model, xhr);
-          };
+        failure: function() {
+          if (failure) failure.apply(model, arguments);
+        },
+        success: function() {
+          if (success) success.apply(model, arguments);
         }
       });
     }

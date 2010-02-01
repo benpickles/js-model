@@ -92,8 +92,7 @@ var Model = function(name, methods) {
       if (!this.valid()) return false;
 
       // Merge any changes into attributes and clear changes.
-      this.attributes = $.extend(this.attributes, this.changes);
-      this.reset();
+      this.update(this.changes).reset();
 
       var method = this.newRecord() ? "create" : "update";
       this.callPersistMethod(method, success, failure);
@@ -114,6 +113,11 @@ var Model = function(name, methods) {
 
     trigger: function(name) {
       $(document).trigger([name, this._name].join('.'), [this]);
+      return this;
+    },
+
+    update: function(attributes) {
+      $.extend(this.attributes, attributes);
       return this;
     },
 
