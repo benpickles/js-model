@@ -1,12 +1,25 @@
 var Model = function(name, methods) {
-  // Constructor.
+  // The model constructor.
   var model = function(attributes) {
     this._name = name;
     this.attributes = attributes || {};
     this.changes = {};
+    this.collection = collection;
     this.errors = [];
     this.trigger('initialize');
   };
+
+  // Use a custom collection object if specified, otherwise create a default.
+  var collection;
+  if (methods && methods.collection) {
+    collection = methods.collection;
+    delete methods.collection;
+  } else {
+    collection = Model.Collection();
+  };
+
+  // Borrow the Collection's methods and add to the model as "class" methods.
+  model = $.extend(model, collection);
 
   model.prototype = $.extend({
     attr: function(name, value) {

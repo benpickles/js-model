@@ -125,22 +125,19 @@ test("events", function() {
   $(document).unbind('.post');
 });
 
-test("collection", function() {
-  var PostCollection = Model.Collection();
-  var Post = Model("post", {
-    collection: PostCollection
-  });
+test('model collection "class" methods', function() {
+  var Post = Model("post");
 
-  ok(PostCollection.first() == null, "collection starts empty");
+  ok(Post.first() == null, "collection starts empty");
 
   var post = new Post();
-  ok(PostCollection.first() == null, "collection is unaffected");
+  ok(Post.first() == null, "collection is unaffected");
 
   post.save();
-  same(PostCollection.first(), post, "post added to collection automatically");
+  same(Post.first(), post, "post added to collection automatically");
 
   post.destroy();
-  ok(PostCollection.first() == null, "post removed from collection automatically");
+  ok(Post.first() == null, "post removed from collection automatically");
 });
 
 test("persistence", function() {
