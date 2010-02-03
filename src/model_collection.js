@@ -11,8 +11,10 @@ Model.Collection = function(methods) {
 
   // Define default and any custom methods.
   model_collection.prototype = $.extend({
-    add: function(model) {
-      this.collection.push(model);
+    add: function() {
+      for (var i = 0; i < arguments.length; i++) {
+        this.collection.push(arguments[i]);
+      };
       return this;
     },
 

@@ -12,7 +12,7 @@ test("Model.Collection", function() {
   equals(PostCollection.find(1), null);
   equals(PostCollection.first(), null);
 
-  PostCollection.add(post1).add(post2).add(post3);
+  PostCollection.add(post1, post2).add(post3);
 
   same(PostCollection.all(), [post1, post2, post3]);
   equal(PostCollection.find(1), post1);
@@ -40,7 +40,7 @@ test("detect, select, first, last (and chaining)", function() {
   var post2 = new Post({ id: 2, title: "Bar" });
   var post3 = new Post({ id: 3, title: "Bar" });
 
-  PostCollection.add(post1).add(post2).add(post3);
+  PostCollection.add(post1, post2, post3);
 
   var indexes = [];
 
@@ -93,7 +93,7 @@ test("sort (and chaining)", function() {
   var post3 = new Post({ title: "Acd" });
   var post4 = new Post({ title: "abc" });
 
-  PostCollection.add(post1).add(post2).add(post3).add(post4);
+  PostCollection.add(post1, post2, post3, post4);
 
   same(PostCollection.all(), [post1, post2, post3, post4]);
 
