@@ -28,6 +28,13 @@ Model.Collection = function(methods) {
       }) || null;
     },
 
+    each: function(func) {
+      $.each(this.collection, function(i) {
+        func.call(this, i);
+      });
+      return this;
+    },
+
     find: function(id) {
       return this.detect(function() {
         return this.id() == id;

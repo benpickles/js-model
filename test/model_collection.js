@@ -84,6 +84,45 @@ test("detect, select, first, last (and chaining)", function() {
     "should yield index correctly");
 })
 
+test("each (and chaining)", function() {
+  var Post = Model('post');
+  var PostCollection = Model.Collection();
+
+  var post1 = new Post({ id: 1, title: "Foo" });
+  var post2 = new Post({ id: 2, title: "Bar" });
+  var post3 = new Post({ id: 3, title: "Baz" });
+
+  PostCollection.add(post1, post2, post3);
+
+  var indexes = [];
+  var ids = [];
+  var titles = [];
+
+  var eachFunc = function(i) {
+    indexes.push(i);
+    ids.push(this.id());
+    titles.push(this.attr("title"));
+  };
+
+  PostCollection.each(eachFunc);
+
+  same(indexes, [0, 1, 2]);
+  same(ids, [1, 2, 3]);
+  same(titles, ["Foo", "Bar", "Baz"]);
+
+  indexes = [];
+  ids = [];
+  titles = [];
+
+  PostCollection.select(function() {
+    return this.attr("title").indexOf("a") > -1;
+  }).each(eachFunc);
+
+  same(indexes, [0, 1]);
+  same(ids, [2, 3]);
+  same(titles, ["Bar", "Baz"]);
+});
+
 test("sort (and chaining)", function() {
   var Post = Model('post');
   var PostCollection = Model.Collection();
