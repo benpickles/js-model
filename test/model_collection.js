@@ -32,7 +32,7 @@ test("Model.Collection", function() {
   ok(!PostCollection.remove(null));
 });
 
-test("detect, select", function() {
+test("detect, select, first, last (and chaining)", function() {
   var Post = Model('post');
   var PostCollection = Model.Collection();
 
@@ -45,7 +45,7 @@ test("detect, select", function() {
   var indexes = [];
 
   equal(PostCollection.detect(function(i) {
-    indexes.push(i)
+    indexes.push(i);
     return this.attr("title") == "Bar";
   }), post2);
 
@@ -53,23 +53,63 @@ test("detect, select", function() {
   indexes = [];
 
   equal(PostCollection.detect(function(i) {
-    indexes.push(i)
+    indexes.push(i);
     return this.attr("title") == "Baz";
   }), null);
 
-  same(indexes, [0, 1, 2]);
+  same(indexes, [0, 1, 2], "should yield index correctly");
   indexes = [];
 
   same(PostCollection.select(function(i) {
-    indexes.push(i)
+    indexes.push(i);
     return this.attr("title") == "Bar";
-  }), [post2, post3]);
+  }).all(), [post2, post3]);
 
   same(PostCollection.select(function(i) {
-    indexes.push(i)
+    indexes.push(i);
+    return this.attr("title") == "Bar";
+  }).first(), post2);
+
+  same(PostCollection.select(function(i) {
+    indexes.push(i);
+    return this.attr("title") == "Bar";
+  }).last(), post3);
+
+  same(PostCollection.select(function(i) {
+    indexes.push(i);
     return this.attr("title") == "Baz";
-  }), []);
+  }).all(), []);
+
+  same(indexes, [0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2],
+    "should yield index correctly");
 })
+
+test("sort (and chaining)", function() {
+  var Post = Model('post');
+  var PostCollection = Model.Collection();
+
+  var post1 = new Post({ title: "bcd" });
+  var post2 = new Post({ title: "xyz" });
+  var post3 = new Post({ title: "Acd" });
+  var post4 = new Post({ title: "abc" });
+
+  PostCollection.add(post1).add(post2).add(post3).add(post4);
+
+  same(PostCollection.all(), [post1, post2, post3, post4]);
+
+  same(PostCollection.sort(function() {
+    return this.attr("title").toLowerCase();
+  }).all(), [post4, post3, post1, post2]);
+
+  same(PostCollection.select(function() {
+    return this.attr("title").indexOf("c") > -1;
+  }).sort(function() {
+    return this.attr("title").toLowerCase();
+  }).all(), [post4, post3, post1]);
+
+  same(PostCollection.all(), [post1, post2, post3, post4],
+    "original collection should be untouched");
+});
 
 test("Custom methods", function() {
   var PostCollection = Model.Collection({

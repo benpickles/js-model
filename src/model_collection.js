@@ -1,7 +1,12 @@
 Model.Collection = function(methods) {
   // Constructor.
-  var model_collection = function() {
-    this.collection = [];
+  var model_collection = function(collection) {
+    this.collection = collection || [];
+  };
+
+  // Convenience method to allow a simple way to chain collection methods.
+  var chain = function(collection) {
+    return new model_collection(collection);
   };
 
   // Define default and any custom methods.
@@ -31,6 +36,10 @@ Model.Collection = function(methods) {
       return this.collection[0] || null;
     },
 
+    last: function() {
+      return this.collection[this.collection.length - 1] || null;
+    },
+
     remove: function(id) {
       var ids = _.invoke(this.collection, 'id');
       var index = _.indexOf(ids, id);
@@ -43,9 +52,17 @@ Model.Collection = function(methods) {
     },
 
     select: function(func) {
-      return _.select(this.collection, function(model, i) {
+      var selected = _.select(this.collection, function(model, i) {
         return func.call(model, i);
       });
+      return chain(selected);
+    },
+
+    sort: function(func) {
+      var sorted = _.sortBy(this.collection, function(model, i) {
+        return func.call(model, i);
+      });
+      return chain(sorted);
     }
   }, methods);
 
