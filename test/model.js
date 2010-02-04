@@ -18,14 +18,14 @@ test("attr and changes", function() {
   var post = new Post({ title: "Foo", body: "..." });
 
   // Set attribute using attr.
-  equal(post.attr("title", "Bar"), post, "returns self");
+  equals(post.attr("title", "Bar"), post, "returns self");
 
   // Check attributes and changes.
   equals(post.attr("title"), "Bar");
   same(post.attributes, { title: "Foo", body: "..." }, "attributes should be unchanged");
   same(post.changes, { title: "Bar" });
 
-  equal(post.reset(), post, "returns self");
+  equals(post.reset(), post, "returns self");
 
   equals(post.attr("title"), "Foo");
   same(post.changes, {});
@@ -41,7 +41,7 @@ test("attr and changes", function() {
   same(post.attributes, { title: "Bar", body: "..." });
   same(post.changes, {});
 
-  equal(post.attr({ title: "Foo", bar: "Bar" }), post, "returns self");
+  equals(post.attr({ title: "Foo", bar: "Bar" }), post, "returns self");
 
   same(post.attributes, { title: "Bar", body: "..." });
   same(post.changes, { title: "Foo", bar: "Bar" });
@@ -146,21 +146,21 @@ test("persistence", function() {
 
   var TestPersistance = {
     create: function(model, success, failure) {
-      equal(model, post);
+      equals(model, post);
       results.push("create");
       results.push(success());
       results.push(failure());
     },
 
     destroy: function(model, success, failure) {
-      equal(model, post);
+      equals(model, post);
       results.push("destroy");
       results.push(success());
       results.push(failure());
     },
 
     update: function(model, success, failure) {
-      equal(model, post);
+      equals(model, post);
       results.push("update");
       results.push(success());
       results.push(failure());

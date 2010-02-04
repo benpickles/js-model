@@ -15,19 +15,19 @@ test("Model.Collection", function() {
   PostCollection.add(post1, post2).add(post3);
 
   same(PostCollection.all(), [post1, post2, post3]);
-  equal(PostCollection.find(1), post1);
-  equal(PostCollection.find(2), post2);
-  equal(PostCollection.find(3), post3);
-  equal(PostCollection.find(4), null);
-  equal(PostCollection.first(), post1);
+  equals(PostCollection.find(1), post1);
+  equals(PostCollection.find(2), post2);
+  equals(PostCollection.find(3), post3);
+  equals(PostCollection.find(4), null);
+  equals(PostCollection.first(), post1);
 
   ok(PostCollection.remove(2));
 
   same(PostCollection.all(), [post1, post3]);
-  equal(PostCollection.find(1), post1);
-  equal(PostCollection.find(2), null);
-  equal(PostCollection.find(3), post3);
-  equal(PostCollection.find(4), null);
+  equals(PostCollection.find(1), post1);
+  equals(PostCollection.find(2), null);
+  equals(PostCollection.find(3), post3);
+  equals(PostCollection.find(4), null);
 
   ok(!PostCollection.remove(null));
 });
@@ -44,7 +44,7 @@ test("detect, select, first, last (and chaining)", function() {
 
   var indexes = [];
 
-  equal(PostCollection.detect(function(i) {
+  equals(PostCollection.detect(function(i) {
     indexes.push(i);
     return this.attr("title") == "Bar";
   }), post2);
@@ -52,7 +52,7 @@ test("detect, select, first, last (and chaining)", function() {
   same(indexes, [0, 1]);
   indexes = [];
 
-  equal(PostCollection.detect(function(i) {
+  equals(PostCollection.detect(function(i) {
     indexes.push(i);
     return this.attr("title") == "Baz";
   }), null);
