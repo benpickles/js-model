@@ -40,8 +40,9 @@ var Model = function(name, methods) {
         return this;
       } else {
         // Changes take precedent over attributes.
-        var change = this.changes[name];
-        return change == undefined ? this.attributes[name] : change;
+        return (name in this.changes) ?
+          this.changes[name] :
+          this.attributes[name];
       };
     },
 

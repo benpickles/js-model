@@ -17,6 +17,21 @@ test("attr and changes", function() {
   var Post = Model("post");
   var post = new Post({ title: "Foo", body: "..." });
 
+  // Setting an attribute to null should be read back as null.
+  post.attr("title", null);
+  equals(post.attributes.title, "Foo", "attributes should be unchanged");
+  equals(post.changes.title, null);
+  equals(post.attr("title"), null);
+
+  post.attr("title", "Foo");
+  equals(post.attributes.title, "Foo");
+  ok(!("title" in post.changes));
+  equals(post.attr("title"), "Foo");
+
+  post.reset();
+  same(post.attributes, { title: "Foo", body: "..." });
+  same(post.changes, {});
+
   // Set attribute using attr.
   equals(post.attr("title", "Bar"), post, "returns self");
 
