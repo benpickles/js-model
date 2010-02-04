@@ -135,12 +135,12 @@ var Model = function(name, methods) {
     },
 
     valid: function() {
+      this.errors = [];
       this.validate();
       return this.errors.length == 0;
     },
 
     validate: function() {
-      this.errors = [];
       return this;
     }
   }, methods);

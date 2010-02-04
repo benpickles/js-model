@@ -97,9 +97,6 @@ To add your own validations you should define a custom `validate` method that ad
 
     var Post = Model('post', {
       validate: function() {
-        // Reset errors
-        this.errors = []
-
         if (this.attr("title") != "Bar") {
           this.errors.push("Title should be Bar")
         }
