@@ -13,11 +13,13 @@ Model.Collection = function(methods) {
   model_collection.prototype = $.extend({
     add: function() {
       for (var i = 0; i < arguments.length; i++) {
-        this.collection.push(arguments[i]);
+        var existing_elem = this.find(arguments[i].id());
+        if (!existing_elem){
+          this.collection.push(arguments[i]); 
+        }
       };
       return this;
     },
-
     all: function() {
       return this.collection;
     },
