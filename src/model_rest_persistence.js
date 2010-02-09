@@ -21,7 +21,11 @@ Model.RestPersistence = function(resource, methods) {
     },
 
     destroy: function(model, success, failure) {
-      return this.xhr('DELETE', this.update_path(model), null, success, failure);
+      return this.xhr('DELETE', this.destroy_path(model), null, success, failure);
+    },
+
+    destroy_path: function(model) {
+      return this.update_path(model);
     },
 
     update: function(model, success, failure) {
