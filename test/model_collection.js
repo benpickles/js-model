@@ -1,6 +1,6 @@
 module("Model.Collection");
 
-test("Model.Collection", function() {
+test("all, find, first, add, remove", function() {
   var Post = Model('post');
   var PostCollection = Model.Collection();
 
@@ -30,6 +30,11 @@ test("Model.Collection", function() {
   equals(PostCollection.find(4), null);
 
   ok(!PostCollection.remove(null));
+
+  var post1_duplicate = new Post({ id: 1 });
+  PostCollection.add(post1_duplicate);
+
+  same(PostCollection.all(), [post1, post3], "shouldn't be able to add if a model with the same id exists in the collection");
 });
 
 test("detect, select, first, last (and chaining)", function() {
