@@ -4,57 +4,59 @@ Model.RestPersistence = function(resource, methods) {
   };
 
   model_resource.prototype = $.extend({
-    create: function(model, success, failure) {
-      var wrappedSuccess = function(data) {
-        // Remote data is the definitive source.
+    create: function(model, callback) {
+      var wrappedCallback = function(success, data, xhr) {
+        // Remote data is the definitive source, merge model attributes with
+        // response data.
         this.update(data);
 
-        // Now run the supplied success callback.
-        if (success) success.apply(this, arguments);
+        // Execute callback if suppied.
+        if (callback) callback.apply(this, arguments);
       };
 
-      return this.xhr('POST', this.create_path(model), model, wrappedSuccess, failure);
+      return this.xhr('POST', this.create_path(model), model, wrappedCallback);
     },
 
     create_path: function(model) {
       return this.resource;
     },
 
-    destroy: function(model, success, failure) {
-      return this.xhr('DELETE', this.destroy_path(model), null, success, failure);
+    destroy: function(model, callback) {
+      return this.xhr('DELETE', this.destroy_path(model), null, callback);
     },
 
     destroy_path: function(model) {
       return this.update_path(model);
     },
 
-    update: function(model, success, failure) {
-      var wrappedSuccess = function(data) {
-        // Remote data is the definitive source.
+    update: function(model, callback) {
+      var wrappedCallback = function(success, data, xhr) {
+        // Remote data is the definitive source, merge model attributes with
+        // response data.
         this.update(data);
 
-        // Now run the supplied success callback.
-        if (success) success.apply(this, arguments);
+        // Execute callback if suppied.
+        if (callback) callback.apply(this, arguments);
       };
 
-      return this.xhr('PUT', this.update_path(model), model, wrappedSuccess, failure);
+      return this.xhr('PUT', this.update_path(model), model, wrappedCallback);
     },
 
     update_path: function(model) {
       return [this.resource, model.id()].join('/');
     },
 
-    xhr: function(method, url, model, success, failure) {
+    xhr: function(method, url, model, callback) {
       return $.ajax({
         type: method,
         url: url,
         dataType: "json",
         data: model ? model.toParam() : null,
-        failure: function() {
-          if (failure) failure.apply(model, arguments);
+        failure: function(data, status, xhr) {
+          if (callback) callback.call(model, false, data, xhr);
         },
-        success: function() {
-          if (success) success.apply(model, arguments);
+        success: function(data, status, xhr) {
+          if (callback) callback.call(model, true, data, xhr);
         }
       });
     }

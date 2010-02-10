@@ -13,7 +13,7 @@ test("attributes", function() {
   equals(post.attr("title"), "Foo");
 });
 
-test("attr and changes", function() {
+test("attr, attributes, changes, reset, save", function() {
   var Post = Model("post");
   var post = new Post({ title: "Foo", body: "..." });
 
@@ -184,25 +184,22 @@ test("persistence", function() {
   var post;
 
   var TestPersistance = {
-    create: function(model, success, failure) {
-      equals(model, post);
+    create: function(model, callback) {
+      results.push(model);
       results.push("create");
-      results.push(success());
-      results.push(failure());
+      results.push(callback());
     },
 
-    destroy: function(model, success, failure) {
-      equals(model, post);
+    destroy: function(model, callback) {
+      results.push(model);
       results.push("destroy");
-      results.push(success());
-      results.push(failure());
+      results.push(callback());
     },
 
-    update: function(model, success, failure) {
-      equals(model, post);
+    update: function(model, callback) {
+      results.push(model);
       results.push("update");
-      results.push(success());
-      results.push(failure());
+      results.push(callback());
     }
   };
 
@@ -210,18 +207,19 @@ test("persistence", function() {
     persistence: TestPersistance
   });
 
-  var success = function() { return "success"; };
-  var failure = function() { return "failure"; };
+  var callback = function() {
+    return "callback";
+  };
 
   post = new Post();
-  post.save(success, failure);
+  post.save(callback);
   post.attributes.id = 1;
-  post.save(success, failure);
-  post.destroy(success, failure);
+  post.save(callback);
+  post.destroy(callback);
 
   same(results, [
-    "create", "success", "failure",
-    "update", "success", "failure",
-    "destroy", "success", "failure"
+    post, "create", "callback",
+    post, "update", "callback",
+    post, "destroy", "callback"
   ]);
 });

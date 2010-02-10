@@ -12,6 +12,7 @@ test("Model#save() (create)", function() {
   stop();
 
   post.save(function() {
+    same(this, post);
     same(post.attributes, { id: 1, title: "Foo amended", body: "...", foo: "bar" });
     equals(post.id(), 1);
     start();
@@ -42,6 +43,7 @@ test("Model#save() (update)", function() {
   stop();
 
   post.save(function() {
+    same(this, post);
     same(post.attributes, { id: 1, title: "Bar amended", body: "..." });
     start();
   });

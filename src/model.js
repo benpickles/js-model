@@ -46,7 +46,7 @@ var Model = function(name, methods) {
       };
     },
 
-    callPersistMethod: function(method, success, failure) {
+    callPersistMethod: function(method, callback) {
       var self = this;
 
       // Automatically manage adding and removing from a Model.Collection if
@@ -60,36 +60,37 @@ var Model = function(name, methods) {
         };
       };
 
+      // Wrap the existing callback in this function so we always manage the
+      // collection and trigger events from here rather than relying on the
+      // persistence adapter to do it for us. The persistence adapter is
+      // only required to execute the callback with a single argument - a
+      // boolean to indicate whether the call was a success - though any
+      // other arguments will also be forwarded to the original callback.
+      var wrappedCallback = function(success) {
+        // Add/remove from collection if persist was successful.
+        if (success) manageCollection();
+
+        // Trigger the event before executing the callback.
+        self.trigger(method);
+
+        // Store the return value of the callback.
+        var value;
+
+        // Run the supplied callback.
+        if (callback) value = callback.apply(self, arguments);
+
+        return value;
+      };
+
       if (this.persistence) {
-        var wrappedSuccess = function() {
-          manageCollection();
-
-          // Store the return value of the success callback.
-          var value;
-
-          // Run the supplied callback.
-          if (success) value = success.apply(self, arguments);
-
-          // Now trigger an event.
-          self.trigger(method);
-
-          return value;
-        };
-
-        this.persistence[method](this, wrappedSuccess, failure);
+        this.persistence[method](this, wrappedCallback);
       } else {
-        manageCollection();
-
-        // Trigger the event.
-        this.trigger(method);
-
-        // Execute the callback if specified.
-        if (success) success.call(this, true);
+        wrappedCallback.call(this, true);
       };
     },
 
-    destroy: function(success, failure) {
-      this.callPersistMethod("destroy", success, failure);
+    destroy: function(callback) {
+      this.callPersistMethod("destroy", callback);
       return this;
     },
 
@@ -106,14 +107,14 @@ var Model = function(name, methods) {
       return this;
     },
 
-    save: function(success, failure) {
+    save: function(callback) {
       if (!this.valid()) return false;
 
       // Merge any changes into attributes and clear changes.
       this.update(this.changes).reset();
 
       var method = this.newRecord() ? "create" : "update";
-      this.callPersistMethod(method, success, failure);
+      this.callPersistMethod(method, callback);
 
       return true;
     },
