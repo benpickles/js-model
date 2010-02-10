@@ -79,8 +79,12 @@ var Model = function(name, methods) {
         this.persistence[method](this, wrappedSuccess, failure);
       } else {
         manageCollection();
-        // No persistence adapter is defined, just trigger the event.
+
+        // Trigger the event.
         this.trigger(method);
+
+        // Execute the callback if specified.
+        if (success) success.call(this, true);
       };
     },
 

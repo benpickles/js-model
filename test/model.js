@@ -101,6 +101,30 @@ test("validations/save", function() {
   same(post.changes, {});
 });
 
+test("save and destroy with callbacks", function() {
+  var Post = Model("post");
+
+  var results = [];
+  var callback = function(success) {
+    // `this` refers to the model itself.
+    results.push(this);
+    // success will always be true when no persistence adapter is defined.
+    results.push(success);
+  };
+
+  var post = new Post();
+  post.save(callback);
+  post.attributes.id = 1;
+  post.save(callback);
+  post.destroy(callback);
+
+  same(results, [
+    post, true,
+    post, true,
+    post, true
+  ]);
+});
+
 test("events", function() {
   var Post = Model("post");
   var state;
