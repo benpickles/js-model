@@ -1,5 +1,7 @@
 # Changelog
 
+* Fix that persistence failure should not trigger corresponding event.
+
 ## 0.6.0
 
 * Pass only a single callback to save/destroy which is called with a boolean to indicate success/failure.

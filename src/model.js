@@ -67,11 +67,13 @@ var Model = function(name, methods) {
       // boolean to indicate whether the call was a success - though any
       // other arguments will also be forwarded to the original callback.
       var wrappedCallback = function(success) {
-        // Add/remove from collection if persist was successful.
-        if (success) manageCollection();
+        if (success) {
+          manageCollection();
+          // Add/remove from collection if persist was successful.
 
-        // Trigger the event before executing the callback.
-        self.trigger(method);
+          // Trigger the event before executing the callback.
+          self.trigger(method);
+        };
 
         // Store the return value of the callback.
         var value;
