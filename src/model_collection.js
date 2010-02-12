@@ -13,6 +13,8 @@ Model.Collection = function(methods) {
   // Define default and any custom methods.
   model_collection.prototype = $.extend({
     add: function() {
+      var added = [];
+
       for (var i = 0; i < arguments.length; i++) {
         var model = arguments[i];
         var existing_elem = this.detect(function() {
@@ -20,10 +22,13 @@ Model.Collection = function(methods) {
         });
 
         if (!existing_elem) {
-          this.collection.push(arguments[i]);
+          this.collection.push(model);
+          added.push(model);
         }
       };
-      this.trigger("add");
+
+      if (added.length > 0) this.trigger("add", added);
+
       return this;
     },
 
@@ -90,12 +95,12 @@ Model.Collection = function(methods) {
       return chain(sorted);
     },
 
-    trigger: function(name) {
+    trigger: function(name, data) {
       var callbacks = this.callbacks[name];
 
       if (callbacks) {
         for (var i = 0; i < callbacks.length; i++) {
-          callbacks[i].call(this);
+          callbacks[i].apply(this, data);
         };
       };
 

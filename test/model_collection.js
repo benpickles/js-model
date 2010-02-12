@@ -167,6 +167,9 @@ test("events", function() {
   PostCollection.bind("add", function() {
     results.push(this);
     results.push("add");
+    for (var i = 0; i < arguments.length; i++) {
+      results.push(arguments[i]);
+    };
   });
 
   PostCollection.bind("remove", function() {
@@ -187,14 +190,15 @@ test("events", function() {
   });
 
   PostCollection.add(post1, post2);
+  PostCollection.add(post1);
   PostCollection.add(post3);
   PostCollection.remove(1);
   PostCollection.remove(666);
   PostCollection.trigger("custom");
 
   same(results, [
-    PostCollection, "add",
-    PostCollection, "add",
+    PostCollection, "add", post1, post2,
+    PostCollection, "add", post3,
     PostCollection, "remove",
     PostCollection, "custom",
     PostCollection, "custom-2"
