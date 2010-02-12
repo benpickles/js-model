@@ -1,5 +1,6 @@
 # Changelog
 
+* `update` should trigger "update" event, add separate `merge` method.
 * Fix that persistence failure should not trigger corresponding event.
 
 ## 0.6.0

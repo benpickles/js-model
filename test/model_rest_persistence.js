@@ -83,3 +83,33 @@ test("Model#destroy()", function() {
   equals(request.dataType, "json");
   same(request.data, null);
 });
+
+test("events", function() {
+  var Post = Model("post", {
+    persistence: Model.RestPersistence("./post.json", {
+      update_path: function() { return this.create_path(); }
+    })
+  });
+
+  var events = [];
+
+  // Stub trigger and capture its argument.
+  Post.prototype.trigger = function(name) {
+    events.push(name);
+  };
+
+  var post = new Post();
+
+  AjaxSpy.stubData({ id: 1 });
+
+  stop();
+
+  post.save(function() {
+    same(events.join(", "), "initialize, create");
+
+    post.save(function() {
+      same(events.join(", "), "initialize, create, update");
+      start();
+    });
+  });
+});

@@ -6,9 +6,9 @@ Model.RestPersistence = function(resource, methods) {
   model_resource.prototype = $.extend({
     create: function(model, callback) {
       var wrappedCallback = function(success, data, xhr) {
-        // Remote data is the definitive source, merge model attributes with
-        // response data.
-        this.update(data);
+        // Remote data is the definitive source, merge response data with
+        // model attributes.
+        this.merge(data);
 
         // Execute callback if suppied.
         if (callback) callback.apply(this, arguments);
@@ -31,9 +31,9 @@ Model.RestPersistence = function(resource, methods) {
 
     update: function(model, callback) {
       var wrappedCallback = function(success, data, xhr) {
-        // Remote data is the definitive source, merge model attributes with
-        // response data.
-        this.update(data);
+        // Remote data is the definitive source, merge response data with
+        // model attributes.
+        this.merge(data);
 
         // Execute callback if suppied.
         if (callback) callback.apply(this, arguments);

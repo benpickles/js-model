@@ -100,6 +100,11 @@ var Model = function(name, methods) {
       return this.attributes.id || null;
     },
 
+    merge: function(attributes) {
+      $.extend(this.attributes, attributes);
+      return this;
+    },
+
     newRecord: function() {
       return this.id() == null;
     },
@@ -113,7 +118,7 @@ var Model = function(name, methods) {
       if (!this.valid()) return false;
 
       // Merge any changes into attributes and clear changes.
-      this.update(this.changes).reset();
+      this.merge(this.changes).reset();
 
       var method = this.newRecord() ? "create" : "update";
       this.callPersistMethod(method, callback);
@@ -138,7 +143,7 @@ var Model = function(name, methods) {
     },
 
     update: function(attributes) {
-      $.extend(this.attributes, attributes);
+      this.merge(attributes).trigger("update");
       return this;
     },
 
