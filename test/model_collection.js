@@ -155,6 +155,52 @@ test("sort (and chaining)", function() {
     "original collection should be untouched");
 });
 
+test("events", function() {
+  var PostCollection = Model.Collection();
+  var Post = Model('post');
+  var results = [];
+
+  var post1 = new Post({ id: 1 });
+  var post2 = new Post({ id: 2 });
+  var post3 = new Post({ id: 3 });
+
+  PostCollection.bind("add", function() {
+    results.push(this);
+    results.push("add");
+  });
+
+  PostCollection.bind("remove", function() {
+    results.push(this);
+    results.push("remove");
+  })
+
+  PostCollection.bind("custom", function() {
+    results.push(this);
+    results.push("custom");
+  }).bind("custom", function() {
+    results.push(this);
+    results.push("custom-2");
+  })
+
+  PostCollection.bind("not-called", function() {
+    results.push("not-called");
+  });
+
+  PostCollection.add(post1, post2);
+  PostCollection.add(post3);
+  PostCollection.remove(1);
+  PostCollection.remove(666);
+  PostCollection.trigger("custom");
+
+  same(results, [
+    PostCollection, "add",
+    PostCollection, "add",
+    PostCollection, "remove",
+    PostCollection, "custom",
+    PostCollection, "custom-2"
+  ]);
+});
+
 test("Custom methods", function() {
   var PostCollection = Model.Collection({
     foo: function() {

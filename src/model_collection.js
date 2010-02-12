@@ -2,6 +2,7 @@ Model.Collection = function(methods) {
   // Constructor.
   var model_collection = function(collection) {
     this.collection = collection || [];
+    this.callbacks = {};
   };
 
   // Convenience method to allow a simple way to chain collection methods.
@@ -22,11 +23,18 @@ Model.Collection = function(methods) {
           this.collection.push(arguments[i]);
         }
       };
+      this.trigger("add");
       return this;
     },
 
     all: function() {
       return this.collection;
+    },
+
+    bind: function(event, callback) {
+      this.callbacks[event] = this.callbacks[event] || [];
+      this.callbacks[event].push(callback);
+      return this;
     },
 
     detect: function(func) {
@@ -61,6 +69,7 @@ Model.Collection = function(methods) {
       var index = _.indexOf(ids, id);
       if (index > -1) {
         this.collection.splice(index, 1);
+        this.trigger("remove");
         return true;
       } else {
         return false;
@@ -79,6 +88,18 @@ Model.Collection = function(methods) {
         return func.call(model, i);
       });
       return chain(sorted);
+    },
+
+    trigger: function(name) {
+      var callbacks = this.callbacks[name];
+
+      if (callbacks) {
+        for (var i = 0; i < callbacks.length; i++) {
+          callbacks[i].call(this);
+        };
+      };
+
+      return this;
     }
   }, methods);
 
