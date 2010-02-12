@@ -3,6 +3,7 @@ var Model = function(name, methods) {
   var model = function(attributes) {
     this._name = name;
     this.attributes = attributes || {};
+    this.callbacks = {};
     this.changes = {};
     this.collection = collection;
     this.errors = [];
@@ -44,6 +45,12 @@ var Model = function(name, methods) {
           this.changes[name] :
           this.attributes[name];
       };
+    },
+
+    bind: function(event, callback) {
+      this.callbacks[event] = this.callbacks[event] || [];
+      this.callbacks[event].push(callback);
+      return this;
     },
 
     callPersistMethod: function(method, callback) {
@@ -138,7 +145,14 @@ var Model = function(name, methods) {
     },
 
     trigger: function(name) {
-      $(document).trigger([name, this._name].join('.'), [this]);
+      var callbacks = this.callbacks[name];
+
+      if (callbacks) {
+        for (var i = 0; i < callbacks.length; i++) {
+          callbacks[i].call(this);
+        };
+      };
+
       return this;
     },
 

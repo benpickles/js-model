@@ -127,41 +127,44 @@ test("save and destroy with callbacks", function() {
 
 test("events", function() {
   var Post = Model("post");
-  var state;
-
-  $(document).bind("initialize.post", function() {
-    state = "initialized";
-  });
-  $(document).bind("create.post", function() {
-    state = "created";
-  });
-  $(document).bind("update.post", function() {
-    state = "updated";
-  });
-  $(document).bind("custom.post", function() {
-    state = "custom";
-  });
-  $(document).bind("destroy.post", function() {
-    state = "destroyed";
-  });
+  var results = [];
 
   var post = new Post({ title: "Foo", body: "..." });
-  equals(state, "initialized");
+
+  post.bind("create", function() {
+    results.push(this);
+    results.push("create");
+  }).bind("update", function() {
+    results.push(this);
+    results.push("update");
+  }).bind("custom", function() {
+    results.push(this);
+    results.push("custom");
+  }).bind("custom", function() {
+    results.push(this);
+    results.push("custom-2");
+  }).bind("destroy", function() {
+    results.push(this);
+    results.push("destroy");
+  });
+
+  post.bind("not-called", function() {
+    results.push("not-called");
+  });
 
   post.save();
-  equals(state, "created");
-
   post.attributes.id = 1;
   post.save();
-  equals(state, "updated");
-
   post.trigger("custom");
-  equals(state, "custom");
-
   post.destroy();
-  equals(state, "destroyed");
 
-  $(document).unbind('.post');
+  same(results, [
+    post, "create",
+    post, "update",
+    post, "custom",
+    post, "custom-2",
+    post, "destroy"
+  ]);
 });
 
 test('model collection "class" methods', function() {

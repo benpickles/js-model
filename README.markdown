@@ -156,16 +156,30 @@ It's easy to persist a model's data to the server by defining an adapter when cr
     post.attr("title", "Bar").save()
     // Ajax PUT request made to /posts/1
 
-### Events
+### Events (`bind`/`trigger`)
 
 Through its lifetime a model will trigger some events for you to bind to:
 
- * `initialize.model_name`
- * `create.model_name`
- * `update.model_name`
- * `destroy.model_name`
+ * create
+ * update
+ * destroy
 
-Custom events can also be triggered by calling `trigger()`:
+You can easily hook into these events and bind custom callbacks to them:
 
+    var post = new Post({ title: "Foo" })
+    post.bind("create", function() {
+      // Do something
+    })
+    post.save()
+    // => Something happened
+
+Custom events can also be bound and triggered by calling `trigger()`:
+
+    post.bind("foo", function() {
+      // Do something
+    })
+    post.bind("foo", function() {
+      // Do something different
+    })
     post.trigger("foo")
-    // => "foo.post" event triggered
+    // => "foo" event triggered, something AND something different happened!
