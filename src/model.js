@@ -143,12 +143,12 @@ var Model = function(name, methods) {
       return params;
     },
 
-    trigger: function(name) {
+    trigger: function(name, data) {
       var callbacks = this.callbacks[name];
 
       if (callbacks) {
         for (var i = 0; i < callbacks.length; i++) {
-          callbacks[i].call(this);
+          callbacks[i].apply(this, data);
         };
       };
 
