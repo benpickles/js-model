@@ -105,10 +105,10 @@ test("events", function() {
   stop();
 
   post.save(function() {
-    same(events.join(", "), "initialize, create");
+    same(events.join(", "), "create");
 
     post.save(function() {
-      same(events.join(", "), "initialize, create, update");
+      same(events.join(", "), "create, update");
       start();
     });
   });

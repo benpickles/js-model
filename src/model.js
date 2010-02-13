@@ -7,7 +7,6 @@ var Model = function(name, methods) {
     this.changes = {};
     this.collection = collection;
     this.errors = [];
-    this.trigger('initialize');
   };
 
   // Use a custom collection object if specified, otherwise create a default.

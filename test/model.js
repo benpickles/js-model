@@ -256,19 +256,15 @@ test("persistence failure", function() {
   post = new Post();
   post.save();
 
-  equals(events.join(", "), "initialize",
-    "should not trigger create event if persistence failed");
-
+  same(events, [], "should not trigger create event if persistence failed");
   same(Post.all(), [], "post should not be added to collection");
 
   post.attributes.id = 1;
   post.save();
 
-  equals(events.join(", "), "initialize",
-    "should not trigger update event if persistence failed");
+  same(events, [], "should not trigger update event if persistence failed");
 
   post.destroy();
 
-  equals(events.join(", "), "initialize",
-    "should not trigger destroy event if persistence failed");
+  same(events, [], "should not trigger destroy event if persistence failed");
 });
