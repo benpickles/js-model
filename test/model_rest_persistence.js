@@ -11,7 +11,8 @@ test("Model#save() (create)", function() {
 
   stop();
 
-  post.save(function() {
+  post.save(function(success) {
+    ok(success);
     same(this, post);
     same(post.attributes, { id: 1, title: "Foo amended", body: "...", foo: "bar" });
     equals(post.id(), 1);
@@ -25,7 +26,7 @@ test("Model#save() (create)", function() {
   equals(request.type, "POST");
   equals(request.url, "./post.json");
   equals(request.dataType, "json");
-  same(request.data, { "post[title]": "Foo", "post[body]": "..." });
+  same(request.data, { post: { title: "Foo", body: "..." } });
 });
 
 test("Model#save() (update)", function() {
@@ -42,7 +43,8 @@ test("Model#save() (update)", function() {
 
   stop();
 
-  post.save(function() {
+  post.save(function(success) {
+    ok(success);
     same(this, post);
     same(post.attributes, { id: 1, title: "Bar amended", body: "..." });
     start();
@@ -55,7 +57,7 @@ test("Model#save() (update)", function() {
   equals(request.type, "PUT");
   equals(request.url, "./post.json");
   equals(request.dataType, "json");
-  same(request.data, { "post[title]": "Bar", "post[body]": "..." });
+  same(request.data, { post: { title: "Bar", body: "..." } });
 });
 
 test("Model#destroy()", function() {
@@ -70,7 +72,8 @@ test("Model#destroy()", function() {
 
   stop();
 
-  post.destroy(function() {
+  post.destroy(function(success) {
+    ok(success);
     start();
   });
 

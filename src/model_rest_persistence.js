@@ -29,6 +29,19 @@ Model.RestPersistence = function(resource, methods) {
       return this.update_path(model);
     },
 
+    params: function(model) {
+      var params;
+      if (model) {
+        var attributes = _.clone(model.attributes);
+        delete attributes.id;
+        params = {};
+        params[model._name] = attributes;
+      } else {
+        params = null;
+      }
+      return params;
+    },
+
     update: function(model, callback) {
       var wrappedCallback = function(success, data, xhr) {
         // Remote data is the definitive source, merge response data with
@@ -51,7 +64,7 @@ Model.RestPersistence = function(resource, methods) {
         type: method,
         url: url,
         dataType: "json",
-        data: model ? model.toParam() : null,
+        data: this.params(model),
         failure: function(data, status, xhr) {
           if (callback) callback.call(model, false, data, xhr);
         },

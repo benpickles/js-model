@@ -132,17 +132,6 @@ var Model = function(name, methods) {
       return true;
     },
 
-    toParam: function() {
-      var params = {};
-      for (var attr in this.attributes) {
-        var value = this.attributes[attr];
-        if (attr != 'id' && value != null) {
-          params[this._name + '[' + attr + ']'] = value;
-        };
-      };
-      return params;
-    },
-
     trigger: function(name, data) {
       var callbacks = this.callbacks[name];
 
