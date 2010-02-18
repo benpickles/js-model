@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.7.0
+
+* Events are now bound directly to a model rather than using jQuery `bind`. Collections also now have the concept of events with "add" and "remove" built-in.
+
+## 0.6.1
+
 * `update` should trigger "update" event, add separate `merge` method.
 * Fix that persistence failure should not trigger corresponding event.
 
