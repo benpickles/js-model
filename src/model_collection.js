@@ -43,13 +43,13 @@ Model.Collection = function(methods) {
     },
 
     detect: function(func) {
-      return _.detect(this.collection, function(model, i) {
+      return _.detect(this.all(), function(model, i) {
         return func.call(model, i);
       }) || null;
     },
 
     each: function(func) {
-      $.each(this.collection, function(i) {
+      $.each(this.all(), function(i) {
         func.call(this, i);
       });
       return this;
@@ -62,11 +62,12 @@ Model.Collection = function(methods) {
     },
 
     first: function() {
-      return this.collection[0] || null;
+      return this.all()[0] || null;
     },
 
     last: function() {
-      return this.collection[this.collection.length - 1] || null;
+      var all = this.all();
+      return all[all.length - 1] || null;
     },
 
     remove: function(id) {
@@ -82,14 +83,14 @@ Model.Collection = function(methods) {
     },
 
     select: function(func) {
-      var selected = _.select(this.collection, function(model, i) {
+      var selected = _.select(this.all(), function(model, i) {
         return func.call(model, i);
       });
       return chain(selected);
     },
 
     sort: function(func) {
-      var sorted = _.sortBy(this.collection, function(model, i) {
+      var sorted = _.sortBy(this.all(), function(model, i) {
         return func.call(model, i);
       });
       return chain(sorted);

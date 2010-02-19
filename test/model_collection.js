@@ -214,3 +214,28 @@ test("Custom methods", function() {
 
   equals(PostCollection.foo(), "foo");
 });
+
+test("Custom `all` method", function() {
+  var Post = Model('post', {
+    collection: Model.Collection({
+      all: function() {
+        return _.sortBy(this.collection, function(model) {
+          return model.attr("position");
+        });
+      }
+    })
+  });
+  var post1 = new Post({ id: 1, position: 2 });
+  var post2 = new Post({ id: 2, position: 3 });
+  var post3 = new Post({ id: 3, position: 1 });
+
+  Post.add(post1, post2, post3);
+
+  var results = [];
+
+  Post.each(function() {
+    results.push(this.id());
+  });
+
+  equals(results.join(", "), "3, 1, 2", "`each` should iterate over `all`");
+});
