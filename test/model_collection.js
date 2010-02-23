@@ -1,6 +1,6 @@
 module("Model.Collection");
 
-test("all, find, first, add, remove", function() {
+test("all, count, find, first, add, remove", function() {
   var Post = Model('post');
   var PostCollection = Model.Collection();
 
@@ -9,12 +9,14 @@ test("all, find, first, add, remove", function() {
   var post3 = new Post({ id: 3 });
 
   same(PostCollection.all(), []);
+  equals(PostCollection.count(), 0);
   equals(PostCollection.find(1), null);
   equals(PostCollection.first(), null);
 
   PostCollection.add(post1, post2).add(post3);
 
   same(PostCollection.all(), [post1, post2, post3]);
+  equals(PostCollection.count(), 3);
   equals(PostCollection.find(1), post1);
   equals(PostCollection.find(2), post2);
   equals(PostCollection.find(3), post3);
@@ -24,6 +26,7 @@ test("all, find, first, add, remove", function() {
   ok(PostCollection.remove(2));
 
   same(PostCollection.all(), [post1, post3]);
+  equals(PostCollection.count(), 2);
   equals(PostCollection.find(1), post1);
   equals(PostCollection.find(2), null);
   equals(PostCollection.find(3), post3);
@@ -37,7 +40,7 @@ test("all, find, first, add, remove", function() {
   same(PostCollection.all(), [post1, post3], "shouldn't be able to add if a model with the same id exists in the collection");
 });
 
-test("detect, select, first, last (and chaining)", function() {
+test("detect, select, first, last, count (with chaining)", function() {
   var Post = Model('post');
   var PostCollection = Model.Collection();
 
@@ -87,6 +90,18 @@ test("detect, select, first, last (and chaining)", function() {
 
   same(indexes, [0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2],
     "should yield index correctly");
+
+  same(PostCollection.select(function(i) {
+    return this.attr("title") == "Foo";
+  }).count(), 1);
+
+  same(PostCollection.select(function(i) {
+    return this.attr("title") == "Bar";
+  }).count(), 2);
+
+  same(PostCollection.select(function(i) {
+    return this.attr("title") == "Baz";
+  }).count(), 0);
 })
 
 test("each (and chaining)", function() {

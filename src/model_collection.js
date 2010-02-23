@@ -42,6 +42,10 @@ Model.Collection = function(methods) {
       return this;
     },
 
+    count: function() {
+      return this.collection.length;
+    },
+
     detect: function(func) {
       return _.detect(this.all(), function(model, i) {
         return func.call(model, i);
