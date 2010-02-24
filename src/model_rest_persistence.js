@@ -10,7 +10,7 @@ Model.RestPersistence = function(resource, methods) {
         // model attributes.
         this.merge(data);
 
-        // Execute callback if suppied.
+        // Execute callback if supplied.
         if (callback) callback.apply(this, arguments);
       };
 
@@ -42,13 +42,21 @@ Model.RestPersistence = function(resource, methods) {
       return params;
     },
 
+    parseResponseData: function(xhr) {
+      try {
+        return jQuery.parseJSON(xhr.responseText);
+      } catch(e) {
+        Model.Log(e);
+      };
+    },
+
     update: function(model, callback) {
       var wrappedCallback = function(success, data, xhr) {
         // Remote data is the definitive source, merge response data with
         // model attributes.
         this.merge(data);
 
-        // Execute callback if suppied.
+        // Execute callback if supplied.
         if (callback) callback.apply(this, arguments);
       };
 
@@ -60,16 +68,19 @@ Model.RestPersistence = function(resource, methods) {
     },
 
     xhr: function(method, url, model, callback) {
+      var self = this;
+
       return $.ajax({
         type: method,
         url: url,
-        dataType: "json",
+        dataType: "text",
         data: this.params(model),
-        failure: function(data, status, xhr) {
-          if (callback) callback.call(model, false, data, xhr);
-        },
-        success: function(data, status, xhr) {
-          if (callback) callback.call(model, true, data, xhr);
+        complete: function(xhr, textStatus) {
+          if (callback) {
+            var success = textStatus == "success";
+            var data = self.parseResponseData(xhr);
+            callback.call(model, success, data, xhr);
+          };
         }
       });
     }

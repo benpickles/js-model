@@ -2,12 +2,11 @@ module("Model.RestPersistence");
 
 test("Model#save() (create)", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("./post.json")
+    persistence: Model.RestPersistence("./ajax/create.json")
   });
   var post = new Post({ title: "Foo", body: "..." });
 
   AjaxSpy.start();
-  AjaxSpy.stubData({ id: 1, title: "Foo amended", foo: "bar" });
 
   stop();
 
@@ -24,14 +23,13 @@ test("Model#save() (create)", function() {
   var request = AjaxSpy.requests.shift();
 
   equals(request.type, "POST");
-  equals(request.url, "./post.json");
-  equals(request.dataType, "json");
+  equals(request.url, "./ajax/create.json");
   same(request.data, { post: { title: "Foo", body: "..." } });
 });
 
 test("Model#save() (update)", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("./post.json", {
+    persistence: Model.RestPersistence("./ajax/update.json", {
       update_path: function() { return this.create_path(); }
     })
   });
@@ -39,7 +37,6 @@ test("Model#save() (update)", function() {
   post.attr("title", "Bar");
 
   AjaxSpy.start();
-  AjaxSpy.stubData({ title: "Bar amended" });
 
   stop();
 
@@ -55,14 +52,13 @@ test("Model#save() (update)", function() {
   var request = AjaxSpy.requests.shift();
 
   equals(request.type, "PUT");
-  equals(request.url, "./post.json");
-  equals(request.dataType, "json");
+  equals(request.url, "./ajax/update.json");
   same(request.data, { post: { title: "Bar", body: "..." } });
 });
 
 test("Model#destroy()", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("./post.json", {
+    persistence: Model.RestPersistence("./ajax/create.json", {
       update_path: function() { return this.create_path(); }
     })
   });
@@ -82,14 +78,13 @@ test("Model#destroy()", function() {
   var request = AjaxSpy.requests.shift();
 
   equals(request.type, "DELETE");
-  equals(request.url, "./post.json");
-  equals(request.dataType, "json");
+  equals(request.url, "./ajax/create.json");
   same(request.data, null);
 });
 
 test("events", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("./post.json", {
+    persistence: Model.RestPersistence("./ajax/create.json", {
       update_path: function() { return this.create_path(); }
     })
   });
@@ -102,8 +97,6 @@ test("events", function() {
   };
 
   var post = new Post();
-
-  AjaxSpy.stubData({ id: 1 });
 
   stop();
 

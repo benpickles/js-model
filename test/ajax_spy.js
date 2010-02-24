@@ -22,22 +22,4 @@ var AjaxSpy = {
     jQuery.ajax = this.oldAjax;
     this.oldAjax = null;
   },
-
-  stubData: function(data) {
-    jQuery.httpData = function() {
-      return data;
-    };
-  },
-
-  stubData: function(data) {
-    this.oldHttpData = jQuery.httpData;
-    jQuery.httpData = function() {
-      return data;
-    };
-  },
-
-  unstubData: function() {
-    jQuery.httpData = this.oldHttpData;
-    this.oldHttpData = null;
-  }
 };
