@@ -13,7 +13,7 @@ test("attributes", function() {
   equals(post.attr("title"), "Foo");
 });
 
-test("attr, attributes, changes, reset, save", function() {
+test("attr, attributes, changes, reset, save, destroy", function() {
   var Post = Model("post");
   var post = new Post({ title: "Foo", body: "..." });
 
@@ -51,7 +51,7 @@ test("attr, attributes, changes, reset, save", function() {
   same(post.attributes, { title: "Foo", body: "..." });
   same(post.changes, { title: "Bar" });
 
-  ok(post.save());
+  same(post.save(), post);
 
   same(post.attributes, { title: "Bar", body: "..." });
   same(post.changes, {});
@@ -61,10 +61,16 @@ test("attr, attributes, changes, reset, save", function() {
   same(post.attributes, { title: "Bar", body: "..." });
   same(post.changes, { title: "Foo", bar: "Bar" });
 
-  ok(post.save());
+  same(post.save(function(success) {
+    ok(success);
+  }), post);
 
   same(post.attributes, { bar: "Bar", body: "...", title: "Foo" });
   same(post.changes, {});
+
+  post.destroy(function(success) {
+    ok(success);
+  });
 });
 
 test("custom methods", function() {
@@ -92,37 +98,20 @@ test("validations/save", function() {
   var post = new Post({ title: "Foo" });
 
   ok(!post.valid());
-  ok(!post.save());
+
+  post.save(function(success) {
+    ok(!success);
+  });
 
   post.attr("title", "Bar");
 
   ok(post.valid());
-  ok(post.save());
+
+  post.save(function(success) {
+    ok(success);
+  });
+
   same(post.changes, {});
-});
-
-test("save and destroy with callbacks", function() {
-  var Post = Model("post");
-
-  var results = [];
-  var callback = function(success) {
-    // `this` refers to the model itself.
-    results.push(this);
-    // success will always be true when no persistence adapter is defined.
-    results.push(success);
-  };
-
-  var post = new Post();
-  post.save(callback);
-  post.attributes.id = 1;
-  post.save(callback);
-  post.destroy(callback);
-
-  same(results, [
-    post, true,
-    post, true,
-    post, true
-  ]);
 });
 
 test("events", function() {

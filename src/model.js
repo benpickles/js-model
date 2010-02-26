@@ -121,15 +121,17 @@ var Model = function(name, methods) {
     },
 
     save: function(callback) {
-      if (!this.valid()) return false;
+      if (this.valid()) {
+        // Merge any changes into attributes and clear changes.
+        this.merge(this.changes).reset();
 
-      // Merge any changes into attributes and clear changes.
-      this.merge(this.changes).reset();
+        var method = this.newRecord() ? "create" : "update";
+        this.callPersistMethod(method, callback);
+      } else {
+        if (callback) callback(false);
+      }
 
-      var method = this.newRecord() ? "create" : "update";
-      this.callPersistMethod(method, callback);
-
-      return true;
+      return this;
     },
 
     trigger: function(name, data) {
