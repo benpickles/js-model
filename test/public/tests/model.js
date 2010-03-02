@@ -1,36 +1,30 @@
 module("Model");
 
-test("attributes", function() {
-  var Post = Model("post");
-  var post;
-
-  post = new Post();
-  same(post.attributes, {});
-
-  post = new Post({ title: "Foo", body: "..." });
-  same(post.attributes, { title: "Foo", body: "..." });
-
-  equals(post.attr("title"), "Foo");
-});
-
 test("attr, attributes, changes, reset, save, destroy", function() {
   var Post = Model("post");
+
+  same(new Post().attributes, {});
+
   var post = new Post({ title: "Foo", body: "..." });
 
-  // Setting an attribute to null should be read back as null.
+  same(post.attributes, { title: "Foo", body: "..." });
+  same(post.changes, {});
+  same(post.attr(), { title: "Foo", body: "..." });
+
   post.attr("title", null);
   equals(post.attributes.title, "Foo", "attributes should be unchanged");
   equals(post.changes.title, null);
-  equals(post.attr("title"), null);
+  equals(post.attr("title"), null, "null value should be read back as null");
 
   post.attr("title", "Foo");
   equals(post.attributes.title, "Foo");
-  ok(!("title" in post.changes));
+  ok(!("title" in post.changes), "unchanged value shouldn't appear in changes");
   equals(post.attr("title"), "Foo");
 
   post.reset();
   same(post.attributes, { title: "Foo", body: "..." });
   same(post.changes, {});
+  same(post.attr(), { title: "Foo", body: "..." });
 
   // Set attribute using attr.
   equals(post.attr("title", "Bar"), post, "returns self");
@@ -39,6 +33,7 @@ test("attr, attributes, changes, reset, save, destroy", function() {
   equals(post.attr("title"), "Bar");
   same(post.attributes, { title: "Foo", body: "..." }, "attributes should be unchanged");
   same(post.changes, { title: "Bar" });
+  same(post.attr(), { title: "Bar", body: "..." });
 
   equals(post.reset(), post, "returns self");
 

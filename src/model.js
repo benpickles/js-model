@@ -23,7 +23,10 @@ var Model = function(name, methods) {
 
   model.prototype = $.extend({
     attr: function(name, value) {
-      if (arguments.length == 2) {
+      if (arguments.length == 0) {
+        // Combined attributes/changes object.
+        return $.extend(_.clone(this.attributes), this.changes);
+      } else if (arguments.length == 2) {
         // Don't write to attributes yet, store in changes for now.
         if (_.isEqual(this.attributes[name], value)) {
           // Clean up any stale changes.
