@@ -77,8 +77,11 @@ var Model = function(name, methods) {
       // other arguments will also be forwarded to the original callback.
       var wrappedCallback = function(success) {
         if (success) {
-          manageCollection();
+          // Merge any changes into attributes and clear changes.
+          self.merge(self.changes).reset();
+
           // Add/remove from collection if persist was successful.
+          manageCollection();
 
           // Trigger the event before executing the callback.
           self.trigger(method);
@@ -125,9 +128,6 @@ var Model = function(name, methods) {
 
     save: function(callback) {
       if (this.valid()) {
-        // Merge any changes into attributes and clear changes.
-        this.merge(this.changes).reset();
-
         var method = this.newRecord() ? "create" : "update";
         this.callPersistMethod(method, callback);
       } else {

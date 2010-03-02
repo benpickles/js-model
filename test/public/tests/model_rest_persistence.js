@@ -34,7 +34,8 @@ test("create failure", function() {
   var Post = Model("post", {
     persistence: Model.RestPersistence("/posts-failure")
   });
-  var post = new Post({ title: "Foo", body: "..." });
+  var post = new Post();
+  post.attr({ title: "Foo", body: "..." });
 
   equals(Post.count(), 0);
 
@@ -43,6 +44,8 @@ test("create failure", function() {
   post.save(function(success) {
     ok(!success);
     same(this, post);
+    same(this.attributes, {}, "changes should not have been merged");
+    same(this.attr(), { title: "Foo", body: "..." });
     equals(Post.count(), 0);
     start();
   });
@@ -80,12 +83,15 @@ test("update failure", function() {
     persistence: Model.RestPersistence("/posts-failure")
   });
   var post = new Post({ id: 1, title: "Foo" });
+  post.attr("title", "Bar");
 
   stop();
 
   post.save(function(success) {
     ok(!success);
     same(this, post);
+    same(this.attributes, { id: 1, title: "Foo" }, "changes should not have been merged");
+    same(this.attr(), { id: 1, title: "Bar" });
     start();
   });
 });
