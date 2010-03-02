@@ -7,6 +7,8 @@ var AjaxSpy = {
   },
 
   start: function() {
+    this.clear();
+
     // Don't die if it's already been started.
     if (this.oldAjax) return;
 
@@ -19,6 +21,7 @@ var AjaxSpy = {
   },
 
   stop: function() {
+    this.clear();
     jQuery.ajax = this.oldAjax;
     this.oldAjax = null;
   },

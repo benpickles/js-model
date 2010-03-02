@@ -6,13 +6,14 @@ get '/' do
   redirect '/index.html'
 end
 
-post '/ajax' do
+# Success.
+post '/posts' do
   JSON.generate({ :id => 1, :title => 'Foo amended', :body => '...', :foo => 'bar' })
 end
 
-put '/ajax/:id' do
+put '/posts/:id' do
   JSON.generate({ :id => 1, :title => 'Bar amended', :body => '...' })
 end
 
-delete '/ajax/:id' do
+delete '/posts/:id' do
 end

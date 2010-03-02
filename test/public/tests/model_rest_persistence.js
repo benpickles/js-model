@@ -1,10 +1,12 @@
 module("Model.RestPersistence");
 
-test("Model#save() (create)", function() {
+test("create", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/ajax")
+    persistence: Model.RestPersistence("/posts")
   });
   var post = new Post({ title: "Foo", body: "..." });
+
+  equals(Post.count(), 0);
 
   AjaxSpy.start();
 
@@ -15,6 +17,7 @@ test("Model#save() (create)", function() {
     same(this, post);
     same(post.attributes, { id: 1, title: "Foo amended", body: "...", foo: "bar" });
     equals(post.id(), 1);
+    equals(Post.count(), 1);
     start();
   });
 
@@ -23,13 +26,31 @@ test("Model#save() (create)", function() {
   var request = AjaxSpy.requests.shift();
 
   equals(request.type, "POST");
-  equals(request.url, "/ajax");
+  equals(request.url, "/posts");
   same(request.data, { post: { title: "Foo", body: "..." } });
 });
 
-test("Model#save() (update)", function() {
+test("create failure", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/ajax")
+    persistence: Model.RestPersistence("/posts-failure")
+  });
+  var post = new Post({ title: "Foo", body: "..." });
+
+  equals(Post.count(), 0);
+
+  stop();
+
+  post.save(function(success) {
+    ok(!success);
+    same(this, post);
+    equals(Post.count(), 0);
+    start();
+  });
+});
+
+test("update", function() {
+  var Post = Model("post", {
+    persistence: Model.RestPersistence("/posts")
   });
   var post = new Post({ id: 1, title: "Foo", body: "..." });
   post.attr("title", "Bar");
@@ -50,13 +71,28 @@ test("Model#save() (update)", function() {
   var request = AjaxSpy.requests.shift();
 
   equals(request.type, "PUT");
-  equals(request.url, "/ajax/1");
+  equals(request.url, "/posts/1");
   same(request.data, { post: { title: "Bar", body: "..." } });
 });
 
-test("Model#destroy()", function() {
+test("update failure", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/ajax")
+    persistence: Model.RestPersistence("/posts-failure")
+  });
+  var post = new Post({ id: 1, title: "Foo" });
+
+  stop();
+
+  post.save(function(success) {
+    ok(!success);
+    same(this, post);
+    start();
+  });
+});
+
+test("destroy", function() {
+  var Post = Model("post", {
+    persistence: Model.RestPersistence("/posts")
   });
   var post = new Post({ id: 1, title: "Foo", body: "..." });
 
@@ -74,13 +110,33 @@ test("Model#destroy()", function() {
   var request = AjaxSpy.requests.shift();
 
   equals(request.type, "DELETE");
-  equals(request.url, "/ajax/1");
+  equals(request.url, "/posts/1");
   same(request.data, null);
+});
+
+test("destroy failure", function() {
+  var Post = Model("post", {
+    persistence: Model.RestPersistence("/posts-failure")
+  });
+  var post = new Post({ id: 1, title: "Foo" });
+
+  Post.add(post);
+
+  equals(Post.count(), 1);
+
+  stop();
+
+  post.destroy(function(success) {
+    ok(!success);
+    same(this, post);
+    equals(Post.count(), 1);
+    start();
+  });
 });
 
 test("events", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/ajax")
+    persistence: Model.RestPersistence("/posts")
   });
 
   var events = [];
