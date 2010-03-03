@@ -16,14 +16,6 @@ Model.Errors.prototype = {
   },
 
   on: function(attribute) {
-    var errors = this.errors[attribute];
-
-    if (!errors) {
-      return;
-    } else if (errors.length == 1) {
-      return errors[0];
-    } else {
-      return errors;
-    }
+    return this.errors[attribute] || [];
   }
 }

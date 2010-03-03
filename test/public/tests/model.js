@@ -97,8 +97,8 @@ test("valid, validate, errors", function() {
 
   ok(!post.valid());
   equals(post.errors.length, 2);
-  same(post.errors.on("body"), "can't be blank");
-  same(post.errors.on("title"), "should be Bar");
+  same(post.errors.on("body"), ["can't be blank"]);
+  same(post.errors.on("title"), ["should be Bar"]);
 
   post.save(function(success) {
     ok(!success);
@@ -108,14 +108,14 @@ test("valid, validate, errors", function() {
 
   ok(!post.valid());
   equals(post.errors.length, 3);
-  same(post.errors.on("body"), "can't be blank");
+  same(post.errors.on("body"), ["can't be blank"]);
   same(post.errors.on("title"), ["should not be Foo", "should be Bar"]);
 
   post.reset();
 
   equals(post.errors.length, 0);
-  ok(post.errors.on("body") === undefined);
-  ok(post.errors.on("title") === undefined);
+  same(post.errors.on("body"), []);
+  same(post.errors.on("title"), []);
 
   post.attr({
     body: "...",
@@ -124,8 +124,8 @@ test("valid, validate, errors", function() {
 
   ok(post.valid());
   equals(post.errors.length, 0);
-  ok(post.errors.on("body") === undefined);
-  ok(post.errors.on("title") === undefined);
+  same(post.errors.on("body"), []);
+  same(post.errors.on("title"), []);
 
   post.save(function(success) {
     ok(success);
