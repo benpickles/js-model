@@ -1,4 +1,4 @@
-require 'lib/bundle'
+autoload :Bundle, 'lib/bundle'
 
 task :default => :test
 
