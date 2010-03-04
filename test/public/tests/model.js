@@ -96,7 +96,7 @@ test("valid, validate, errors", function() {
   var post = new Post();
 
   ok(!post.valid());
-  equals(post.errors.length, 2);
+  equals(post.errors.size(), 2);
   same(post.errors.on("body"), ["can't be blank"]);
   same(post.errors.on("title"), ["should be Bar"]);
 
@@ -107,13 +107,13 @@ test("valid, validate, errors", function() {
   post.attr("title", "Foo");
 
   ok(!post.valid());
-  equals(post.errors.length, 3);
+  equals(post.errors.size(), 3);
   same(post.errors.on("body"), ["can't be blank"]);
   same(post.errors.on("title"), ["should not be Foo", "should be Bar"]);
 
   post.reset();
 
-  equals(post.errors.length, 0);
+  equals(post.errors.size(), 0);
   same(post.errors.on("body"), []);
   same(post.errors.on("title"), []);
 
@@ -123,7 +123,7 @@ test("valid, validate, errors", function() {
   });
 
   ok(post.valid());
-  equals(post.errors.length, 0);
+  equals(post.errors.size(), 0);
   same(post.errors.on("body"), []);
   same(post.errors.on("title"), []);
 

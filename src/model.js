@@ -158,7 +158,7 @@ var Model = function(name, methods) {
     valid: function() {
       this.errors.clear();
       this.validate();
-      return this.errors.length == 0;
+      return this.errors.size() == 0;
     },
 
     validate: function() {
