@@ -83,7 +83,7 @@ test("custom methods", function() {
 test("valid, validate, errors", function() {
   var Post = Model("post", {
     validate: function() {
-      if (_.isEmpty(this.attr("body")))
+      if (!/\S/.test(this.attr("body") || ""))
         this.errors.add("body", "can't be blank");
 
       if (this.attr("title") == "Foo")
