@@ -5,15 +5,7 @@ Model.RestPersistence = function(resource, methods) {
 
   model_resource.prototype = $.extend({
     create: function(model, callback) {
-      var wrappedCallback = function(success, data, xhr) {
-        // Remote data is the definitive source, update model.
-        this.attr(data);
-
-        // Execute callback if supplied.
-        if (callback) callback.apply(this, arguments);
-      };
-
-      return this.xhr('POST', this.create_path(model), model, wrappedCallback);
+      return this.xhr('POST', this.create_path(model), model, callback);
     },
 
     create_path: function(model) {
@@ -21,7 +13,7 @@ Model.RestPersistence = function(resource, methods) {
     },
 
     destroy: function(model, callback) {
-      return this.xhr('DELETE', this.destroy_path(model), null, callback);
+      return this.xhr('DELETE', this.destroy_path(model), model, callback);
     },
 
     destroy_path: function(model) {
@@ -50,15 +42,7 @@ Model.RestPersistence = function(resource, methods) {
     },
 
     update: function(model, callback) {
-      var wrappedCallback = function(success, data, xhr) {
-        // Remote data is the definitive source, update model.
-        this.attr(data);
-
-        // Execute callback if supplied.
-        if (callback) callback.apply(this, arguments);
-      };
-
-      return this.xhr('PUT', this.update_path(model), model, wrappedCallback);
+      return this.xhr('PUT', this.update_path(model), model, callback);
     },
 
     update_path: function(model) {
@@ -74,13 +58,33 @@ Model.RestPersistence = function(resource, methods) {
         dataType: "text",
         data: this.params(model),
         complete: function(xhr, textStatus) {
-          if (callback) {
-            var success = textStatus == "success";
-            var data = self.parseResponseData(xhr);
-            callback.call(model, success, data, xhr);
-          };
+          self.xhrComplete(xhr, textStatus, model, callback);
         }
       });
+    },
+
+    xhrComplete: function(xhr, textStatus, model, callback) {
+      var data = this.parseResponseData(xhr);
+      var success = textStatus == "success";
+
+      if (data) {
+        if (success) {
+          // Remote data is the definitive source, update model.
+          model.attr(data);
+        } else if (xhr.status == 422) {
+          // Rails' preferred failed validation response code, assume these
+          // are errors and replace current model errors with them.
+          model.errors.clear();
+
+          for (var attribute in data) {
+            for (var i = 0; i < data[attribute].length; i++) {
+              model.errors.add(attribute, data[attribute][i]);
+            }
+          }
+        }
+      }
+
+      if (callback) callback.call(model, success, xhr);
     }
   }, methods);
 

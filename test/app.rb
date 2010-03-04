@@ -17,3 +17,38 @@ end
 
 delete '/posts/:id' do
 end
+
+# Failure.
+post '/posts-failure' do
+  status 500
+end
+
+put '/posts-failure/:id' do
+  status 500
+end
+
+delete '/posts-failure/:id' do
+  status 500
+end
+
+# Validations.
+post '/posts-validations' do
+  status 422
+  JSON.generate({
+    :title => ['should not be "Foo"', 'should be "Bar"']
+  })
+end
+
+put '/posts-validations/:id' do
+  status 422
+  JSON.generate({
+    :title => ['should not be "Foo"', 'should be "Bar"']
+  })
+end
+
+delete '/posts-validations/:id' do
+  status 422
+  JSON.generate({
+    :title => ['must do something else before deleting']
+  })
+end
