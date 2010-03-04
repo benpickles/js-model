@@ -51,12 +51,13 @@ Model.RestPersistence = function(resource, methods) {
 
     xhr: function(method, url, model, callback) {
       var self = this;
+      var data = method == "DELETE" ? null : this.params(model);
 
       return $.ajax({
         type: method,
         url: url,
         dataType: "text",
-        data: this.params(model),
+        data: data,
         complete: function(xhr, textStatus) {
           self.xhrComplete(xhr, textStatus, model, callback);
         }
