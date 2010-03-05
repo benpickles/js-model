@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.7.1
+
+* `Model.RestPersistence` now recognises a 422 response as validation failure and populates the model's errors object with the response data.
+* `Model.errors` is now an object and has a similar interface to ActiveModel.
+* Fix that `changes` should only be merged after a successful `save` (create/update).
+* Calling Model#attr() with no arguments returns a combined object of attributes/changes.
+* Fix that `Model.RestPersistence` Ajax failures should correctly run the supplied callback.
+* Add `count` method to `Model.Collection`.
+* Collection methods now access the collection through the `all` method so that `select`, `each`, etc work as expected if it's overwritten.
+
 ## 0.7.0
 
 * Events are now bound directly to a model rather than using jQuery `bind`. Collections also now have the concept of events with "add" and "remove" built-in.
