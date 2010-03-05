@@ -13,9 +13,11 @@ Model.Errors.prototype = {
   },
 
   each: function(func) {
+    var self = this;
+
     for (var attribute in this.errors) {
       for (var i = 0; i < this.errors[attribute].length; i++) {
-        func(attribute, this.errors[attribute][i]);
+        func.call(this, attribute, this.errors[attribute][i]);
       }
     }
   },

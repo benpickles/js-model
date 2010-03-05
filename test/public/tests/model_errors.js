@@ -8,10 +8,11 @@ test("add, clear, size, each", function() {
   same(errors.on("title"), []);
 
   var results = [];
+  var eachFunc = function(attribute, message) {
+    results.push(this, attribute, message);
+  };
 
-  errors.each(function(attribute, message) {
-    results.push(attribute, message);
-  });
+  errors.each(eachFunc);
 
   same(results, []);
 
@@ -29,27 +30,23 @@ test("add, clear, size, each", function() {
 
   results = [];
 
-  errors.each(function(attribute, message) {
-    results.push(attribute, message);
-  });
+  errors.each(eachFunc);
 
   same(results, [
-    "title", "can't be blank",
-    "title", "must be more than 1 character"
+    errors, "title", "can't be blank",
+    errors, "title", "must be more than 1 character"
   ]);
 
   errors.add("body", "can't be blank");
 
   results = [];
 
-  errors.each(function(attribute, message) {
-    results.push(attribute, message);
-  });
+  errors.each(eachFunc);
 
   same(results, [
-    "title", "can't be blank",
-    "title", "must be more than 1 character",
-    "body", "can't be blank"
+    errors, "title", "can't be blank",
+    errors, "title", "must be more than 1 character",
+    errors, "body", "can't be blank"
   ]);
 
   errors.clear();
