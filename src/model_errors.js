@@ -9,6 +9,10 @@ Model.Errors.prototype = {
     this.errors[attribute].push(message);
   },
 
+  all: function() {
+    return this.errors;
+  },
+
   clear: function() {
     this.errors = {};
   },
