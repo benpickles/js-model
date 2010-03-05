@@ -30,6 +30,25 @@ test("create", function() {
   same(request.data, { post: { title: "Foo", body: "..." } });
 });
 
+test("create - 422 response (failed validations)", function() {
+  var Post = Model("post", {
+    persistence: Model.RestPersistence("/posts-validations")
+  });
+  var post = new Post();
+  post.attr("title", "Foo");
+
+  stop();
+
+  post.save(function(success) {
+    ok(!success);
+    same(this, post);
+    same(this.attributes, {}, "changes should not have been merged");
+    same(this.attr(), { title: "Foo" });
+    same(this.errors.on("title"), ['should not be "Foo"', 'should be "Bar"']);
+    start();
+  });
+});
+
 test("create failure", function() {
   var Post = Model("post", {
     persistence: Model.RestPersistence("/posts-failure")
@@ -76,6 +95,25 @@ test("update", function() {
   equals(request.type, "PUT");
   equals(request.url, "/posts/1");
   same(request.data, { post: { title: "Bar", body: "..." } });
+});
+
+test("update - 422 response (failed validations)", function() {
+  var Post = Model("post", {
+    persistence: Model.RestPersistence("/posts-validations")
+  });
+  var post = new Post({ id: 1 });
+  post.attr("title", "Foo");
+
+  stop();
+
+  post.save(function(success) {
+    ok(!success);
+    same(this, post);
+    same(this.attributes, { id: 1 }, "changes should not have been merged");
+    same(this.attr(), { id: 1, title: "Foo" });
+    same(this.errors.on("title"), ['should not be "Foo"', 'should be "Bar"']);
+    start();
+  });
 });
 
 test("update failure", function() {
@@ -136,6 +174,22 @@ test("destroy failure", function() {
     ok(!success);
     same(this, post);
     equals(Post.count(), 1);
+    start();
+  });
+});
+
+test("destroy - 422 response (failed validations)", function() {
+  var Post = Model("post", {
+    persistence: Model.RestPersistence("/posts-validations")
+  });
+  var post = new Post({ id: 1, title: "Foo" });
+
+  stop();
+
+  post.destroy(function(success) {
+    ok(!success);
+    same(this, post);
+    same(this.errors.on("title"), ["must do something else before deleting"]);
     start();
   });
 });

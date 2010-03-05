@@ -80,27 +80,52 @@ test("custom methods", function() {
   equals(post.foo(), "foo");
 });
 
-test("validations/save", function() {
+test("valid, validate, errors", function() {
   var Post = Model("post", {
     validate: function() {
-      this.errors = [];
-      if (this.attr("title") != "Bar") {
-        this.errors.push("Title should be Bar");
-      };
+      if (!/\S/.test(this.attr("body") || ""))
+        this.errors.add("body", "can't be blank");
+
+      if (this.attr("title") == "Foo")
+        this.errors.add("title", "should not be Foo");
+      if (this.attr("title") != "Bar")
+        this.errors.add("title", "should be Bar");
     }
   });
 
-  var post = new Post({ title: "Foo" });
+  var post = new Post();
 
   ok(!post.valid());
+  equals(post.errors.size(), 2);
+  same(post.errors.on("body"), ["can't be blank"]);
+  same(post.errors.on("title"), ["should be Bar"]);
 
   post.save(function(success) {
     ok(!success);
   });
 
-  post.attr("title", "Bar");
+  post.attr("title", "Foo");
+
+  ok(!post.valid());
+  equals(post.errors.size(), 3);
+  same(post.errors.on("body"), ["can't be blank"]);
+  same(post.errors.on("title"), ["should not be Foo", "should be Bar"]);
+
+  post.reset();
+
+  equals(post.errors.size(), 0);
+  same(post.errors.on("body"), []);
+  same(post.errors.on("title"), []);
+
+  post.attr({
+    body: "...",
+    title: "Bar"
+  });
 
   ok(post.valid());
+  equals(post.errors.size(), 0);
+  same(post.errors.on("body"), []);
+  same(post.errors.on("title"), []);
 
   post.save(function(success) {
     ok(success);

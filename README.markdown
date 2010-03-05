@@ -91,31 +91,32 @@ Of course you can also set methods on the model's `prototype` as usual:
     post.bar()
     // => Do something else
 
-### Validations
+### Validations and Errors
 
-To add your own validations you should define a custom `validate` method that adds error messages to the `errors` array. `valid()` runs this method and checks that the `errors` array is empty.
+To add your own validations you should define a custom `validate` method that adds error messages to the `errors` object. `valid()` is called on save and checks that `errors` is empty.
 
     var Post = Model('post', {
       validate: function() {
         if (this.attr("title") != "Bar") {
-          this.errors.push("Title should be Bar")
+          this.errors.add("title", "should be Bar")
         }
       }
     })
 
-    var post = new Post({ title: "Foo" })
-    post.valid()
-    // => false
+    var post = new Post()
+    post.attr("title", "Foo")
 
-    post.errors
-    // => ["Title should be Bar"]
+    post.valid()                // => false
+    post.errors.size()          // => 1
+    post.errors.on("title")     // => ["should be Bar"]
+    post.errors.all()           // => { title: ["should be Bar"] }
 
     post.attr("title", "Bar")
-    post.valid()
-    // => true
 
-    post.errors
-    // => []
+    post.valid()                // => true
+    post.errors.size()          // => 0
+    post.errors.on("title")     // => []
+    post.errors.all()           // => {}
 
 ### `save()`
 

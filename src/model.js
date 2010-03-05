@@ -6,7 +6,7 @@ var Model = function(name, methods) {
     this.callbacks = {};
     this.changes = {};
     this.collection = collection;
-    this.errors = [];
+    this.errors = new Model.Errors(this);
   };
 
   // Use a custom collection object if specified, otherwise create a default.
@@ -122,6 +122,7 @@ var Model = function(name, methods) {
     },
 
     reset: function() {
+      this.errors.clear();
       this.changes = {};
       return this;
     },
@@ -155,9 +156,9 @@ var Model = function(name, methods) {
     },
 
     valid: function() {
-      this.errors = [];
+      this.errors.clear();
       this.validate();
-      return this.errors.length == 0;
+      return this.errors.size() == 0;
     },
 
     validate: function() {
