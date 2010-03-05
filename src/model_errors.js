@@ -1,5 +1,6 @@
-Model.Errors = function() {
+Model.Errors = function(model) {
   this.errors = {};
+  this.model = model;
 };
 
 Model.Errors.prototype = {

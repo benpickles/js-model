@@ -6,7 +6,7 @@ var Model = function(name, methods) {
     this.callbacks = {};
     this.changes = {};
     this.collection = collection;
-    this.errors = new Model.Errors();
+    this.errors = new Model.Errors(this);
   };
 
   // Use a custom collection object if specified, otherwise create a default.
