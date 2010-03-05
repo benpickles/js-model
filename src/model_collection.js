@@ -92,8 +92,9 @@ Model.Collection = function(methods) {
     },
 
     select: function(func) {
-      var selected = _.select(this.all(), function(model, i) {
-        return func.call(model, i);
+      var selected = [];
+      $.each(this.all(), function(i) {
+        if (func.call(this, i)) selected.push(this);
       });
       return chain(selected);
     },
