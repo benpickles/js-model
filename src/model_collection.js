@@ -47,9 +47,14 @@ Model.Collection = function(methods) {
     },
 
     detect: function(func) {
-      return _.detect(this.all(), function(model, i) {
-        return func.call(model, i);
-      }) || null;
+      var model;
+      $.each(this.all(), function(i) {
+        if (func.call(this, i)) {
+          model = this;
+          return false;
+        }
+      });
+      return model;
     },
 
     each: function(func) {
