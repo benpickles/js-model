@@ -5,93 +5,115 @@ Dependencies:
  * [jQuery](http://jquery.com/)
  * [Underscore](http://documentcloud.github.com/underscore/)
 
-## Models
+## Getting started
 
-### `Model()`
-
-`Model()` is a factory for creating model classes:
+The first thing to do is to create a model class using the factory 'Model()':
 
     var Post = Model('post')
-    var post = new Post()
 
-### Attributes
+This allows you to create instances of 'post' models, and also contains an internal collection of all 'posts' which can be used for querying.
 
-Attributes are passed when instantiating a model object and can be directly accessed through the `attributes` property.
+## Manipulating objects (without persistence yet)
 
-    var post = new Post({ title: "Foo" })
-    post.attributes
-    // => { title: "Foo" }
+The next thing you need to do is create and manipulate instances of your new JS model. These actions should be fairly familiar to people who have used ActiveRecord.
 
-#### `attr(name, [value])`
+### create 
 
-`attr` takes two forms, passing a single argument will read while a name/value pair will write the attribute value and return `this` - allowing multiple chained setter calls.
+    var post = new Post({foo: 'bar'}) 
 
-    var post = new Post({ title: "Foo" })
+### update
 
-    // Get attribute
-    post.attr("title")
-    // => "Foo"
+    post.update({foo: 'bar' })
 
-    // Set attribute
-    post.attr("title", "Bar")
+### destroy 
 
-    // Get attribute again
-    post.attr("title")
-    // => "Bar"
+    post.destroy()
 
-    // Chain setters
-    post.attr("title", "Baz").attr("body", "...")
-    // => post
+Attributes are read with the attr method, which works in a similar way to JQuery on the DOM:
 
-#### `changes`
+    post.attr('foo'); // getter
+    post.attr('foo', 'bar'); // setter
 
-Attributes set with the `attr` method are written to an intermediary object rather than directly to the `attributes` object, these will be written to `attributes` at a later stage.
+The id of an object is set after persistence, and is accessible via the id() method.
 
-    var post = new Post({ title: "Foo" })
-    post.attributes             // => { title: "Foo" }
-    post.changes                // => {}
+### Maintaining the state of collections
 
-    // Change title
-    post.attr("title", "Bar")
-    post.attributes             // => { title: "Foo" }
-    post.changes                // => { title: "Bar" }
-    post.attr("title")          // => "Bar"
+Instances need to be fed back into the model's collection, so that the results are available to "finders". The 2 main methods which handle this are:
 
-    // Change it back to what it was
-    post.attr("title", "Foo")
-    post.attributes             // => { title: "Foo" }
-    post.changes                // => {}
+* Post.add(post)
+* Post.remove(post.id())
 
-    // Change title again and reset changes
-    post.attr("title", "Bar")
-    post.attributes             // => { title: "Foo" }
-    post.changes                // => { title: "Bar" }
-    post.reset()
-    post.changes                // => {}
+These are called automatically after successful persistence, but can also be called manually.
 
-### Custom Methods
+## Finding objects
 
-Custom methods can be defined on the model at class creation time, they are added to the model's `prototype` overwriting the defaults if necessary.
+Since state is held in the browser, objects need to be queried from our collection in order to be manipulated and used in the UI. This is where JS-Model is different to several other solutions. It is not a REST-based proxy for the objects on your server, and doesn't rely on constant HTTP requests to gather information. Instead it look up objects in its own cache. 
+
+Different finders are available
+
+    Post.all() 
+
+and 
+
+    Post.find(id)
+
+These are useful for iterating over the collection and finding specific objects, respectively. It is also possible to add custom finders to the collection's prototype (see below).
+
+## Linking data objects to UI elements
+
+JS-model allows you to listen to the lifecycle of objects, based on the events they trigger at different points.
+
+### Collection events
+
+It is possible to bind to an event occurring when adding an object to a collection. Eg:
+
+    MyCollection.bind('add', function(new_object){ add_object_into_ui(new_object) })
+
+and 
+
+    MyCollection.bind('remove', function(removed_object){ remove_object_from_ui(removed_object) })
+
+### Instance events:
+
+Parts of your application can be bound to changes which happen to a __specific__ instance:
+
+    my_object.bind('update', function(){ my_ui_elem.text(my_object.attr('name')) })
+
+Including when the instance is destroyed:
+
+    my_object.bind('remove', function(){ my_ui_elem.remove() })
+
+## Persistence 
+
+State can be persisted in a number of ways, including local storage. However, one of the most common uses is via REST to the originating server. JS-Model comes bundled with an optional REST persistence adaptor.
+
+### REST/Ajax persistence
+
+Setting up persistence for a given model is handled when the class is created: 
 
     var Post = Model('post', {
-      foo: function() {
-        ...
+      persistence: Model.RestPersistence("/posts")
+    }
+
+Calling __save__ or __destroy__ on an object now fires a corresponding REST Request:
+
+    var post = new Post({foo: 'bar'}).save() // makes a POST request to '/posts'
+
+A custom callback can be fed into the save method to execute on success or failure:
+
+    post.save(function(success) {
+      if (success) {
+        alert('yey')
+      } else {
+        alert('boo')
       }
     })
 
-    var post = new Post({ ... })
-    post.foo()
-    // => Do something
+The default triggered events (mentioned earlier) are generally only called once persistence is successful.
 
-Of course you can also set methods on the model's `prototype` as usual:
+## Validations
 
-    Post.prototype.bar = function() {
-      ...
-    }
-    post.bar()
-    // => Do something else
-
-### Validations and Errors
+It is possible to have local validations to avoid hitting your server unnecessarily.
 
 To add your own validations you should define a custom `validate` method that adds error messages to the `errors` object. `valid()` is called on save and checks that `errors` is empty.
 
@@ -118,69 +140,44 @@ To add your own validations you should define a custom `validate` method that ad
     post.errors.on("title")     // => []
     post.errors.all()           // => {}
 
-### `save()`
+## Adding custom methods
 
-If the model is valid `save` will merge any `changes` with `attributes`.
+Since models are objects, there can be a need to give them custom public methods. There are parts to a JS-model which can be extended, and these are akin to instance and class methods on an ORM such as ActiveRecord.
 
-    var post = new Post({ title: "Foo" })
+### Instance methods
 
-    // Post requires title to be "Bar" - see above
-    post.save()                 // => false
+Instance methods are often used to link objects together in a way which mimics the relationships the data might have in the remote database ('has many' etc). However, they can be pretty much anything. These are defined on the model at class creation time, they are added to the model's `prototype` overwriting the defaults if necessary.
 
-    // Make the model valid and save
-    post.attr("title", "Bar")
-    post.attributes             // => { title: "Foo" }
-    post.changes                // => { title: "Bar" }
-    post.save()                 // => true
-
-    post.attributes             // => { title: "Bar" }
-    post.changes                // => {}
-
-### Persistence
-
-It's easy to persist a model's data to the server by defining an adapter when creating the class - a simple REST adapter is provided.
-
-    var Post = Model("post", {
-      persistence: Model.RestPersistence("/posts")
+    var Post = Model('post', {
+      foo: function() {
+        ...
+      }
     })
 
-    var post = new Post({ title: "Foo" })
-    post.newRecord()  // => true
+    Post.find(3).foo()
 
-    post.save()
-    // Ajax POST request made to /posts
+### Collection (Class) methods
 
-    // The model's newly assigned id is extracted from the Ajax response
-    post.id()         // => 1
-    post.newRecord()  // => false
+These are defined by extending the 'collection' method of a model with an altered version of "Model.Collection", eg:
 
-    post.attr("title", "Bar").save()
-    // Ajax PUT request made to /posts/1
+    var Post = Model('post', {
+      collection: Model.Collection({
+        find_by_foo: function(foo) {
+          return this.detect(function() {
+            return this.attr('foo') == foo;
+          });
+        }
+      })
+    }
 
-### Events (`bind`/`trigger`)
+    Post.find_by_foo('bar')
 
-Through its lifetime a model will trigger some events for you to bind to:
 
- * create
- * update
- * destroy
+## Triggering custom events
 
-You can easily hook into these events and bind custom callbacks to them:
+You might also want to have custom events on objects, which are also possible:
 
-    var post = new Post({ title: "Foo" })
-    post.bind("create", function() {
-      // Do something
-    })
-    post.save()
-    // => Something happened
+    post.trigger('turn_blue')
 
-Custom events can also be bound and triggered by calling `trigger()`:
+Which could be linked up to a UI element.
 
-    post.bind("foo", function() {
-      // Do something
-    })
-    post.bind("foo", function() {
-      // Do something different
-    })
-    post.trigger("foo")
-    // => "foo" event triggered, something AND something different happened!
