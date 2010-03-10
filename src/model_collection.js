@@ -105,7 +105,7 @@ Model.Collection = function(methods) {
 
       if (callbacks) {
         for (var i = 0; i < callbacks.length; i++) {
-          callbacks[i].apply(this, data);
+          callbacks[i].apply(this, data || []);
         };
       };
 
