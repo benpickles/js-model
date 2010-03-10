@@ -24,5 +24,5 @@ var AjaxSpy = {
     this.clear();
     jQuery.ajax = this.oldAjax;
     this.oldAjax = null;
-  },
+  }
 };
