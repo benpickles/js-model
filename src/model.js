@@ -9,14 +9,11 @@ var Model = function(name, methods) {
     this.errors = new Model.Errors(this);
   };
 
-  // Use a custom collection object if specified, otherwise create a default.
-  var collection;
-  if (methods && methods.collection) {
-    collection = methods.collection;
-    delete methods.collection;
-  } else {
-    collection = Model.Collection();
-  };
+  methods = methods || {};
+
+  // Use a custom collection object if specified or create a default.
+  var collection = methods.collection || Model.Collection();
+  delete methods.collection;
 
   // Borrow the Collection's methods and add to the model as "class" methods.
   model = $.extend(model, collection);
