@@ -56,7 +56,7 @@ Model.RestPersistence = function(resource, methods) {
       return jQuery.ajax({
         type: method,
         url: url,
-        dataType: "text",
+        dataType: "json",
         data: data,
         complete: function(xhr, textStatus) {
           self.xhrComplete(xhr, textStatus, model, callback);
