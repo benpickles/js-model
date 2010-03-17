@@ -22,7 +22,7 @@ var Model = function(name, methods) {
     attr: function(name, value) {
       if (arguments.length == 0) {
         // Combined attributes/changes object.
-        return jQuery.extend(_.clone(this.attributes), this.changes);
+        return jQuery.extend({}, this.attributes, this.changes);
       } else if (arguments.length == 2) {
         // Don't write to attributes yet, store in changes for now.
         if (_.isEqual(this.attributes[name], value)) {

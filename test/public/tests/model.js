@@ -9,7 +9,11 @@ test("attr, attributes, changes, reset, save, destroy", function() {
 
   same(post.attributes, { title: "Foo", body: "..." });
   same(post.changes, {});
-  same(post.attr(), { title: "Foo", body: "..." });
+
+  var attr = post.attr();
+  same(attr, { title: "Foo", body: "..." });
+  attr.title = "Bar";
+  equals(post.attributes.title, "Foo", "`attr` should return a copy of attributes not the real thing");
 
   post.attr("title", null);
   equals(post.attributes.title, "Foo", "attributes should be unchanged");
