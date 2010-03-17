@@ -16,9 +16,9 @@ var Model = function(name, methods) {
   delete methods.collection;
 
   // Borrow the Collection's methods and add to the model as "class" methods.
-  model = jQuery.extend(model, collection);
+  jQuery.extend(model, collection);
 
-  model.prototype = jQuery.extend({
+  jQuery.extend(model.prototype, {
     attr: function(name, value) {
       if (arguments.length == 0) {
         // Combined attributes/changes object.

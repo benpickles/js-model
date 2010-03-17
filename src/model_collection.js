@@ -11,7 +11,7 @@ Model.Collection = function(methods) {
   };
 
   // Define default and any custom methods.
-  model_collection.prototype = jQuery.extend({
+  jQuery.extend(model_collection.prototype, {
     add: function() {
       var added = [];
 

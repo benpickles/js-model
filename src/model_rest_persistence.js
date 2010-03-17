@@ -3,7 +3,7 @@ Model.RestPersistence = function(resource, methods) {
     this.resource = resource;
   };
 
-  model_resource.prototype = jQuery.extend({
+  jQuery.extend(model_resource.prototype, {
     create: function(model, callback) {
       return this.xhr('POST', this.create_path(model), model, callback);
     },
