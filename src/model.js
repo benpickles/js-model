@@ -16,13 +16,13 @@ var Model = function(name, methods) {
   delete methods.collection;
 
   // Borrow the Collection's methods and add to the model as "class" methods.
-  model = $.extend(model, collection);
+  model = jQuery.extend(model, collection);
 
-  model.prototype = $.extend({
+  model.prototype = jQuery.extend({
     attr: function(name, value) {
       if (arguments.length == 0) {
         // Combined attributes/changes object.
-        return $.extend(_.clone(this.attributes), this.changes);
+        return jQuery.extend(_.clone(this.attributes), this.changes);
       } else if (arguments.length == 2) {
         // Don't write to attributes yet, store in changes for now.
         if (_.isEqual(this.attributes[name], value)) {
@@ -110,7 +110,7 @@ var Model = function(name, methods) {
     },
 
     merge: function(attributes) {
-      $.extend(this.attributes, attributes);
+      jQuery.extend(this.attributes, attributes);
       return this;
     },
 

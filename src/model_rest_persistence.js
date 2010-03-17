@@ -3,7 +3,7 @@ Model.RestPersistence = function(resource, methods) {
     this.resource = resource;
   };
 
-  model_resource.prototype = $.extend({
+  model_resource.prototype = jQuery.extend({
     create: function(model, callback) {
       return this.xhr('POST', this.create_path(model), model, callback);
     },
@@ -53,7 +53,7 @@ Model.RestPersistence = function(resource, methods) {
       var self = this;
       var data = method == "DELETE" ? null : this.params(model);
 
-      return $.ajax({
+      return jQuery.ajax({
         type: method,
         url: url,
         dataType: "text",

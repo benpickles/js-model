@@ -11,7 +11,7 @@ Model.Collection = function(methods) {
   };
 
   // Define default and any custom methods.
-  model_collection.prototype = $.extend({
+  model_collection.prototype = jQuery.extend({
     add: function() {
       var added = [];
 
@@ -53,7 +53,7 @@ Model.Collection = function(methods) {
     },
 
     each: function(func) {
-      $.each(this.all(), function(i) {
+      jQuery.each(this.all(), function(i) {
         func.call(this, i);
       });
       return this;
