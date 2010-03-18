@@ -1,7 +1,6 @@
 var Model = function(name, methods) {
   // The model constructor.
   var model = function(attributes) {
-    this._name = name;
     this.attributes = attributes || {};
     this.callbacks = {};
     this.changes = {};
@@ -12,7 +11,7 @@ var Model = function(name, methods) {
 
   // Use a custom collection object if specified or create a default. Borrow
   // these methods and add them to the models "class" methods.
-  jQuery.extend(model, methods.collection || Model.Collection());
+  jQuery.extend(model, methods.collection || Model.Collection(), { _name: name });
 
   jQuery.extend(model.prototype, {
     attr: function(name, value) {

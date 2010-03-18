@@ -26,7 +26,7 @@ Model.RestPersistence = function(resource, methods) {
         var attributes = model.attr();
         delete attributes.id;
         params = {};
-        params[model._name] = attributes;
+        params[model.constructor._name.toLowerCase()] = attributes;
       } else {
         params = null;
       }
