@@ -5,11 +5,6 @@ Model.Collection = function(methods) {
     this.callbacks = {};
   };
 
-  // Convenience method to allow a simple way to chain collection methods.
-  var chain = function(collection) {
-    return new model_collection(collection);
-  };
-
   // Define default and any custom methods.
   jQuery.extend(model_collection.prototype, {
     add: function() {
@@ -40,6 +35,11 @@ Model.Collection = function(methods) {
       this.callbacks[event] = this.callbacks[event] || [];
       this.callbacks[event].push(callback);
       return this;
+    },
+
+    // Convenience method to allow a simple way to chain collection methods.
+    chain: function(collection) {
+      return new this.constructor(collection);
     },
 
     count: function() {
@@ -96,14 +96,14 @@ Model.Collection = function(methods) {
       $.each(this.all(), function(i) {
         if (func.call(this, i)) selected.push(this);
       });
-      return chain(selected);
+      return this.chain(selected);
     },
 
     sort: function(func) {
       var sorted = _.sortBy(this.all(), function(model, i) {
         return func.call(model, i);
       });
-      return chain(sorted);
+      return this.chain(sorted);
     },
 
     trigger: function(name, data) {
