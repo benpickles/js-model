@@ -67,11 +67,15 @@ JS-model allows you to listen to the lifecycle of objects, based on the events t
 
 It is possible to bind to an event occurring when adding an object to a collection. Eg:
 
-    MyCollection.bind('add', function(new_object){ add_object_into_ui(new_object) })
+    Post.bind("add", function(new_object) {
+      add_object_into_ui(new_object)
+    })
 
-and 
+and
 
-    MyCollection.bind('remove', function(removed_object){ remove_object_from_ui(removed_object) })
+    Post.bind("remove", function(removed_object) {
+      remove_object_from_ui(removed_object)
+    })
 
 ### Instance events:
 

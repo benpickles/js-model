@@ -171,7 +171,6 @@ test("sort (and chaining)", function() {
 });
 
 test("events", function() {
-  var PostCollection = Model.Collection();
   var Post = Model('post');
   var results = [];
 
@@ -179,7 +178,7 @@ test("events", function() {
   var post2 = new Post({ id: 2 });
   var post3 = new Post({ id: 3 });
 
-  PostCollection.bind("add", function() {
+  Post.bind("add", function() {
     results.push(this);
     results.push("add");
     for (var i = 0; i < arguments.length; i++) {
@@ -187,12 +186,12 @@ test("events", function() {
     };
   });
 
-  PostCollection.bind("remove", function() {
+  Post.bind("remove", function() {
     results.push(this);
     results.push("remove");
   })
 
-  PostCollection.bind("custom", function() {
+  Post.bind("custom", function() {
     results.push(this);
     results.push("custom");
   }).bind("custom", function() {
@@ -200,23 +199,23 @@ test("events", function() {
     results.push("custom-2");
   })
 
-  PostCollection.bind("not-called", function() {
+  Post.bind("not-called", function() {
     results.push("not-called");
   });
 
-  PostCollection.add(post1, post2);
-  PostCollection.add(post1);
-  PostCollection.add(post3);
-  PostCollection.remove(1);
-  PostCollection.remove(666);
-  PostCollection.trigger("custom");
+  Post.add(post1, post2);
+  Post.add(post1);
+  Post.add(post3);
+  Post.remove(1);
+  Post.remove(666);
+  Post.trigger("custom");
 
   same(results, [
-    PostCollection, "add", post1, post2,
-    PostCollection, "add", post3,
-    PostCollection, "remove",
-    PostCollection, "custom",
-    PostCollection, "custom-2"
+    Post, "add", post1, post2,
+    Post, "add", post3,
+    Post, "remove",
+    Post, "custom",
+    Post, "custom-2"
   ]);
 });
 
