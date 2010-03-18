@@ -5,18 +5,14 @@ var Model = function(name, methods) {
     this.attributes = attributes || {};
     this.callbacks = {};
     this.changes = {};
-    this.collection = collection;
     this.errors = new Model.Errors(this);
   };
 
   methods = methods || {};
 
-  // Use a custom collection object if specified or create a default.
-  var collection = methods.collection || Model.Collection();
-  delete methods.collection;
-
-  // Borrow the Collection's methods and add to the model as "class" methods.
-  jQuery.extend(model, collection);
+  // Use a custom collection object if specified or create a default. Borrow
+  // these methods and add them to the models "class" methods.
+  jQuery.extend(model, methods.collection || Model.Collection());
 
   jQuery.extend(model.prototype, {
     attr: function(name, value) {
@@ -55,14 +51,12 @@ var Model = function(name, methods) {
     callPersistMethod: function(method, callback) {
       var self = this;
 
-      // Automatically manage adding and removing from a Model.Collection if
-      // one is defined.
+      // Automatically manage adding and removing from the model's Collection.
       var manageCollection = function() {
-        if (!self.collection) return;
         if (method == "create") {
-          self.collection.add(self);
+          self.constructor.add(self);
         } else if (method == "destroy") {
-          self.collection.remove(self.id());
+          self.constructor.remove(self.id());
         };
       };
 
