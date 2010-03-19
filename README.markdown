@@ -2,8 +2,8 @@
 
 Dependencies:
 
- * [jQuery](http://jquery.com/)
- * [Underscore](http://documentcloud.github.com/underscore/)
+ * [jQuery](http://jquery.com/) (1.4.x)
+ * [Underscore](http://documentcloud.github.com/underscore/) (for now)
 
 ## Getting started
 
