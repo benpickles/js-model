@@ -47,7 +47,7 @@ These are called automatically after successful persistence, but can also be cal
 
 ## Finding objects
 
-Since state is held in the browser, objects need to be queried from our collection in order to be manipulated and used in the UI. This is where JS-Model is different to several other solutions. It is not a REST-based proxy for the objects on your server, and doesn't rely on constant HTTP requests to gather information. Instead it look up objects in its own cache. 
+Since state is held in the browser, objects need to be queried from our collection in order to be manipulated and used in the UI. This is where js-model is different to several other solutions. It is not a REST-based proxy for the objects on your server, and doesn't rely on constant HTTP requests to gather information. Instead it look up objects in its own cache. 
 
 Different finders are available
 
@@ -61,7 +61,7 @@ These are useful for iterating over the collection and finding specific objects,
 
 ## Linking data objects to UI elements
 
-JS-model allows you to listen to the lifecycle of objects, based on the events they trigger at different points.
+js-model allows you to listen to the lifecycle of objects, based on the events they trigger at different points.
 
 ### Collection events
 
@@ -89,7 +89,7 @@ Including when the instance is destroyed:
 
 ## Persistence 
 
-State can be persisted in a number of ways, including local storage. However, one of the most common uses is via REST to the originating server. JS-Model comes bundled with an optional REST persistence adaptor.
+State can be persisted in a number of ways, including local storage. However, one of the most common uses is via REST to the originating server. js-model comes bundled with an optional REST persistence adaptor.
 
 ### REST/Ajax persistence
 
@@ -121,7 +121,7 @@ It is possible to have local validations to avoid hitting your server unnecessar
 
 To add your own validations you should define a custom `validate` method that adds error messages to the `errors` object. `valid()` is called on save and checks that `errors` is empty.
 
-    var Post = Model('post', {
+    var Post = Model('post', {}, {
       validate: function() {
         if (this.attr("title") != "Bar") {
           this.errors.add("title", "should be Bar")
@@ -146,36 +146,33 @@ To add your own validations you should define a custom `validate` method that ad
 
 ## Adding custom methods
 
-Since models are objects, there can be a need to give them custom public methods. There are parts to a JS-model which can be extended, and these are akin to instance and class methods on an ORM such as ActiveRecord.
+Since models are objects, there can be a need to give them custom public methods. There are two parts to a model which can be extended, and these are akin to instance and class methods on an ORM such as ActiveRecord.
+
+### Class methods
+
+These are defined by passing an object as the second argument when defining a model:
+
+    var Post = Model("post", {
+      find_by_foo: function(foo) {
+        return this.detect(function() {
+          return this.attr("foo") == foo;
+        });
+      }
+    }
+
+    Post.find_by_foo("bar")
 
 ### Instance methods
 
-Instance methods are often used to link objects together in a way which mimics the relationships the data might have in the remote database ('has many' etc). However, they can be pretty much anything. These are defined on the model at class creation time, they are added to the model's `prototype` overwriting the defaults if necessary.
+Instance methods are the third argument when defining a model and are often used to link objects together in a way which mimics the relationships the data might have in the remote database ('has many' etc). However, they can be pretty much anything. These are defined on the model at class creation time, they are added to the model's `prototype` overwriting the defaults if necessary.
 
-    var Post = Model('post', {
+    var Post = Model("post", {}, {
       foo: function() {
         ...
       }
     })
 
     Post.find(3).foo()
-
-### Collection (Class) methods
-
-These are defined by extending the 'collection' method of a model with an altered version of "Model.Collection", eg:
-
-    var Post = Model('post', {
-      collection: Model.Collection({
-        find_by_foo: function(foo) {
-          return this.detect(function() {
-            return this.attr('foo') == foo;
-          });
-        }
-      })
-    }
-
-    Post.find_by_foo('bar')
-
 
 ## Triggering custom events
 
@@ -184,4 +181,3 @@ You might also want to have custom events on objects, which are also possible:
     post.trigger('turn_blue')
 
 Which could be linked up to a UI element.
-
