@@ -12,7 +12,7 @@ task :minify => :bundle do
   Bundle.new.minify!
 end
 
-desc 'Boot test server - run tests at http://localhost:9393/'
+desc 'Boot test server - run tests at http://localhost:4567/'
 task :test do
-  exec 'cd test && shotgun app.rb'
+  exec 'cd test && ruby app.rb'
 end
