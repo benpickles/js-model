@@ -4,7 +4,8 @@
  *  Released under MIT license.
  */
 //= require "model"
-//= require "model_errors"
-//= require "model_log"
 //= require "model_collection"
+//= require "model_errors"
+//= require "model_instance_methods"
+//= require "model_log"
 //= require "model_rest_persistence"
