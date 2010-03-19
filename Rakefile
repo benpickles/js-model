@@ -4,12 +4,13 @@ task :default => :test
 
 desc 'Bundle source files.'
 task :bundle do
-  Bundle.new.bundle!
+  @bundle = Bundle.new
+  @bundle.bundle!
 end
 
 desc 'Minify bundled source.'
 task :minify => :bundle do
-  Bundle.new.minify!
+  @bundle.minify!
 end
 
 desc 'Boot test server - run tests at http://localhost:4567/'
