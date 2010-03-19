@@ -1,12 +1,11 @@
-Model.Collection = function(methods) {
+Model.Collection = function() {
   // Constructor.
   var model_collection = function(collection) {
     this.collection = collection || [];
     this.callbacks = {};
   };
 
-  // Define default and any custom methods.
-  jQuery.extend(model_collection.prototype, {
+  model_collection.prototype = {
     add: function() {
       var added = [];
 
@@ -39,7 +38,7 @@ Model.Collection = function(methods) {
 
     // Convenience method to allow a simple way to chain collection methods.
     chain: function(collection) {
-      return new this.constructor(collection);
+      return new model_collection(collection);
     },
 
     count: function() {
@@ -117,7 +116,7 @@ Model.Collection = function(methods) {
 
       return this;
     }
-  }, methods);
+  };
 
   return new model_collection();
 };

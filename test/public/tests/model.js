@@ -77,7 +77,13 @@ test("custom methods", function() {
     foo: function() {
       return "foo";
     }
+  }, {
+    foo: function() {
+      return "foo";
+    }
   });
+
+  equals(Post.foo(), "foo");
 
   var post = new Post();
 
@@ -85,7 +91,7 @@ test("custom methods", function() {
 });
 
 test("valid, validate, errors", function() {
-  var Post = Model("post", {
+  var Post = Model("post", {}, {
     validate: function() {
       if (!/\S/.test(this.attr("body") || ""))
         this.errors.add("body", "can't be blank");

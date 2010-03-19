@@ -1,4 +1,7 @@
-var Model = function(name, methods) {
+var Model = function(name, class_methods, instance_methods) {
+  class_methods = class_methods || {};
+  instance_methods = instance_methods || {};
+
   // The model constructor.
   var model = function(attributes) {
     this.attributes = attributes || {};
@@ -7,11 +10,9 @@ var Model = function(name, methods) {
     this.errors = new Model.Errors(this);
   };
 
-  methods = methods || {};
-
-  // Use a custom collection object if specified or create a default. Borrow
-  // these methods and add them to the models "class" methods.
-  jQuery.extend(model, methods.collection || Model.Collection(), { _name: name });
+  // Always apply Model.Collection methods as model class methods and extend
+  // with any custom class methods. Make sure _name is added last.
+  jQuery.extend(model, Model.Collection(), class_methods, { _name: name });
 
   jQuery.extend(model.prototype, {
     attr: function(name, value) {
@@ -86,8 +87,8 @@ var Model = function(name, methods) {
         return value;
       };
 
-      if (this.persistence) {
-        this.persistence[method](this, wrappedCallback);
+      if (this.constructor.persistence) {
+        this.constructor.persistence[method](this, wrappedCallback);
       } else {
         wrappedCallback.call(this, true);
       };
@@ -154,7 +155,7 @@ var Model = function(name, methods) {
     validate: function() {
       return this;
     }
-  }, methods);
+  }, instance_methods);
 
   return model;
 };

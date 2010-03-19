@@ -219,25 +219,13 @@ test("events", function() {
   ]);
 });
 
-test("Custom methods", function() {
-  var PostCollection = Model.Collection({
-    foo: function() {
-      return "foo";
-    }
-  });
-
-  equals(PostCollection.foo(), "foo");
-});
-
 test("Custom `all` method", function() {
   var Post = Model('post', {
-    collection: Model.Collection({
-      all: function() {
-        return _.sortBy(this.collection, function(model) {
-          return model.attr("position");
-        });
-      }
-    })
+    all: function() {
+      return _.sortBy(this.collection, function(model) {
+        return model.attr("position");
+      });
+    }
   });
   var post1 = new Post({ id: 1, position: 2 });
   var post2 = new Post({ id: 2, position: 3 });
