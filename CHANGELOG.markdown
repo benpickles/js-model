@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.8.0
+
+* Move model collection methods into a separate object allowing you to customise the defaults in a single place.
+* Move model instance methods into a separate object. This allows you to redefine the defaults once rather than having to pass the same custom method to multiple models at declaration time.
+* Defining a model now takes three arguments: name, class methods, instance methods.
+
+## 0.7.3
+
+* Fix callbacks in IE.
+* Fix broken Ajax tests in IE6 and IE7.
+
 ## 0.7.1
 
 * `Model.RestPersistence` now recognises a 422 response as validation failure and populates the model's errors object with the response data.
