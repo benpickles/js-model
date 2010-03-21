@@ -241,3 +241,18 @@ test("Custom `all` method", function() {
 
   equals(results.join(", "), "3, 1, 2", "`each` should iterate over `all`");
 });
+
+test("Custom method with chaining", function() {
+  var Post = Model("post", {
+    not_first: function() {
+      return this.chain(this.all().slice(1));
+    }
+  });
+  var post1 = new Post({ id: 1 });
+  var post2 = new Post({ id: 2 });
+  var post3 = new Post({ id: 3 });
+
+  Post.add(post1, post2, post3);
+
+  equals(Post.not_first().first(), post2);
+});
