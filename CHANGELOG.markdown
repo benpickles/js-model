@@ -1,5 +1,7 @@
 # Changelog
 
+* Custom class methods should be available after chaining.
+
 ## 0.8.0
 
 * Move model collection methods into a separate object allowing you to customise the defaults in a single place.

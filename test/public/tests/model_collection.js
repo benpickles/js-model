@@ -242,17 +242,25 @@ test("Custom `all` method", function() {
   equals(results.join(", "), "3, 1, 2", "`each` should iterate over `all`");
 });
 
-test("Custom method with chaining", function() {
+test("Custom method with chaining, then more chaining", function() {
   var Post = Model("post", {
     not_first: function() {
       return this.chain(this.all().slice(1));
+    },
+
+    not_last: function() {
+      return this.chain(this.all().slice(0, this.collection.length - 1));
     }
   });
   var post1 = new Post({ id: 1 });
   var post2 = new Post({ id: 2 });
   var post3 = new Post({ id: 3 });
+  var post4 = new Post({ id: 4 });
 
-  Post.add(post1, post2, post3);
+  Post.add(post1, post2, post3, post4);
 
   equals(Post.not_first().first(), post2);
+  equals(Post.not_last().last(), post3);
+  equals(Post.not_first().not_last().last(), post3,
+    "custom methods should be available after chaining");
 });

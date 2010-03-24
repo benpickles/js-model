@@ -12,7 +12,7 @@ var Model = function(name, class_methods, instance_methods) {
 
   // Always apply Model.Collection methods as model class methods and extend
   // with any custom class methods. Make sure _name is added last.
-  jQuery.extend(model, Model.Collection(), class_methods, { _name: name });
+  jQuery.extend(model, Model.Collection(class_methods), { _name: name });
 
   // Add default and custom instance methods.
   jQuery.extend(model.prototype, Model.InstanceMethods, instance_methods);
