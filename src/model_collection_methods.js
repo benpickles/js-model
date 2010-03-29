@@ -5,14 +5,14 @@ Model.CollectionMethods = {
     for (var i = 0; i < arguments.length; i++) {
       var model = arguments[i];
       var existing_elem = this.detect(function() {
-        return this.id() != null && this.id() == model.id();
+        return this.id() !== null && this.id() == model.id();
       });
 
       if (!existing_elem) {
         this.collection.push(model);
         added.push(model);
       }
-    };
+    }
 
     if (added.length > 0) this.trigger("add", added);
 
@@ -75,7 +75,7 @@ Model.CollectionMethods = {
       return true;
     } else {
       return false;
-    };
+    }
   },
 
   select: function(func) {
@@ -99,8 +99,8 @@ Model.CollectionMethods = {
     if (callbacks) {
       for (var i = 0; i < callbacks.length; i++) {
         callbacks[i].apply(this, data || []);
-      };
-    };
+      }
+    }
 
     return this;
   }

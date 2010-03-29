@@ -18,8 +18,6 @@ Model.Errors.prototype = {
   },
 
   each: function(func) {
-    var self = this;
-
     for (var attribute in this.errors) {
       for (var i = 0; i < this.errors[attribute].length; i++) {
         func.call(this, attribute, this.errors[attribute][i]);
@@ -36,4 +34,4 @@ Model.Errors.prototype = {
     this.each(function() { count++; });
     return count;
   }
-}
+};

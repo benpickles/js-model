@@ -1,29 +1,29 @@
 Model.InstanceMethods = {
   attr: function(name, value) {
-    if (arguments.length == 0) {
+    if (arguments.length === 0) {
       // Combined attributes/changes object.
       return jQuery.extend({}, this.attributes, this.changes);
-    } else if (arguments.length == 2) {
+    } else if (arguments.length === 2) {
       // Don't write to attributes yet, store in changes for now.
       if (_.isEqual(this.attributes[name], value)) {
         // Clean up any stale changes.
         delete this.changes[name];
       } else {
         this.changes[name] = value;
-      };
+      }
       return this;
-    } else if (typeof name == "object") {
+    } else if (typeof name === "object") {
       // Mass-assign attributes.
       for (var key in name) {
         this.attr(key, name[key]);
-      };
+      }
       return this;
     } else {
       // Changes take precedent over attributes.
       return (name in this.changes) ?
         this.changes[name] :
         this.attributes[name];
-    };
+    }
   },
 
   bind: function(event, callback) {
@@ -37,11 +37,11 @@ Model.InstanceMethods = {
 
     // Automatically manage adding and removing from the model's Collection.
     var manageCollection = function() {
-      if (method == "create") {
+      if (method === "create") {
         self.constructor.add(self);
-      } else if (method == "destroy") {
+      } else if (method === "destroy") {
         self.constructor.remove(self.id());
-      };
+      }
     };
 
     // Wrap the existing callback in this function so we always manage the
@@ -60,7 +60,7 @@ Model.InstanceMethods = {
 
         // Trigger the event before executing the callback.
         self.trigger(method);
-      };
+      }
 
       // Store the return value of the callback.
       var value;
@@ -75,7 +75,7 @@ Model.InstanceMethods = {
       this.constructor.persistence[method](this, wrappedCallback);
     } else {
       wrappedCallback.call(this, true);
-    };
+    }
   },
 
   destroy: function(callback) {
@@ -93,7 +93,7 @@ Model.InstanceMethods = {
   },
 
   newRecord: function() {
-    return this.id() == null;
+    return this.id() === null;
   },
 
   reset: function() {
@@ -119,8 +119,8 @@ Model.InstanceMethods = {
     if (callbacks) {
       for (var i = 0; i < callbacks.length; i++) {
         callbacks[i].apply(this, data || []);
-      };
-    };
+      }
+    }
 
     return this;
   },
@@ -133,7 +133,7 @@ Model.InstanceMethods = {
   valid: function() {
     this.errors.clear();
     this.validate();
-    return this.errors.size() == 0;
+    return this.errors.size() === 0;
   },
 
   validate: function() {
