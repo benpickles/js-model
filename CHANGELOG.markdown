@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.8.1
+
 * Custom class methods should be available after chaining.
 
 ## 0.8.0
