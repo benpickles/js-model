@@ -35,7 +35,7 @@ Model.CollectionMethods = {
 
   detect: function(func) {
     var model;
-    $.each(this.all(), function(i) {
+    jQuery.each(this.all(), function(i) {
       if (func.call(this, i)) {
         model = this;
         return false;
@@ -80,7 +80,7 @@ Model.CollectionMethods = {
 
   select: function(func) {
     var selected = [];
-    $.each(this.all(), function(i) {
+    jQuery.each(this.all(), function(i) {
       if (func.call(this, i)) selected.push(this);
     });
     return this.chain(selected);
