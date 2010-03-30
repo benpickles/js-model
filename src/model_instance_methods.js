@@ -106,8 +106,8 @@ Model.InstanceMethods = {
     if (this.valid()) {
       var method = this.newRecord() ? "create" : "update";
       this.callPersistMethod(method, callback);
-    } else {
-      if (callback) callback(false);
+    } else if (callback) {
+      callback(false);
     }
 
     return this;
