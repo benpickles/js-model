@@ -97,6 +97,29 @@ test("update", function() {
   same(request.data, { post: { title: "Bar", body: "..." } });
 });
 
+test("update - blank response (Rails' `head :ok`)", function() {
+  var Post = Model("post", {
+    persistence: Model.RestPersistence("/posts-empty-response")
+  });
+  var post = new Post({ id: 1, title: "Foo", body: "..." });
+  post.attr("title", "Bar");
+
+  stop();
+
+  var old_log = Model.Log;
+  var logged = [];
+
+  Model.Log = function() {
+    logged.push(arguments);
+  };
+
+  post.save(function(success) {
+    same(logged, []);
+    start();
+    Model.Log = old_log;
+  });
+});
+
 test("update - 422 response (failed validations)", function() {
   var Post = Model("post", {
     persistence: Model.RestPersistence("/posts-validations")

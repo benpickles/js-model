@@ -1,8 +1,10 @@
 # Changelog
 
+* Don't log an error when Rails returns a response of " " for a `head :ok` response.
+
 ## 0.8.1
 
-* Custom class methods should be available after chaining.
+* Fix that custom class methods should be available after chaining.
 
 ## 0.8.0
 

@@ -18,6 +18,11 @@ end
 delete '/posts/:id' do
 end
 
+# Blank response (Rails' `head :ok`)
+put '/posts-empty-response/:id' do
+  ' '
+end
+
 # Failure.
 post '/posts-failure' do
   status 500

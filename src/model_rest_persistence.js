@@ -35,7 +35,9 @@ Model.RestPersistence = function(resource, methods) {
 
     parseResponseData: function(xhr) {
       try {
-        return jQuery.parseJSON(xhr.responseText);
+        return /\S/.test(xhr.responseText) ?
+          jQuery.parseJSON(xhr.responseText) :
+          null;
       } catch(e) {
         Model.Log(e);
       }
