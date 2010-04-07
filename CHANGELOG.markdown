@@ -1,6 +1,9 @@
 # Changelog
 
+## 0.8.2
+
 * Don't log an error when Rails returns a response of " " for a `head :ok` response.
+* `jQuery.ajax` should use `dataType` "json" removing the need to set a global `beforeSend`. [Jason Lee]
 
 ## 0.8.1
 
