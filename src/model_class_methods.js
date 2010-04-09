@@ -23,12 +23,6 @@ Model.ClassMethods = {
     return this.collection;
   },
 
-  bind: function(event, callback) {
-    this.callbacks[event] = this.callbacks[event] || [];
-    this.callbacks[event].push(callback);
-    return this;
-  },
-
   count: function() {
     return this.collection.length;
   },
@@ -91,17 +85,5 @@ Model.ClassMethods = {
       return func.call(model, i);
     });
     return this.chain(sorted);
-  },
-
-  trigger: function(name, data) {
-    var callbacks = this.callbacks[name];
-
-    if (callbacks) {
-      for (var i = 0; i < callbacks.length; i++) {
-        callbacks[i].apply(this, data || []);
-      }
-    }
-
-    return this;
   }
 };

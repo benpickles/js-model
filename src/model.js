@@ -5,16 +5,14 @@ var Model = function(name, class_methods, instance_methods) {
   // The model constructor.
   var model = function(attributes) {
     this.attributes = attributes || {};
-    this.callbacks = {};
     this.changes = {};
     this.errors = new Model.Errors(this);
   };
 
   // Apply class methods and extend with any custom class methods. Make sure
   // vitals are added last so they can't be overridden.
-  jQuery.extend(model, Model.ClassMethods, class_methods, {
+  jQuery.extend(model, Model.Callbacks, Model.ClassMethods, class_methods, {
     _name: name,
-    callbacks: {},
     collection: [],
 
     // Convenience method to allow a simple method of chaining class methods.
@@ -24,7 +22,8 @@ var Model = function(name, class_methods, instance_methods) {
   });
 
   // Add default and custom instance methods.
-  jQuery.extend(model.prototype, Model.InstanceMethods, instance_methods);
+  jQuery.extend(model.prototype, Model.Callbacks, Model.InstanceMethods,
+    instance_methods);
 
   return model;
 };

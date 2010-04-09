@@ -166,55 +166,6 @@ test("sort (and chaining)", function() {
     "original collection should be untouched");
 });
 
-test("events", function() {
-  var Post = Model('post');
-  var results = [];
-
-  var post1 = new Post({ id: 1 });
-  var post2 = new Post({ id: 2 });
-  var post3 = new Post({ id: 3 });
-
-  Post.bind("add", function() {
-    results.push(this);
-    results.push("add");
-    for (var i = 0; i < arguments.length; i++) {
-      results.push(arguments[i]);
-    };
-  });
-
-  Post.bind("remove", function() {
-    results.push(this);
-    results.push("remove");
-  })
-
-  Post.bind("custom", function() {
-    results.push(this);
-    results.push("custom");
-  }).bind("custom", function() {
-    results.push(this);
-    results.push("custom-2");
-  })
-
-  Post.bind("not-called", function() {
-    results.push("not-called");
-  });
-
-  Post.add(post1, post2);
-  Post.add(post1);
-  Post.add(post3);
-  Post.remove(1);
-  Post.remove(666);
-  Post.trigger("custom");
-
-  same(results, [
-    Post, "add", post1, post2,
-    Post, "add", post3,
-    Post, "remove",
-    Post, "custom",
-    Post, "custom-2"
-  ]);
-});
-
 test("Custom `all` method", function() {
   var Post = Model('post', {
     all: function() {
