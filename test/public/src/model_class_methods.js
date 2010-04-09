@@ -1,0 +1,1 @@
+../../../src/model_class_methods.js

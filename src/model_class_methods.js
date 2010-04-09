@@ -1,4 +1,4 @@
-Model.CollectionMethods = {
+Model.ClassMethods = {
   add: function() {
     var added = [];
 

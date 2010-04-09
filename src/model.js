@@ -10,9 +10,18 @@ var Model = function(name, class_methods, instance_methods) {
     this.errors = new Model.Errors(this);
   };
 
-  // Always apply Model.Collection methods as model class methods and extend
-  // with any custom class methods. Make sure _name is added last.
-  jQuery.extend(model, Model.Collection(class_methods), { _name: name });
+  // Apply class methods and extend with any custom class methods. Make sure
+  // vitals are added last so they can't be overridden.
+  jQuery.extend(model, Model.ClassMethods, class_methods, {
+    _name: name,
+    callbacks: {},
+    collection: [],
+
+    // Convenience method to allow a simple method of chaining class methods.
+    chain: function(collection) {
+      return jQuery.extend({}, this, { collection: collection });
+    }
+  });
 
   // Add default and custom instance methods.
   jQuery.extend(model.prototype, Model.InstanceMethods, instance_methods);
