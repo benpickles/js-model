@@ -96,3 +96,53 @@ test("instance-level", function() {
     post, "destroy"
   ]);
 });
+
+test("unbind all callbacks for an event", function() {
+  var Post = Model("post");
+  var results = [];
+
+  var post = new Post({ title: "Foo", body: "..." });
+
+  post.bind("create", function() {
+    results.push("create");
+  }).bind("update", function() {
+    results.push("update");
+  }).bind("custom", function() {
+    results.push("custom");
+  }).bind("custom", function() {
+    results.push("custom-2");
+  }).bind("destroy", function() {
+    results.push("destroy");
+  });
+
+  post.unbind("create");
+  post.unbind("update");
+  post.unbind("custom");
+  post.unbind("destroy");
+
+  post.save();
+  post.attributes.id = 1;
+  post.save();
+  post.trigger("custom");
+  post.destroy();
+
+  same(results, []);
+});
+
+test("unbind a specific event callback by function", function() {
+  var Post = Model("post");
+  var results = [];
+  var callback = function() {
+    results.push("bad");
+  };
+
+  var post = new Post();
+
+  post.bind("custom", callback).bind("custom", function() {
+    results.push("good");
+  });
+  post.unbind("custom", callback);
+  post.trigger("custom");
+
+  same(results, ["good"]);
+});

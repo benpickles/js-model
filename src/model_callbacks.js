@@ -17,5 +17,22 @@ Model.Callbacks = {
     }
 
     return this;
+  },
+
+  unbind: function(event, callback) {
+    if (callback) {
+      var callbacks = this.callbacks[event] || [];
+      var func = callback.toString();
+
+      for (var i = 0; i < callbacks.length; i++) {
+        if (callbacks[i].toString() === func) {
+          this.callbacks[event].splice(i, 1);
+        }
+      }
+    } else {
+      delete this.callbacks[event];
+    }
+
+    return this;
   }
 };
