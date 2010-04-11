@@ -26,12 +26,6 @@ Model.InstanceMethods = {
     }
   },
 
-  bind: function(event, callback) {
-    this.callbacks[event] = this.callbacks[event] || [];
-    this.callbacks[event].push(callback);
-    return this;
-  },
-
   callPersistMethod: function(method, callback) {
     var self = this;
 
@@ -108,18 +102,6 @@ Model.InstanceMethods = {
       this.callPersistMethod(method, callback);
     } else if (callback) {
       callback(false);
-    }
-
-    return this;
-  },
-
-  trigger: function(name, data) {
-    var callbacks = this.callbacks[name];
-
-    if (callbacks) {
-      for (var i = 0; i < callbacks.length; i++) {
-        callbacks[i].apply(this, data || []);
-      }
     }
 
     return this;
