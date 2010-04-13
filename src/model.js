@@ -4,7 +4,7 @@ var Model = function(name, class_methods, instance_methods) {
 
   // The model constructor.
   var model = function(attributes) {
-    this.attributes = jQuery.extend({}, attributes)
+    this.attributes = this.coerceAttributes(jQuery.extend({}, attributes))
     this.changes = {};
     this.errors = new Model.Errors(this);
     this.uid = [name, Model.UID.generate()].join("-")

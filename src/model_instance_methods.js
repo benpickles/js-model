@@ -4,6 +4,8 @@ Model.InstanceMethods = {
       // Combined attributes/changes object.
       return jQuery.extend({}, this.attributes, this.changes);
     } else if (arguments.length === 2) {
+      value = this.coerceAttribute(name, value)
+
       // Don't write to attributes yet, store in changes for now.
       if (this.attributes[name] === value) {
         // Clean up any stale changes.
@@ -70,6 +72,36 @@ Model.InstanceMethods = {
     } else {
       wrappedCallback.call(this, true);
     }
+  },
+
+  coerceAttribute: function(name, value) {
+    var type = this.constructor.attribute_types && this.constructor.attribute_types[name]
+
+    if (type) {
+      switch (type) {
+        case "boolean":
+          value = (
+            value === false || value === "false" ||
+            value === 0 || value === "0"
+          ) ? false : true
+          break
+        case "float":
+          value = parseFloat(value)
+          break
+        case "integer":
+          value = parseInt(value)
+          break
+      }
+    }
+
+    return value
+  },
+
+  coerceAttributes: function(attributes) {
+    for (var name in attributes) {
+      attributes[name] = this.coerceAttribute(name, attributes[name])
+    }
+    return attributes
   },
 
   destroy: function(callback) {

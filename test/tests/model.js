@@ -82,6 +82,39 @@ test("attr, attributes, changes, reset, save, destroy", function() {
   });
 });
 
+test("attribute types", function() {
+  var Post = Model("post", {
+    attribute_types: {
+      category_id: "integer",
+      lat: "float",
+      published: "boolean"
+    }
+  })
+
+  var post = new Post({
+    category_id: "1.4",
+    lat: "12345.6789",
+    published: "false"
+  })
+
+  ok(post.attr("category_id") === 1)
+  ok(post.attr("lat") === 12345.6789)
+  ok(post.attr("published") === false)
+
+  post.attr("published", true)
+  ok(post.attr("published") === true)
+  post.attr("published", 0)
+  ok(post.attr("published") === false)
+  post.attr("published", "true")
+  ok(post.attr("published") === true)
+  post.attr("published", "0")
+  ok(post.attr("published") === false)
+  post.attr("published", 1)
+  ok(post.attr("published") === true)
+  post.attr("published", false)
+  ok(post.attr("published") === false)
+})
+
 test("custom methods", function() {
   var Post = Model("post", {
     foo: function() {
