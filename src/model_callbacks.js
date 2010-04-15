@@ -22,10 +22,9 @@ Model.Callbacks = {
   unbind: function(event, callback) {
     if (callback) {
       var callbacks = this.callbacks[event] || [];
-      var func = callback.toString();
 
       for (var i = 0; i < callbacks.length; i++) {
-        if (callbacks[i].toString() === func) {
+        if (callbacks[i] === callback) {
           this.callbacks[event].splice(i, 1);
         }
       }
