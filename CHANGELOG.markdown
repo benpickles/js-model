@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.3
+
+* Fix that `find`, `first`, `last` and `detect` return `null` when nothing is found.
+* Add `unbind` method to unbind all callbacks for a particular event or a specific callback by passing a reference to the original function.
+* Move callback functionality into a separate module and mix-in to class and instance.
+
 ## 0.8.2
 
 * Don't log an error when Rails returns a response of " " for a `head :ok` response.
