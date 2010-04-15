@@ -35,7 +35,7 @@ Model.ClassMethods = {
         return false;
       }
     });
-    return model;
+    return model || null;
   },
 
   each: function(func) {
@@ -48,7 +48,7 @@ Model.ClassMethods = {
   find: function(id) {
     return this.detect(function() {
       return this.id() == id;
-    });
+    }) || null;
   },
 
   first: function() {

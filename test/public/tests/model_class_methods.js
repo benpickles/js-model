@@ -9,8 +9,9 @@ test("all, count, find, first, add, remove", function() {
 
   same(Post.all(), []);
   equals(Post.count(), 0);
-  equals(Post.find(1), null);
-  equals(Post.first(), null);
+  ok(Post.find(1) === null);
+  ok(Post.first() === null);
+  ok(Post.last() === null);
 
   Post.add(post1, post2).add(post3);
 
@@ -27,9 +28,9 @@ test("all, count, find, first, add, remove", function() {
   same(Post.all(), [post1, post3]);
   equals(Post.count(), 2);
   equals(Post.find(1), post1);
-  equals(Post.find(2), null);
+  ok(Post.find(2) === null);
   equals(Post.find(3), post3);
-  equals(Post.find(4), null);
+  ok(Post.find(4) === null);
 
   ok(!Post.remove(null));
 
@@ -58,10 +59,10 @@ test("detect, select, first, last, count (with chaining)", function() {
   same(indexes, [0, 1]);
   indexes = [];
 
-  equals(Post.detect(function(i) {
+  ok(Post.detect(function(i) {
     indexes.push(i);
     return this.attr("title") == "Baz";
-  }), null);
+  }) === null);
 
   same(indexes, [0, 1, 2], "should yield index correctly");
   indexes = [];
