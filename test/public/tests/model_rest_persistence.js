@@ -1,5 +1,73 @@
 module("Model.RestPersistence");
 
+test("create with named params in resource path", function() {
+  var Post = Model("post", {
+    persistence: Model.RestPersistence("/root/:root_id/nested/:nested_id/posts")
+  });
+  var post = new Post({ title: "Nested", body: "...", root_id: 3, nested_id: 2 });
+
+  AjaxSpy.start();
+  stop();
+
+  post.save(function(success) {
+    ok(success);
+    start();
+  });
+
+  equals(AjaxSpy.requests.length, 1, "one request should have been made");
+
+  var request = AjaxSpy.requests.shift();
+  
+  equals(request.type, "POST");
+  equals(request.url, "/root/3/nested/2/posts");
+});
+
+test("update with named params in resource path", function() {
+  var Post = Model("post", {
+    persistence: Model.RestPersistence("/root/:root_id/nested/:nested_id/posts")
+  });
+  var post = new Post({ id: 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
+  post.attr("title", "Nested amended");
+
+  AjaxSpy.start();
+  stop();
+
+  post.save(function(success) {
+    ok(success);
+    start();
+  });
+
+  equals(AjaxSpy.requests.length, 1, "one request should have been made");
+
+  var request = AjaxSpy.requests.shift();
+
+  equals(request.type, "PUT");
+  equals(request.url, "/root/3/nested/2/posts/1");
+});
+
+test("destroy with named params in resource path", function() {
+  var Post = Model("post", {
+    persistence: Model.RestPersistence("/root/:root_id/nested/:nested_id/posts")
+  });
+  var post = new Post({ id: 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
+
+  AjaxSpy.start();
+  stop();
+
+  post.destroy(function(success) {
+    ok(success);
+    start();
+  });
+
+  equals(AjaxSpy.requests.length, 1, "one request should have been made");
+
+  var request = AjaxSpy.requests.shift();
+
+  equals(request.type, "DELETE");
+  equals(request.url, "/root/3/nested/2/posts/1");
+  same(request.data, null);
+});
+
 test("create", function() {
   var Post = Model("post", {
     persistence: Model.RestPersistence("/posts")

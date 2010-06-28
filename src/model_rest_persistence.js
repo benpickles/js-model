@@ -1,15 +1,29 @@
 Model.RestPersistence = function(resource, methods) {
+	var PARAM_NAME_MATCHER = /:([\w\d]+)/g;
+	
   var model_resource = function() {
     this.resource = resource;
+		this.resource_param_names = [];
+    while ((param_name = PARAM_NAME_MATCHER.exec(resource)) !== null) {
+      this.resource_param_names.push(param_name[1]);
+    };
   };
 
   jQuery.extend(model_resource.prototype, {
+		path: function(model) {
+			var path = this.resource;
+			$.each(this.resource_param_names, function(i, param) {
+				path = path.replace(":" + param, model.attributes[param]);
+			});
+			return path;
+		},
+
     create: function(model, callback) {
       return this.xhr('POST', this.create_path(model), model, callback);
     },
 
     create_path: function(model) {
-      return this.resource;
+      return this.path(model);
     },
 
     destroy: function(model, callback) {
@@ -48,7 +62,7 @@ Model.RestPersistence = function(resource, methods) {
     },
 
     update_path: function(model) {
-      return [this.resource, model.id()].join('/');
+      return [this.path(model), model.id()].join('/');
     },
 
     xhr: function(method, url, model, callback) {
