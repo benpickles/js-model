@@ -101,7 +101,10 @@ Setting up persistence for a given model is handled when the class is created:
 
 Calling __save__ or __destroy__ on an object now fires a corresponding REST Request:
 
-    var post = new Post({foo: 'bar'}).save() // makes a POST request to '/posts'
+    var post = new Post({foo: 'bar'})
+    post.save()                     //   POST /posts
+    post.attr("foo", "baz").save()  //    PUT /posts/1
+    post.destroy()                  // DELETE /posts/1
 
 A custom callback can be fed into the save method to execute on success or failure:
 
@@ -114,6 +117,16 @@ A custom callback can be fed into the save method to execute on success or failu
     })
 
 The default triggered events (mentioned earlier) are generally only called once persistence is successful.
+
+You can also include named parameters in the URL that will pick up the corresponding values from the model instance:
+
+    var Post = Model("post", {
+      persistence: Model.RestPersistence("/categories/:category_id/posts")
+    }
+    var post = new Post({ title: "Foo", category_id: 2 })
+
+    // POST request made to /categories/2/posts
+    post.save()
 
 ## Validations
 

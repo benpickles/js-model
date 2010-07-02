@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.4
+
+* Add named parameters to `Model.RestPersistence` so "/categories/:category_id/posts" will pick up the corresponding `category_id` attribute from your model and be converted to "/categories/2/posts". [Russell Jones]
+
 ## 0.8.3
 
 * Fix that `find`, `first`, `last` and `detect` return `null` when nothing is found.
