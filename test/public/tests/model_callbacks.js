@@ -97,6 +97,25 @@ test("instance-level", function() {
   ]);
 });
 
+test('instance events should only trigger on a specific instance', function () {
+  var Post = Model('post')
+
+  var foo = new Post({title: 'foo'})
+  var bar = new Post({title: 'bar'})
+
+  var triggered = false
+
+  bar.bind('some-event', function () {
+    triggered = true
+  })
+
+  foo.trigger('some-event')
+  ok(!triggered, "event was triggered when it shouldn't have been")
+
+  bar.trigger('some-event')
+  ok(triggered, "event wasn't triggered when it should have been")
+})
+
 test("unbind all callbacks for an event", function() {
   var Post = Model("post");
   var results = [];
