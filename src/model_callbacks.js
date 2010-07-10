@@ -1,6 +1,4 @@
 Model.Callbacks = {
-  callbacks: {},
-
   bind: function(event, callback) {
     this.callbacks[event] = this.callbacks[event] || [];
     this.callbacks[event].push(callback);

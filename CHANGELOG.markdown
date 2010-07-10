@@ -1,5 +1,7 @@
 # Changelog
 
+* Fix for callbacks being wrongly called on multiple instances - they were being stored on the prototype and thus being shared across instances. Thanks to Oliver Nightingale for identifying the bug and writing a test case.
+
 ## 0.8.4
 
 * Add named parameters to `Model.RestPersistence` so "/categories/:category_id/posts" will pick up the corresponding `category_id` attribute from your model and be converted to "/categories/2/posts". [Russell Jones]
