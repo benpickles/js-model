@@ -1,5 +1,6 @@
 # Changelog
 
+* Add `pluck` method that takes an attribute name and returns an array of values.
 * Fix for callbacks being wrongly called on multiple instances - they were being stored on the prototype and thus being shared across instances. Thanks to Oliver Nightingale for identifying the bug and writing a test case.
 
 ## 0.8.4

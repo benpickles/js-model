@@ -141,6 +141,20 @@ test("each (and chaining)", function() {
   same(titles, ["Bar", "Baz"]);
 });
 
+test(".pluck", function() {
+  var Post = Model('post')
+
+  var post1 = new Post({ id: 1, title: "a" })
+  var post2 = new Post({ id: 2, title: "b" })
+  var post3 = new Post({ id: 3, title: "c" })
+  var post4 = new Post({ id: 4, title: "d" })
+
+  Post.add(post1, post2, post3, post4)
+
+  same(Post.pluck("id"), [1, 2, 3, 4])
+  same(Post.pluck("title"), ["a", "b", "c", "d"])
+})
+
 test("sort (and chaining)", function() {
   var Post = Model('post');
 

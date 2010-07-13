@@ -60,6 +60,17 @@ Model.ClassMethods = {
     return all[all.length - 1] || null;
   },
 
+  pluck: function(attribute) {
+    var all = this.all()
+    var plucked = []
+
+    for (var i = 0; i < all.length; i++) {
+      plucked.push(all[i].attr(attribute))
+    }
+
+    return plucked
+  },
+
   remove: function(id) {
     var ids = _.invoke(this.collection, 'id');
     var index = _.indexOf(ids, id);
