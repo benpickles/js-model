@@ -92,9 +92,27 @@ Model.ClassMethods = {
   },
 
   sort: function(func) {
-    var sorted = _.sortBy(this.all(), function(model, i) {
-      return func.call(model, i);
-    });
+    var sorted = this.all().slice().sort(func)
     return this.chain(sorted);
+  },
+
+  sortBy: function(attribute_or_func) {
+    var is_func = jQuery.isFunction(attribute_or_func)
+    var extract = function(model) {
+      return attribute_or_func.call(model)
+    }
+
+    return this.sort(function(a, b) {
+      var a_attr = is_func ? extract(a) : a.attr(attribute_or_func)
+      var b_attr = is_func ? extract(b) : b.attr(attribute_or_func)
+
+      if (a_attr < b_attr) {
+        return -1
+      } else if (a_attr > b_attr) {
+        return 1
+      } else {
+        return 0
+      }
+    })
   }
 };

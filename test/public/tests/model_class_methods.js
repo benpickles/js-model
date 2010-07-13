@@ -158,26 +158,28 @@ test(".pluck", function() {
 test("sort (and chaining)", function() {
   var Post = Model('post');
 
-  var post1 = new Post({ title: "bcd" });
-  var post2 = new Post({ title: "xyz" });
-  var post3 = new Post({ title: "Acd" });
-  var post4 = new Post({ title: "abc" });
+  var post1 = new Post({ number: 4, title: "bcd" });
+  var post2 = new Post({ number: 3, title: "xyz" });
+  var post3 = new Post({ number: 2, title: "Acd" });
+  var post4 = new Post({ number: 1, title: "abc" });
 
   Post.add(post1, post2, post3, post4);
 
-  same(Post.all(), [post1, post2, post3, post4]);
+  same(Post.pluck("title"), ["bcd", "xyz", "Acd", "abc"])
 
-  same(Post.sort(function() {
-    return this.attr("title").toLowerCase();
-  }).all(), [post4, post3, post1, post2]);
+  same(Post.sortBy("title").pluck("title"), ["Acd", "abc", "bcd", "xyz"])
 
   same(Post.select(function() {
     return this.attr("title").indexOf("c") > -1;
-  }).sort(function() {
-    return this.attr("title").toLowerCase();
-  }).all(), [post4, post3, post1]);
+  }).sortBy(function() {
+    return this.attr("title").toLowerCase()
+  }).pluck("title"), ["abc", "Acd", "bcd"])
 
-  same(Post.all(), [post1, post2, post3, post4],
+  same(Post.sort(function(a, b) {
+    return a.attr("number") - b.attr("number")
+  }).pluck("title"), ["abc", "Acd", "xyz", "bcd"])
+
+  same(Post.pluck("title"), ["bcd", "xyz", "Acd", "abc"],
     "original collection should be untouched");
 });
 

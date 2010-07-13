@@ -1,5 +1,6 @@
 # Changelog
 
+* Rename `sort` to `sortBy` and add the ability to specify an attribute name as well as a custom function. Add `sort` method that acts on a collection just like `Array#sort`.
 * Add `pluck` method that takes an attribute name and returns an array of values.
 * Fix for callbacks being wrongly called on multiple instances - they were being stored on the prototype and thus being shared across instances. Thanks to Oliver Nightingale for identifying the bug and writing a test case.
 
