@@ -46,7 +46,7 @@ Model.RestPersistence = function(resource, methods) {
       } else {
         params = null;
       }
-      return params;
+      return JSON.stringify(params)
     },
 
     read: function(callback) {
@@ -84,6 +84,7 @@ Model.RestPersistence = function(resource, methods) {
       return jQuery.ajax({
         type: method,
         url: url,
+        contentType: "application/json",
         dataType: "json",
         data: data,
         dataFilter: function(data, type) {

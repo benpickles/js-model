@@ -125,7 +125,7 @@ test("create", function() {
 
   equals(request.type, "POST");
   equals(request.url, "/posts");
-  same(request.data, { post: { title: "Foo", body: "..." } });
+  same(JSON.parse(request.data), { post: { title: "Foo", body: "..." } });
 });
 
 test("create - 422 response (failed validations)", function() {
@@ -192,7 +192,7 @@ test("update", function() {
 
   equals(request.type, "PUT");
   equals(request.url, "/posts/1");
-  same(request.data, { post: { title: "Bar", body: "..." } });
+  same(JSON.parse(request.data), { post: { title: "Bar", body: "..." } });
 });
 
 test("update - blank response (Rails' `head :ok`)", function() {
