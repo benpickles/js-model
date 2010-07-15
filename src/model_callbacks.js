@@ -1,11 +1,14 @@
 Model.Callbacks = {
   bind: function(event, callback) {
+    this.callbacks = this.callbacks || {}
     this.callbacks[event] = this.callbacks[event] || [];
     this.callbacks[event].push(callback);
     return this;
   },
 
   trigger: function(name, data) {
+    this.callbacks = this.callbacks || {}
+
     var callbacks = this.callbacks[name];
 
     if (callbacks) {
@@ -18,6 +21,8 @@ Model.Callbacks = {
   },
 
   unbind: function(event, callback) {
+    this.callbacks = this.callbacks || {}
+
     if (callback) {
       var callbacks = this.callbacks[event] || [];
 
