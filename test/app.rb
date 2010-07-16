@@ -1,9 +1,22 @@
 require 'rubygems'
 require 'sinatra'
 require 'json'
+require 'erb'
+require 'pathname'
 
 get '/' do
-  redirect '/index.html'
+  erb :index
+end
+
+get '/tests/:name' do
+  path = Pathname.new("tests/#{params[:name]}")
+
+  if path.exist?
+    content_type 'application/x-javascript'
+    path.read
+  else
+    halt 404
+  end
 end
 
 # Success.
