@@ -71,10 +71,17 @@ Model.ClassMethods = {
     return plucked
   },
 
-  remove: function(id) {
-    var ids = _.invoke(this.collection, 'id');
-    var index = _.indexOf(ids, id);
-    if (index > -1) {
+  remove: function(model) {
+    var index
+
+    for (var i = 0; i < this.collection.length; i++) {
+      if (this.collection[i] === model) {
+        index = i
+        break
+      }
+    }
+
+    if (index != undefined) {
       this.collection.splice(index, 1);
       this.trigger("remove");
       return true;

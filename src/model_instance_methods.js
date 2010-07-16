@@ -5,7 +5,7 @@ Model.InstanceMethods = {
       return jQuery.extend({}, this.attributes, this.changes);
     } else if (arguments.length === 2) {
       // Don't write to attributes yet, store in changes for now.
-      if (_.isEqual(this.attributes[name], value)) {
+      if (this.attributes[name] === value) {
         // Clean up any stale changes.
         delete this.changes[name];
       } else {
@@ -34,7 +34,7 @@ Model.InstanceMethods = {
       if (method === "create") {
         self.constructor.add(self);
       } else if (method === "destroy") {
-        self.constructor.remove(self.id());
+        self.constructor.remove(self)
       }
     };
 

@@ -12,7 +12,7 @@ test("class-level", function() {
     results.push(this);
     results.push("add");
     for (var i = 0; i < arguments.length; i++) {
-      results.push(arguments[i]);
+      results.push(arguments[i].id())
     };
   });
 
@@ -36,13 +36,13 @@ test("class-level", function() {
   Post.add(post1, post2);
   Post.add(post1);
   Post.add(post3);
-  Post.remove(1);
+  Post.remove(post1);
   Post.remove(666);
   Post.trigger("custom");
 
   same(results, [
-    Post, "add", post1, post2,
-    Post, "add", post3,
+    Post, "add", 1, 2,
+    Post, "add", 3,
     Post, "remove",
     Post, "custom",
     Post, "custom-2"
