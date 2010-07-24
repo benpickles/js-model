@@ -28,20 +28,24 @@ Model.ClassMethods = {
   },
 
   detect: function(func) {
-    var model;
-    jQuery.each(this.all(), function(i) {
-      if (func.call(this, i)) {
-        model = this;
-        return false;
-      }
-    });
-    return model || null;
+    var all = this.all(),
+        model
+
+    for (var i = 0, length = all.length; i < length; i++) {
+      model = all[i]
+      if (func.call(model, i)) return model
+    }
+
+    return null
   },
 
   each: function(func) {
-    jQuery.each(this.all(), function(i) {
-      func.call(this, i);
-    });
+    var all = this.all()
+
+    for (var i = 0, length = all.length; i < length; i++) {
+      func.call(all[i], i)
+    }
+
     return this;
   },
 
@@ -64,7 +68,7 @@ Model.ClassMethods = {
     var all = this.all()
     var plucked = []
 
-    for (var i = 0; i < all.length; i++) {
+    for (var i = 0, length = all.length; i < length; i++) {
       plucked.push(all[i].attr(attribute))
     }
 
@@ -74,7 +78,7 @@ Model.ClassMethods = {
   remove: function(model) {
     var index
 
-    for (var i = 0; i < this.collection.length; i++) {
+    for (var i = 0, length = this.collection.length; i < length; i++) {
       if (this.collection[i] === model) {
         index = i
         break
@@ -91,10 +95,15 @@ Model.ClassMethods = {
   },
 
   select: function(func) {
-    var selected = [];
-    jQuery.each(this.all(), function(i) {
-      if (func.call(this, i)) selected.push(this);
-    });
+    var all = this.all(),
+        selected = [],
+        model
+
+    for (var i = 0, length = all.length; i < length; i++) {
+      model = all[i]
+      if (func.call(model, i)) selected.push(model)
+    }
+
     return this.chain(selected);
   },
 
