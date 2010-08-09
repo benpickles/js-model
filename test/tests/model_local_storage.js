@@ -14,11 +14,12 @@ localStorageTest("read", function() {
   localStorage.setItem("post-b", JSON.stringify({ b: "b" }))
   localStorage.setItem("post-collection", '["post-a","post-b"]')
 
-  Post.load(function() {
-    var post1 = Post.first()
-    var post2 = Post.last()
+  Post.persistence.read(function(data) {
+    equals(data.length, 2)
 
-    equals(2, Post.count())
+    var post1 = data[0]
+    var post2 = data[1]
+
     equals("post-a", post1.uid)
     same({ a: "a" }, post1.attr())
     equals("post-b", post2.uid)

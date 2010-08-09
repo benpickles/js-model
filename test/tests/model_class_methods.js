@@ -251,3 +251,25 @@ test("Custom method with chaining, then more chaining", function() {
   equals(Post.not_first().not_last().last(), post3,
     "custom methods should be available after chaining");
 });
+
+test("load", function() {
+  var TestPersistence = function() {
+    return {
+      read: function(callback) {
+        callback([
+          new Post({ a: 1 }),
+          new Post({ b: 2 })
+        ])
+      }
+    }
+  }
+
+  var Post = Model("post", { persistence: TestPersistence })
+
+  equals(Post.count(), 0)
+
+  Post.load(function(models) {
+    equals(Post.count(), 2, "should add models to collection")
+    equals(models.length, 2, "should pass loaded models to callback")
+  })
+})
