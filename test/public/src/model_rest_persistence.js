@@ -1,1 +1,0 @@
-../../../src/model_rest_persistence.js

@@ -2,21 +2,19 @@ require 'rubygems'
 require 'sinatra'
 require 'json'
 require 'erb'
-require 'pathname'
 
 get '/' do
   erb :index
 end
 
-get '/tests/:name' do
-  path = Pathname.new("tests/#{params[:name]}")
+get '/src/:name' do
+  content_type 'application/x-javascript'
+  File.read("../src/#{params[:name]}")
+end
 
-  if path.exist?
-    content_type 'application/x-javascript'
-    path.read
-  else
-    halt 404
-  end
+get '/tests/:name' do
+  content_type 'application/x-javascript'
+  File.read("tests/#{params[:name]}")
 end
 
 # Success.

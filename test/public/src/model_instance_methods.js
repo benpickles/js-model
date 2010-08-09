@@ -1,1 +1,0 @@
-../../../src/model_instance_methods.js
