@@ -4,11 +4,9 @@ Model.ClassMethods = {
 
     for (var i = 0; i < arguments.length; i++) {
       var model = arguments[i];
-      var existing_elem = this.detect(function() {
-        return this.id() !== null && this.id() == model.id();
-      });
 
-      if (!existing_elem) {
+      if (this.collection.indexOf(model) === -1 &&
+        !(model.id() && this.find(model.id()))) {
         this.collection.push(model);
         added.push(model);
       }

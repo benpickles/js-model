@@ -33,12 +33,31 @@ test("all, count, find, first, add, remove", function() {
   ok(Post.find(4) === null);
 
   ok(!Post.remove(null));
-
-  var post1_duplicate = new Post({ id: 1 });
-  Post.add(post1_duplicate);
-
-  same(Post.pluck("id"), [1, 3], "shouldn't be able to add if a model with the same id exists in the collection");
 });
+
+test("maintaining a collection of unique models by object and id", function() {
+  var Post = Model("post")
+
+  equals(Post.count(), 0)
+
+  var post = new Post().save()
+
+  equals(Post.count(), 1)
+
+  post.save()
+
+  equals(Post.count(), 1)
+
+  post.attributes.id = 1
+  var post_duplicate = new Post({ id: 1 })
+  Post.add(post_duplicate)
+
+  equals(Post.count(), 1)
+
+  new Post().save()
+
+  equals(Post.count(), 2)
+})
 
 test("detect, select, first, last, count (with chaining)", function() {
   var Post = Model('post');
