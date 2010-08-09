@@ -1,11 +1,13 @@
 Model.LocalStorage = function(klass) {
   return {
-    create: function(model) {
+    create: function(model, callback) {
       this.store(model)
+      callback(true)
     },
 
-    destroy: function(model) {
+    destroy: function(model, callback) {
       localStorage.removeItem(model.uid)
+      callback(true)
     },
 
     read: function(callback) {
@@ -33,8 +35,9 @@ Model.LocalStorage = function(klass) {
       localStorage.setItem(uid, data)
     },
 
-    update: function(model) {
+    update: function(model, callback) {
       this.store(model)
+      callback(true)
     }
   }
 }
