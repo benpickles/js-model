@@ -10,6 +10,14 @@ var Model = function(name, class_methods, instance_methods) {
     this.uid = [this.constructor._name, Model.UID.generate()].join("-")
   };
 
+  // Persistence is special, remove it from class_methods and initialize it
+  // with a reference to the class.
+  var persistence = class_methods.persistence
+  if (persistence) {
+    delete class_methods.persistence
+    model.persistence = persistence(model)
+  }
+
   // Apply class methods and extend with any custom class methods. Make sure
   // vitals are added last so they can't be overridden.
   jQuery.extend(model, Model.Callbacks, Model.ClassMethods, class_methods, {

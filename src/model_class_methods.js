@@ -59,6 +59,19 @@ Model.ClassMethods = {
     return this.all()[0] || null;
   },
 
+  load: function(callback) {
+    if (this.persistence) {
+      var self = this
+
+      this.persistence.read(function(models) {
+        for (var i = 0, length = models.length; i < length; i++) {
+          self.add(models[i])
+        }
+        callback()
+      })
+    }
+  },
+
   last: function() {
     var all = this.all();
     return all[all.length - 1] || null;
