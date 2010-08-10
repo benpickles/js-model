@@ -10,13 +10,9 @@ var Model = function(name, class_methods, instance_methods) {
     this.uid = [this.constructor._name, Model.UID.generate()].join("-")
   };
 
-  // Persistence is special, remove it from class_methods and initialize it
-  // with a reference to the class.
+  // Persistence is special, remove it from class_methods.
   var persistence = class_methods.persistence
-  if (persistence) {
-    delete class_methods.persistence
-    model.persistence = persistence(model)
-  }
+  delete class_methods.persistence
 
   // Apply class methods and extend with any custom class methods. Make sure
   // vitals are added last so they can't be overridden.
@@ -29,6 +25,9 @@ var Model = function(name, class_methods, instance_methods) {
       return jQuery.extend({}, this, { collection: collection });
     }
   });
+
+  // Initialise persistence with a reference to the class.
+  if (persistence) model.persistence = persistence(model)
 
   // Add default and custom instance methods.
   jQuery.extend(model.prototype, Model.Callbacks, Model.InstanceMethods,
