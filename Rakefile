@@ -1,16 +1,10 @@
-autoload :Bundle, 'lib/bundle'
+autoload :Bundler, 'lib/bundler'
 
 task :default => :test
 
-desc 'Bundle source files.'
+desc 'Create bundled and minified source files.'
 task :bundle do
-  @bundle = Bundle.new
-  @bundle.bundle!
-end
-
-desc 'Minify bundled source.'
-task :minify => :bundle do
-  @bundle.minify!
+  Bundler.bundle!
 end
 
 desc 'Boot test server - run tests at http://localhost:4567/'
