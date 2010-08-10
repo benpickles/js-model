@@ -1,18 +1,20 @@
 Model.RestPersistence = function(resource, methods) {
 	var PARAM_NAME_MATCHER = /:([\w\d]+)/g;
-	
-  var model_resource = function() {
-    this.resource = resource;
-		this.resource_param_names = [];
-    while ((param_name = PARAM_NAME_MATCHER.exec(resource)) !== null) {
-      this.resource_param_names.push(param_name[1]);
-    };
-  };
+  var resource_param_names = (function() {
+    var resource_param_names = []
+    var param_name
 
-  jQuery.extend(model_resource.prototype, {
+    while ((param_name = PARAM_NAME_MATCHER.exec(resource)) !== null) {
+      resource_param_names.push(param_name[1])
+    }
+
+    return resource_param_names
+  })()
+
+  var rest_persistence = jQuery.extend({
 		path: function(model) {
-			var path = this.resource;
-			$.each(this.resource_param_names, function(i, param) {
+      var path = resource;
+      $.each(resource_param_names, function(i, param) {
 				path = path.replace(":" + param, model.attributes[param]);
 			});
 			return path;
@@ -103,7 +105,9 @@ Model.RestPersistence = function(resource, methods) {
 
       if (callback) callback.call(model, success, xhr);
     }
-  }, methods);
+  }, methods)
 
-  return new model_resource();
+  return function() {
+    return rest_persistence
+  }
 };
