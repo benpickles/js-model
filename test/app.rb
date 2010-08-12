@@ -45,6 +45,10 @@ put '/posts-empty-response/:id' do
   ' '
 end
 
+delete '/posts-empty-response/:id' do
+  ' '
+end
+
 # Failure.
 post '/posts-failure' do
   status 500

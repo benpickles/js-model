@@ -183,8 +183,12 @@ test("update - blank response (Rails' `head :ok`)", function() {
 
   post.save(function(success) {
     same(logged, []);
-    start();
-    Model.Log = old_log;
+
+    post.destroy(function(success) {
+      same(logged, [])
+      start()
+      Model.Log = old_log
+    })
   });
 });
 
