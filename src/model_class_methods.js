@@ -1,12 +1,15 @@
 Model.ClassMethods = {
   add: function() {
     var added = [];
+    var uids = this.uids()
 
     for (var i = 0; i < arguments.length; i++) {
       var model = arguments[i];
 
       if (this.collection.indexOf(model) === -1 &&
-        !(model.id() && this.find(model.id()))) {
+        !(model.id() && this.find(model.id())) &&
+        uids.indexOf(model.uid) === -1)
+      {
         this.collection.push(model);
         added.push(model);
       }
@@ -141,5 +144,16 @@ Model.ClassMethods = {
         return 0
       }
     })
+  },
+
+  uids: function() {
+    var all = this.all()
+    var uids = []
+
+    for (var i = 0, length = all.length; i < length; i++) {
+      uids.push(all[i].uid)
+    }
+
+    return uids
   }
 };

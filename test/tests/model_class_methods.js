@@ -35,7 +35,7 @@ test("all, count, find, first, add, remove", function() {
   ok(!Post.remove(null));
 });
 
-test("maintaining a collection of unique models by object and id", function() {
+test("maintaining a collection of unique models by object, id and uid", function() {
   var Post = Model("post")
 
   equals(Post.count(), 0)
@@ -55,6 +55,13 @@ test("maintaining a collection of unique models by object and id", function() {
   equals(Post.count(), 1)
 
   new Post().save()
+
+  equals(Post.count(), 2)
+
+  var another_post = new Post()
+  another_post.uid = post.uid
+
+  Post.add(another_post)
 
   equals(Post.count(), 2)
 })
