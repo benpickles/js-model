@@ -279,4 +279,6 @@ test("load", function() {
     equals(Post.count(), 2, "should add models to collection")
     equals(models.length, 2, "should pass loaded models to callback")
   })
+
+  ok(Post.load() === Post, "shouldn't fail if there's no callback (and return self)")
 })

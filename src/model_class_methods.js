@@ -68,9 +68,12 @@ Model.ClassMethods = {
         for (var i = 0, length = models.length; i < length; i++) {
           self.add(models[i])
         }
-        callback(models)
+
+        if (callback) callback(models)
       })
     }
+
+    return this
   },
 
   last: function() {
