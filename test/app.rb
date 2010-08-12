@@ -21,6 +21,13 @@ get '/tests/:name' do
   File.read("tests/#{params[:name]}")
 end
 
+get '/posts' do
+  JSON.generate([
+    { :id => 1, :title => 'Bar' },
+    { :id => 2, :title => 'Foo' }
+  ])
+end
+
 # Success.
 post '/posts' do
   json!

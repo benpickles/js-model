@@ -1,5 +1,23 @@
 module("Model.RestPersistence");
 
+asyncTest("read", 3, function() {
+  var Post = Model("post", {
+    persistence: Model.RestPersistence("/posts")
+  })
+
+  Post.persistence.read(function(models) {
+    equals(models.length, 2)
+
+    var post1 = models[0]
+    var post2 = models[1]
+
+    same({ id: 1, title: "Bar" }, post1.attributes)
+    same({ id: 2, title: "Foo" }, post2.attributes)
+
+    start()
+  })
+})
+
 test("create with named params in resource path", function() {
   var Post = Model("post", {
     persistence: Model.RestPersistence("/root/:root_id/nested/:nested_id/posts")

@@ -59,6 +59,24 @@ Model.RestPersistence = function(resource, methods) {
       }
     },
 
+    read: function(callback) {
+      var klass = this.klass
+
+      return this.xhr("GET", this.read_path(), null, function(success, xhr, data) {
+        var models = []
+
+        for (var i = 0, length = data.length; i < length; i++) {
+          models.push(new klass(data[i]))
+        }
+
+        callback(models)
+      })
+    },
+
+    read_path: function() {
+      return resource
+    },
+
     update: function(model, callback) {
       return this.xhr('PUT', this.update_path(model), model, callback);
     },
@@ -69,7 +87,7 @@ Model.RestPersistence = function(resource, methods) {
 
     xhr: function(method, url, model, callback) {
       var self = this;
-      var data = method === "DELETE" ? null : this.params(model);
+      var data = ["DELETE", "GET"].indexOf(method) > -1 ? null : this.params(model);
 
       return jQuery.ajax({
         type: method,
@@ -124,7 +142,8 @@ Model.RestPersistence = function(resource, methods) {
     }
   }, methods)
 
-  return function() {
+  return function(klass) {
+    rest_persistence.klass = klass
     return rest_persistence
   }
 };
