@@ -74,34 +74,51 @@ Model.RestPersistence = function(resource, methods) {
         url: url,
         dataType: "json",
         data: data,
+        dataFilter: function(data, type) {
+          return /\S/.test(data) ? data : null;
+        },
         complete: function(xhr, textStatus) {
-          self.xhrComplete(xhr, textStatus, model, callback);
+          self.xhrComplete(xhr, textStatus, model, callback)
+        },
+        success: function(data, textStatus, xhr) {
+          self.xhrSuccess(xhr, textStatus, model, data)
         }
       });
     },
 
-    xhrComplete: function(xhr, textStatus, model, callback) {
+    xhrSuccess: function(xhr, textStatus, model, data) {
+      // Data doesnt get sent to the `complete` callback and so isn't
+      // available to pass on the user, hack it onto the xhr object rather
+      // than parsing it again later.
+      xhr.js_model_data = data
+
+      // Remote data is the definitive source, update model.
+      if (textStatus === "success" && model && data) model.attr(data)
+    },
+
+    // Rails' preferred failed validation response code, assume the response
+    // contains errors and replace current model errors with them.
+    handle422: function(xhr, textStatus, model) {
       var data = this.parseResponseData(xhr);
-      var success = textStatus === "success";
 
       if (data) {
-        if (success) {
-          // Remote data is the definitive source, update model.
-          model.attr(data);
-        } else if (xhr.status === 422) {
-          // Rails' preferred failed validation response code, assume these
-          // are errors and replace current model errors with them.
-          model.errors.clear();
+        model.errors.clear()
 
-          for (var attribute in data) {
-            for (var i = 0; i < data[attribute].length; i++) {
-              model.errors.add(attribute, data[attribute][i]);
-            }
+        for (var attribute in data) {
+          for (var i = 0; i < data[attribute].length; i++) {
+            model.errors.add(attribute, data[attribute][i])
           }
         }
       }
+    },
 
-      if (callback) callback.call(model, success, xhr);
+    xhrComplete: function(xhr, textStatus, model, callback) {
+      // Allow custom handlers to be defined per-HTTP status code.
+      var handler = this["handle" + xhr.status]
+      if (handler) handler.call(this, xhr, textStatus, model)
+
+      var success = textStatus === "success"
+      if (callback) callback.call(model, success, xhr, xhr.js_model_data)
     }
   }, methods);
 
