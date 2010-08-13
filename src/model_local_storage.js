@@ -1,4 +1,24 @@
 Model.LocalStorage = function(klass) {
+  if (!window.localStorage) {
+    return {
+      create: function(model, callback) {
+        callback(true)
+      },
+
+      destroy: function(model, callback) {
+        callback(true)
+      },
+
+      read: function(callback) {
+        callback([])
+      },
+
+      update: function(model, callback) {
+        callback(true)
+      }
+    }
+  }
+
   var collection_uid = [klass._name, "collection"].join("-")
   var readIndex = function() {
     var data = localStorage[collection_uid]
