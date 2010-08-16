@@ -20,35 +20,15 @@ Model.LocalStorage = function(klass) {
   }
 
   var collection_uid = [klass._name, "collection"].join("-")
-  var readIndex = function() {
-    var data = localStorage[collection_uid]
-    return data ? JSON.parse(data) : []
-  }
   var writeIndex = function(uids) {
-    localStorage.setItem(collection_uid, JSON.stringify(uids))
-  }
-  var addToIndex = function(uid) {
-    var uids = readIndex()
-
-    if (jQuery.inArray(uid, uids) === -1) {
-      uids.push(uid)
-      writeIndex(uids)
-    }
+    Model.LocalStorage.write(collection_uid, uids)
   }
   var removeFromIndex = function(uid) {
-    var uids = readIndex()
-    var index = jQuery.inArray(uid, uids)
-
-    if (index > -1) {
-      uids.splice(index, 1)
-      writeIndex(uids)
-    }
+    Model.LocalStorage.remove(collection_uid, uid)
   }
   var store = function(model) {
-    var uid = model.uid,
-       data = JSON.stringify(model.attr())
-    localStorage.setItem(uid, data)
-    addToIndex(uid)
+    Model.LocalStorage.write(model.uid, model.attr())
+    Model.LocalStorage.add(collection_uid, model.uid)
   }
 
   return {
@@ -66,13 +46,13 @@ Model.LocalStorage = function(klass) {
     read: function(callback) {
       if (!callback) return false
 
-      var uids = readIndex()
+      var uids = Model.LocalStorage.read(collection_uid) || []
       var models = []
       var attributes, model, uid
 
       for (var i = 0, length = uids.length; i < length; i++) {
         uid = uids[i]
-        attributes = JSON.parse(localStorage[uid])
+        attributes = Model.LocalStorage.read(uid)
         model = new klass(attributes)
         model.uid = uid
         models.push(model)
@@ -86,4 +66,29 @@ Model.LocalStorage = function(klass) {
       callback(true)
     }
   }
+}
+
+Model.LocalStorage.add = function(key, value) {
+  var uids = Model.LocalStorage.read(key) || []
+
+  if (uids.indexOf(value) === -1) {
+    uids.push(value)
+    Model.LocalStorage.write(key, uids)
+  }
+}
+Model.LocalStorage.read = function(key) {
+  var data = localStorage[key]
+  return data ? JSON.parse(data) : undefined
+}
+Model.LocalStorage.remove = function(key, value) {
+  var uids = Model.LocalStorage.read(key) || []
+  var index = uids.indexOf(value)
+
+  if (index > -1) {
+    uids.splice(index, 1)
+    Model.LocalStorage.write(key, uids)
+  }
+}
+Model.LocalStorage.write = function(key, value) {
+  localStorage.setItem(key, JSON.stringify(value))
 }
