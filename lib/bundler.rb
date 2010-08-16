@@ -33,14 +33,12 @@ class Bundler
           model_log
           model_rest_persistence
           model_uid
+          model_version
         )
       end
 
       def header
-        @header ||= begin
-          contents = File.read(File.join(SRC_DIR, 'header.js'))
-          contents.gsub('@VERSION', version)
-        end
+        @header ||= File.read(File.join(SRC_DIR, 'header.js'))
       end
 
       def version
@@ -51,8 +49,8 @@ class Bundler
         puts "Generating #{path}"
 
         File.open(path, 'w') do |f|
-          f.write header
-          f.write yield
+          f.write header.gsub('@VERSION', version)
+          f.write yield.gsub('@VERSION', version)
         end
       end
   end
