@@ -9,7 +9,12 @@ Model.LocalStoragePlusRest = function() {
     return {
       create: function(model, callback) {
         local.create(model, jQuery.noop)
-        rest.create(model, callback)
+
+        if (Model.LocalStoragePlusRest.online()) {
+          rest.create(model, callback)
+        } else {
+          callback(true)
+        }
       },
 
       // TODO: What happens when offline?!
@@ -24,11 +29,16 @@ Model.LocalStoragePlusRest = function() {
       read: function(callback) {
         var models
         local.read(function(read) { models = read })
-        rest.read(function(read) {
-          read.unshift(models.length, 0)
-          models.splice.apply(models, read)
+
+        if (Model.LocalStoragePlusRest.online()) {
+          rest.read(function(read) {
+            read.unshift(models.length, 0)
+            models.splice.apply(models, read)
+            callback(models)
+          })
+        } else {
           callback(models)
-        })
+        }
       },
 
       // This is where all the clever stuff happens.
@@ -38,8 +48,18 @@ Model.LocalStoragePlusRest = function() {
 
       update: function(model, callback) {
         local.update(model, jQuery.noop)
-        rest.update(model, callback)
+
+        if (Model.LocalStoragePlusRest.online()) {
+          rest.update(model, callback)
+        } else {
+          callback(true)
+        }
       }
     }
   }
+}
+
+Model.LocalStoragePlusRest._online = true
+Model.LocalStoragePlusRest.online = function() {
+  return this._online && navigator.onLine
 }
