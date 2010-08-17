@@ -5,8 +5,8 @@ require 'closure-compiler'
 require 'fewer'
 
 class Bundler
-  DIST_DIR = 'dist'
-  SRC_DIR = 'src'
+  DIST_DIR = File.expand_path('../../dist', __FILE__)
+  SRC_DIR = File.expand_path('../../src', __FILE__)
 
   class << self
     def bundle!
@@ -19,6 +19,10 @@ class Bundler
       write "#{DIST_DIR}/js-model-#{version}.min.js" do
         Fewer::Engines::Js.new(SRC_DIR, files, :min => true).read
       end
+    end
+
+    def bundled
+      Fewer::Engines::Js.new(SRC_DIR, files).read
     end
 
     private
