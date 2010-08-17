@@ -71,7 +71,7 @@ if (window.localStorage) {
 
     equals(Post.count(), 0)
     equals(localStorage.length, 1)
-    ok(localStorage[post.uid] === undefined)
+    ok(!localStorage[post.uid])
     equals(localStorage["post-collection"], "[]",
       "should be removed from localStorage list")
 
