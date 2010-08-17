@@ -163,23 +163,25 @@ test("persistence", function() {
   var results = [];
   var post;
 
-  var TestPersistance = {
-    create: function(model, callback) {
-      results.push(model);
-      results.push("create");
-      results.push(callback());
-    },
+  var TestPersistance = function() {
+    return {
+      create: function(model, callback) {
+        results.push(model);
+        results.push("create");
+        results.push(callback());
+      },
 
-    destroy: function(model, callback) {
-      results.push(model);
-      results.push("destroy");
-      results.push(callback());
-    },
+      destroy: function(model, callback) {
+        results.push(model);
+        results.push("destroy");
+        results.push(callback());
+      },
 
-    update: function(model, callback) {
-      results.push(model);
-      results.push("update");
-      results.push(callback());
+      update: function(model, callback) {
+        results.push(model);
+        results.push("update");
+        results.push(callback());
+      }
     }
   };
 
@@ -205,17 +207,19 @@ test("persistence", function() {
 });
 
 test("persistence failure", function() {
-  var TestPersistance = {
-    create: function(model, callback) {
-      callback(false);
-    },
+  var TestPersistance = function() {
+    return {
+      create: function(model, callback) {
+        callback(false);
+      },
 
-    destroy: function(model, callback) {
-      callback(false);
-    },
+      destroy: function(model, callback) {
+        callback(false);
+      },
 
-    update: function(model, callback) {
-      callback(false);
+      update: function(model, callback) {
+        callback(false);
+      }
     }
   };
 

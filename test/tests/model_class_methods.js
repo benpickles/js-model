@@ -33,12 +33,38 @@ test("all, count, find, first, add, remove", function() {
   ok(Post.find(4) === null);
 
   ok(!Post.remove(null));
-
-  var post1_duplicate = new Post({ id: 1 });
-  Post.add(post1_duplicate);
-
-  same(Post.pluck("id"), [1, 3], "shouldn't be able to add if a model with the same id exists in the collection");
 });
+
+test("maintaining a collection of unique models by object, id and uid", function() {
+  var Post = Model("post")
+
+  equals(Post.count(), 0)
+
+  var post = new Post().save()
+
+  equals(Post.count(), 1)
+
+  post.save()
+
+  equals(Post.count(), 1)
+
+  post.attributes.id = 1
+  var post_duplicate = new Post({ id: 1 })
+  Post.add(post_duplicate)
+
+  equals(Post.count(), 1)
+
+  new Post().save()
+
+  equals(Post.count(), 2)
+
+  var another_post = new Post()
+  another_post.uid = post.uid
+
+  Post.add(another_post)
+
+  equals(Post.count(), 2)
+})
 
 test("detect, select, first, last, count (with chaining)", function() {
   var Post = Model('post');
@@ -232,3 +258,27 @@ test("Custom method with chaining, then more chaining", function() {
   equals(Post.not_first().not_last().last(), post3,
     "custom methods should be available after chaining");
 });
+
+test("load", function() {
+  var TestPersistence = function() {
+    return {
+      read: function(callback) {
+        callback([
+          new Post({ a: 1 }),
+          new Post({ b: 2 })
+        ])
+      }
+    }
+  }
+
+  var Post = Model("post", { persistence: TestPersistence })
+
+  equals(Post.count(), 0)
+
+  Post.load(function(models) {
+    equals(Post.count(), 2, "should add models to collection")
+    equals(models.length, 2, "should pass loaded models to callback")
+  })
+
+  ok(Post.load() === Post, "shouldn't fail if there's no callback (and return self)")
+})

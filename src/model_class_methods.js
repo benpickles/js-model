@@ -1,14 +1,15 @@
 Model.ClassMethods = {
   add: function() {
     var added = [];
+    var uids = this.uids()
 
     for (var i = 0; i < arguments.length; i++) {
       var model = arguments[i];
-      var existing_elem = this.detect(function() {
-        return this.id() !== null && this.id() == model.id();
-      });
 
-      if (!existing_elem) {
+      if (this.collection.indexOf(model) === -1 &&
+        !(model.id() && this.find(model.id())) &&
+        uids.indexOf(model.uid) === -1)
+      {
         this.collection.push(model);
         added.push(model);
       }
@@ -57,6 +58,22 @@ Model.ClassMethods = {
 
   first: function() {
     return this.all()[0] || null;
+  },
+
+  load: function(callback) {
+    if (this.persistence) {
+      var self = this
+
+      this.persistence.read(function(models) {
+        for (var i = 0, length = models.length; i < length; i++) {
+          self.add(models[i])
+        }
+
+        if (callback) callback(models)
+      })
+    }
+
+    return this
   },
 
   last: function() {
@@ -130,5 +147,16 @@ Model.ClassMethods = {
         return 0
       }
     })
+  },
+
+  uids: function() {
+    var all = this.all()
+    var uids = []
+
+    for (var i = 0, length = all.length; i < length; i++) {
+      uids.push(all[i].uid)
+    }
+
+    return uids
   }
 };
