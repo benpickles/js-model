@@ -7,7 +7,7 @@ var Model = function(name, class_methods, instance_methods) {
     this.attributes = attributes || {};
     this.changes = {};
     this.errors = new Model.Errors(this);
-    this.uid = [this.constructor._name, Model.UID.generate()].join("-")
+    this.uid = [name, Model.UID.generate()].join("-")
   };
 
   // Persistence is special, remove it from class_methods.
