@@ -87,7 +87,8 @@ Model.RestPersistence = function(resource, methods) {
 
     xhr: function(method, url, model, callback) {
       var self = this;
-      var data = ["DELETE", "GET"].indexOf(method) > -1 ? null : this.params(model);
+      var data = jQuery.inArray(method, ["DELETE", "GET"]) > -1 ?
+        null : this.params(model);
 
       return jQuery.ajax({
         type: method,

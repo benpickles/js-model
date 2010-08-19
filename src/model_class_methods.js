@@ -6,9 +6,9 @@ Model.ClassMethods = {
     for (var i = 0; i < arguments.length; i++) {
       var model = arguments[i];
 
-      if (this.collection.indexOf(model) === -1 &&
+      if (jQuery.inArray(model, this.collection) === -1 &&
         !(model.id() && this.find(model.id())) &&
-        uids.indexOf(model.uid) === -1)
+        jQuery.inArray(model.uid, uids) === -1)
       {
         this.collection.push(model);
         added.push(model);
