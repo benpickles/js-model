@@ -1,13 +1,5 @@
-module("Model.LocalStorage")
-
 if (window.localStorage) {
-  // localStorage tests
-  var localStorageTest = function(name, func) {
-    test(name, function() {
-      localStorage.clear()
-      func()
-    })
-  }
+  module("Model.LocalStorage")
 
   localStorageTest("read", function() {
     var Post = Model("post", { persistence: Model.LocalStorage })
@@ -80,7 +72,8 @@ if (window.localStorage) {
     })
   })
 } else {
-  // localStorage not supported tests
+  module("Model.LocalStorage (unavailable)")
+
   test("read", function() {
     var Post = Model("post", { persistence: Model.LocalStorage })
 

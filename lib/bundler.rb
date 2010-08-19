@@ -34,6 +34,7 @@ class Bundler
           model_errors
           model_instance_methods
           model_local_storage
+          model_local_storage_plus_rest
           model_log
           model_rest_persistence
           model_uid
