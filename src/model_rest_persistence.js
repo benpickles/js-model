@@ -94,25 +94,9 @@ Model.RestPersistence = function(resource, methods) {
       });
     },
 
-    // Rails' preferred failed validation response code, assume the response
-    // contains errors and replace current model errors with them.
-    handle422: function(xhr, textStatus, model) {
-      var data = Model.RestPersistence.parseResponseData(xhr);
-
-      if (data) {
-        model.errors.clear()
-
-        for (var attribute in data) {
-          for (var i = 0; i < data[attribute].length; i++) {
-            model.errors.add(attribute, data[attribute][i])
-          }
-        }
-      }
-    },
-
     xhrComplete: function(xhr, textStatus, model, callback) {
       // Allow custom handlers to be defined per-HTTP status code.
-      var handler = this["handle" + xhr.status]
+      var handler = Model.RestPersistence["handle" + xhr.status]
       if (handler) handler.call(this, xhr, textStatus, model)
 
       var success = textStatus === "success"
@@ -130,6 +114,22 @@ Model.RestPersistence = function(resource, methods) {
     return rest_persistence
   }
 };
+
+// Rails' preferred failed validation response code, assume the response
+// contains errors and replace current model errors with them.
+Model.RestPersistence.handle422 = function(xhr, textStatus, model) {
+  var data = Model.RestPersistence.parseResponseData(xhr);
+
+  if (data) {
+    model.errors.clear()
+
+    for (var attribute in data) {
+      for (var i = 0; i < data[attribute].length; i++) {
+        model.errors.add(attribute, data[attribute][i])
+      }
+    }
+  }
+}
 
 Model.RestPersistence.parseResponseData = function(xhr) {
   try {
