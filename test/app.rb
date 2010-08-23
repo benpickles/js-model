@@ -29,6 +29,10 @@ get '/posts' do
   ])
 end
 
+get '/posts-single' do
+  JSON.generate({ :id => 1, :title => 'Bar' })
+end
+
 # Success.
 post '/posts' do
   json!

@@ -53,6 +53,7 @@ Model.RestPersistence = function(resource, methods) {
       var klass = this.klass
 
       return this.xhr("GET", this.read_path(), null, function(success, xhr, data) {
+        data = jQuery.makeArray(data)
         var models = []
 
         for (var i = 0, length = data.length; i < length; i++) {

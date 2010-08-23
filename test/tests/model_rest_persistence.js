@@ -18,6 +18,18 @@ asyncTest("read", 3, function() {
   })
 })
 
+asyncTest("read", 2, function() {
+  var Post = Model("post", {
+    persistence: Model.RestPersistence("/posts-single")
+  })
+
+  Post.persistence.read(function(models) {
+    equals(models.length, 1)
+    same({ id: 1, title: "Bar" }, models[0].attributes)
+    start()
+  })
+})
+
 test("create with named params in resource path", function() {
   var Post = Model("post", {
     persistence: Model.RestPersistence("/root/:root_id/nested/:nested_id/posts")
