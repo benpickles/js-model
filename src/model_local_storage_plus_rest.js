@@ -76,10 +76,13 @@ Model.LocalStoragePlusRest = function() {
         if (Model.LocalStoragePlusRest.online()) {
           rest.update(model, callback)
         } else {
+          var created_uids = Model.LocalStorage.read(create_uids_key)
+
           // Don't add it to the updated list when it hasn't yet been created.
-          if (Model.LocalStorage.read(create_uids_key).indexOf(model.uid) == -1) {
+          if (jQuery.inArray(model.uid, created_uids) == -1) {
             Model.LocalStorage.add(update_uids_key, model.uid)
           }
+
           callback(true)
         }
       }

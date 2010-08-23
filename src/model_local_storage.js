@@ -71,7 +71,7 @@ Model.LocalStorage = function(klass) {
 Model.LocalStorage.add = function(key, value) {
   var uids = Model.LocalStorage.read(key) || []
 
-  if (uids.indexOf(value) === -1) {
+  if (jQuery.inArray(value, uids) === -1) {
     uids.push(value)
     Model.LocalStorage.write(key, uids)
   }
@@ -82,7 +82,7 @@ Model.LocalStorage.read = function(key) {
 }
 Model.LocalStorage.remove = function(key, value) {
   var uids = Model.LocalStorage.read(key) || []
-  var index = uids.indexOf(value)
+  var index = jQuery.inArray(value, uids)
 
   if (index > -1) {
     uids.splice(index, 1)
