@@ -49,16 +49,6 @@ Model.RestPersistence = function(resource, methods) {
       return params;
     },
 
-    parseResponseData: function(xhr) {
-      try {
-        return /\S/.test(xhr.responseText) ?
-          jQuery.parseJSON(xhr.responseText) :
-          null;
-      } catch(e) {
-        Model.Log(e);
-      }
-    },
-
     read: function(callback) {
       var klass = this.klass
 
@@ -100,27 +90,14 @@ Model.RestPersistence = function(resource, methods) {
         },
         complete: function(xhr, textStatus) {
           self.xhrComplete(xhr, textStatus, model, callback)
-        },
-        success: function(data, textStatus, xhr) {
-          self.xhrSuccess(xhr, textStatus, model, data)
         }
       });
-    },
-
-    xhrSuccess: function(xhr, textStatus, model, data) {
-      // Data doesnt get sent to the `complete` callback and so isn't
-      // available to pass on the user, hack it onto the xhr object rather
-      // than parsing it again later.
-      xhr.js_model_data = data
-
-      // Remote data is the definitive source, update model.
-      if (textStatus === "success" && model && data) model.attr(data)
     },
 
     // Rails' preferred failed validation response code, assume the response
     // contains errors and replace current model errors with them.
     handle422: function(xhr, textStatus, model) {
-      var data = this.parseResponseData(xhr);
+      var data = Model.RestPersistence.parseResponseData(xhr);
 
       if (data) {
         model.errors.clear()
@@ -139,7 +116,12 @@ Model.RestPersistence = function(resource, methods) {
       if (handler) handler.call(this, xhr, textStatus, model)
 
       var success = textStatus === "success"
-      if (callback) callback.call(model, success, xhr, xhr.js_model_data)
+      var data = Model.RestPersistence.parseResponseData(xhr)
+
+      // Remote data is the definitive source, update model.
+      if (success && model && data) model.attr(data)
+
+      if (callback) callback.call(model, success, xhr, data)
     }
   }, methods)
 
@@ -148,3 +130,13 @@ Model.RestPersistence = function(resource, methods) {
     return rest_persistence
   }
 };
+
+Model.RestPersistence.parseResponseData = function(xhr) {
+  try {
+    return /\S/.test(xhr.responseText) ?
+      jQuery.parseJSON(xhr.responseText) :
+      null;
+  } catch(e) {
+    Model.Log(e);
+  }
+}
