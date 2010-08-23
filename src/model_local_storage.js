@@ -30,14 +30,14 @@ Model.LocalStorage = function(klass) {
   var addToIndex = function(uid) {
     var uids = readIndex()
 
-    if (uids.indexOf(uid) === -1) {
+    if (jQuery.inArray(uid, uids) === -1) {
       uids.push(uid)
       writeIndex(uids)
     }
   }
   var removeFromIndex = function(uid) {
     var uids = readIndex()
-    var index = uids.indexOf(uid)
+    var index = jQuery.inArray(uid, uids)
 
     if (index > -1) {
       uids.splice(index, 1)
