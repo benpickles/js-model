@@ -45,12 +45,9 @@ Model.LocalStoragePlusRest = function() {
         callback(true)
       },
 
-      // Combine models from both localStorage and REST. Don't worry about
-      // duplicates here, Model.load() (or rather Model.add()) takes care of
-      // that.
+      // Only read from localStorage.
       read: function(callback) {
-        var models
-        local.read(function(read) { models = read })
+        local.read(callback)
 
         if (Model.LocalStoragePlusRest.online()) {
           rest.read(function(read) {
