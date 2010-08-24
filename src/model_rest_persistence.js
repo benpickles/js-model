@@ -86,9 +86,7 @@ Model.RestPersistence = function(resource, methods) {
         url: url,
         dataType: "json",
         data: data,
-        dataFilter: function(data, type) {
-          return /\S/.test(data) ? data : null;
-        },
+        dataFilter: Model.RestPersistence.dataFilter,
         complete: function(xhr, textStatus) {
           self.xhrComplete(xhr, textStatus, model, callback)
         }
@@ -116,6 +114,10 @@ Model.RestPersistence = function(resource, methods) {
   }
 };
 
+Model.RestPersistence.dataFilter = function(data, type) {
+  return /\S/.test(data) ? data : null;
+}
+
 // Rails' preferred failed validation response code, assume the response
 // contains errors and replace current model errors with them.
 Model.RestPersistence.handle422 = function(xhr, textStatus, model) {
@@ -134,9 +136,8 @@ Model.RestPersistence.handle422 = function(xhr, textStatus, model) {
 
 Model.RestPersistence.parseResponseData = function(xhr) {
   try {
-    return /\S/.test(xhr.responseText) ?
-      jQuery.parseJSON(xhr.responseText) :
-      null;
+    var data = Model.RestPersistence.dataFilter(xhr.responseText)
+    return jQuery.parseJSON(data)
   } catch(e) {
     Model.Log(e);
   }

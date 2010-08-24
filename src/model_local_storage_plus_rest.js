@@ -48,21 +48,84 @@ Model.LocalStoragePlusRest = function() {
       // Only read from localStorage.
       read: function(callback) {
         local.read(callback)
-
-        if (Model.LocalStoragePlusRest.online()) {
-          rest.read(function(read) {
-            read.unshift(models.length, 0)
-            models.splice.apply(models, read)
-            callback(models)
-          })
-        } else {
-          callback(models)
-        }
       },
 
       // This is where all the clever stuff happens.
-      sync: function() {
-        // TODO!
+      sync: function(callback) {
+        if (Model.LocalStoragePlusRest.online()) {
+          var create_uids = Model.LocalStorage.read(create_uids_key) || [],
+              update_uids = Model.LocalStorage.read(update_uids_key) || []
+          var created = [],
+              updated = {},
+            destroyed = Model.LocalStorage.read(destroy_ids_key) || []
+
+          jQuery.each(create_uids, function() {
+            created.push(Model.LocalStorage.read(this))
+          })
+          jQuery.each(update_uids, function() {
+            var attributes = Model.LocalStorage.read(this)
+            var id = attributes.id
+            delete attributes.id
+            updated[id] = attributes
+          })
+
+          var data = {
+            create: created,
+            destroy: destroyed,
+            update: updated
+          }
+
+          jQuery.ajax({
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(data),
+            type: "PUT",
+            url: rest.read_path(),
+            dataFilter: Model.RestPersistence.dataFilter,
+            complete: function(xhr, textStatus) {
+              if (textStatus == "success") {
+                var json = Model.RestPersistence.parseResponseData(xhr)
+                var model
+
+                jQuery.each(json.create || [], function(i) {
+                  model = klass.detect(function() {
+                    return this.uid == create_uids[i]
+                  })
+
+                  if (model) {
+                    model.merge(this)
+                    local.update(model, jQuery.noop)
+                  }
+                })
+
+                jQuery.each(json.update || [], function() {
+                  model = klass.find(this.id)
+
+                  if (model) {
+                    model.merge(this)
+                    local.update(model, jQuery.noop)
+                  }
+                })
+
+                jQuery.each(json.destroy || [], function() {
+                  model = klass.find(this.id)
+
+                  if (model) {
+                    local.destroy(model, jQuery.noop)
+                  }
+                })
+
+                localStorage.removeItem(create_uids_key)
+                localStorage.removeItem(destroy_ids_key)
+                localStorage.removeItem(update_uids_key)
+              } else if (xhr.status == 409) {
+                // Conflict!
+              }
+            }
+          })
+        } else {
+          callback(false)
+        }
       },
 
       // Always create the localStorage model, if remote update fails store
