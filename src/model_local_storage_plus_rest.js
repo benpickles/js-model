@@ -8,6 +8,7 @@ Model.LocalStoragePlusRest = function() {
     var create_uids_key = [klass._name, "create"].join("-")
     var destroy_ids_key = [klass._name, "destroy"].join("-")
     var update_uids_key = [klass._name, "update"].join("-")
+    var sync_id_key = [klass._name, "sync_id"].join("-")
 
     return {
       // Always create the localStorage model, if remote creation fails store
@@ -58,6 +59,7 @@ Model.LocalStoragePlusRest = function() {
           var created = [],
               updated = {},
             destroyed = Model.LocalStorage.read(destroy_ids_key) || []
+          var sync_id = Model.LocalStorage.read(sync_id_key)
 
           jQuery.each(create_uids, function() {
             created.push(Model.LocalStorage.read(this))
@@ -72,7 +74,8 @@ Model.LocalStoragePlusRest = function() {
           var data = {
             create: created,
             destroy: destroyed,
-            update: updated
+            update: updated,
+            sync_id: sync_id
           }
 
           jQuery.ajax({
@@ -95,6 +98,10 @@ Model.LocalStoragePlusRest = function() {
                   if (model) {
                     model.merge(this)
                     local.update(model, jQuery.noop)
+                  } else {
+                    model = new klass(this)
+                    klass.add(model)
+                    local.create(model)
                   }
                 })
 
@@ -108,16 +115,21 @@ Model.LocalStoragePlusRest = function() {
                 })
 
                 jQuery.each(json.destroy || [], function() {
-                  model = klass.find(this.id)
+                  model = klass.find(this)
 
                   if (model) {
                     local.destroy(model, jQuery.noop)
+                    klass.remove(model)
                   }
                 })
+
+                Model.LocalStorage.write(sync_id_key, json.sync_id)
 
                 localStorage.removeItem(create_uids_key)
                 localStorage.removeItem(destroy_ids_key)
                 localStorage.removeItem(update_uids_key)
+
+                if (callback) callback()
               } else if (xhr.status == 409) {
                 // Conflict!
               }
