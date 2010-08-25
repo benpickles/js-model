@@ -14,7 +14,7 @@ Model.LocalStoragePlusRest = function() {
       // Always create the localStorage model, if remote creation fails store
       // its uid for later action.
       create: function(model, callback) {
-        local.create(model, jQuery.noop)
+        local.create(model)
 
         if (Model.LocalStoragePlusRest.online()) {
           rest.create(model, callback)
@@ -28,7 +28,7 @@ Model.LocalStoragePlusRest = function() {
       // this has been assigned by the server and attempt to destroy it
       // storing the id for later action if this is not possible.
       destroy: function(model, callback) {
-        local.destroy(model, jQuery.noop)
+        local.destroy(model)
 
         // Cleanup stale data.
         Model.LocalStorage.remove(create_uids_key, model.uid)
@@ -97,7 +97,7 @@ Model.LocalStoragePlusRest = function() {
 
                   if (model) {
                     model.merge(this)
-                    local.update(model, jQuery.noop)
+                    local.update(model)
                   } else {
                     model = new klass(this)
                     klass.add(model)
@@ -110,7 +110,7 @@ Model.LocalStoragePlusRest = function() {
 
                   if (model) {
                     model.merge(this)
-                    local.update(model, jQuery.noop)
+                    local.update(model)
                   }
                 })
 
@@ -118,7 +118,7 @@ Model.LocalStoragePlusRest = function() {
                   model = klass.find(this)
 
                   if (model) {
-                    local.destroy(model, jQuery.noop)
+                    local.destroy(model)
                     klass.remove(model)
                   }
                 })
@@ -143,7 +143,7 @@ Model.LocalStoragePlusRest = function() {
       // Always create the localStorage model, if remote update fails store
       // its uid for later action.
       update: function(model, callback) {
-        local.update(model, jQuery.noop)
+        local.update(model)
 
         if (Model.LocalStoragePlusRest.online()) {
           rest.update(model, callback)

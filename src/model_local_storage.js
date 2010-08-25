@@ -2,19 +2,19 @@ Model.LocalStorage = function(klass) {
   if (!window.localStorage) {
     return {
       create: function(model, callback) {
-        callback(true)
+        if (callback) callback(true)
       },
 
       destroy: function(model, callback) {
-        callback(true)
+        if (callback) callback(true)
       },
 
       read: function(callback) {
-        callback([])
+        if (callback) callback([])
       },
 
       update: function(model, callback) {
-        callback(true)
+        if (callback) callback(true)
       }
     }
   }
@@ -34,13 +34,13 @@ Model.LocalStorage = function(klass) {
   return {
     create: function(model, callback) {
       store(model)
-      callback(true)
+      if (callback) callback(true)
     },
 
     destroy: function(model, callback) {
       localStorage.removeItem(model.uid)
       removeFromIndex(model.uid)
-      callback(true)
+      if (callback) callback(true)
     },
 
     read: function(callback) {
@@ -63,7 +63,7 @@ Model.LocalStorage = function(klass) {
 
     update: function(model, callback) {
       store(model)
-      callback(true)
+      if (callback) callback(true)
     }
   }
 }
