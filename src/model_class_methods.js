@@ -67,7 +67,7 @@ Model.ClassMethods = {
           self.add(models[i])
         }
 
-        if (callback) callback(models)
+        if (callback) callback.call(self, models)
       })
     }
 
