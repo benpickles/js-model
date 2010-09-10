@@ -111,6 +111,10 @@ Model.ClassMethods = {
     }
   },
 
+  reverse: function() {
+    return this.chain(this.all().reverse())
+  },
+
   select: function(func) {
     var all = this.all(),
         selected = [],

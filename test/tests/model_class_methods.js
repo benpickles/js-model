@@ -282,3 +282,13 @@ test("load", function() {
 
   ok(Post.load() === Post, "shouldn't fail if there's no callback (and return self)")
 })
+
+test("reverse", function() {
+  var Post = Model("post")
+  var post1 = new Post()
+  var post2 = new Post()
+
+  Post.add(post1, post2)
+
+  same(Post.reverse().all(), [post2, post1])
+})
