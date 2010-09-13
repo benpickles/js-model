@@ -1,4 +1,4 @@
-Model.RestPersistence = function(resource, methods) {
+Model.REST = function(resource, methods) {
 	var PARAM_NAME_MATCHER = /:([\w\d]+)/g;
   var resource_param_names = (function() {
     var resource_param_names = []
@@ -98,11 +98,11 @@ Model.RestPersistence = function(resource, methods) {
 
     xhrComplete: function(xhr, textStatus, model, callback) {
       // Allow custom handlers to be defined per-HTTP status code.
-      var handler = Model.RestPersistence["handle" + xhr.status]
+      var handler = Model.REST["handle" + xhr.status]
       if (handler) handler.call(this, xhr, textStatus, model)
 
       var success = textStatus === "success"
-      var data = Model.RestPersistence.parseResponseData(xhr)
+      var data = Model.REST.parseResponseData(xhr)
 
       // Remote data is the definitive source, update model.
       if (success && model && data) model.attr(data)
@@ -117,10 +117,13 @@ Model.RestPersistence = function(resource, methods) {
   }
 };
 
+// TODO: Remove in v1 if it ever gets there.
+Model.RestPersistence = Model.REST
+
 // Rails' preferred failed validation response code, assume the response
 // contains errors and replace current model errors with them.
-Model.RestPersistence.handle422 = function(xhr, textStatus, model) {
-  var data = Model.RestPersistence.parseResponseData(xhr);
+Model.REST.handle422 = function(xhr, textStatus, model) {
+  var data = Model.REST.parseResponseData(xhr);
 
   if (data) {
     model.errors.clear()
@@ -133,7 +136,7 @@ Model.RestPersistence.handle422 = function(xhr, textStatus, model) {
   }
 }
 
-Model.RestPersistence.parseResponseData = function(xhr) {
+Model.REST.parseResponseData = function(xhr) {
   try {
     return /\S/.test(xhr.responseText) ?
       jQuery.parseJSON(xhr.responseText) :

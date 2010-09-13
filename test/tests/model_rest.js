@@ -1,8 +1,8 @@
-module("Model.RestPersistence");
+module("Model.REST");
 
 asyncTest("read", 3, function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/posts")
+    persistence: Model.REST("/posts")
   })
 
   Post.persistence.read(function(models) {
@@ -20,7 +20,7 @@ asyncTest("read", 3, function() {
 
 asyncTest("read", 2, function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/posts-single")
+    persistence: Model.REST("/posts-single")
   })
 
   Post.persistence.read(function(models) {
@@ -32,7 +32,7 @@ asyncTest("read", 2, function() {
 
 test("create with named params in resource path", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/root/:root_id/nested/:nested_id/posts")
+    persistence: Model.REST("/root/:root_id/nested/:nested_id/posts")
   });
   var post = new Post({ title: "Nested", body: "...", root_id: 3, nested_id: 2 });
 
@@ -54,7 +54,7 @@ test("create with named params in resource path", function() {
 
 test("update with named params in resource path", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/root/:root_id/nested/:nested_id/posts")
+    persistence: Model.REST("/root/:root_id/nested/:nested_id/posts")
   });
   var post = new Post({ id: 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
   post.attr("title", "Nested amended");
@@ -77,7 +77,7 @@ test("update with named params in resource path", function() {
 
 test("destroy with named params in resource path", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/root/:root_id/nested/:nested_id/posts")
+    persistence: Model.REST("/root/:root_id/nested/:nested_id/posts")
   });
   var post = new Post({ id: 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
 
@@ -100,7 +100,7 @@ test("destroy with named params in resource path", function() {
 
 test("create", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/posts")
+    persistence: Model.REST("/posts")
   });
   var post = new Post({ title: "Foo", body: "..." });
 
@@ -130,7 +130,7 @@ test("create", function() {
 
 test("create - 422 response (failed validations)", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/posts-validations")
+    persistence: Model.REST("/posts-validations")
   });
   var post = new Post();
   post.attr("title", "Foo");
@@ -149,7 +149,7 @@ test("create - 422 response (failed validations)", function() {
 
 test("create failure", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/posts-failure")
+    persistence: Model.REST("/posts-failure")
   });
   var post = new Post();
   post.attr({ title: "Foo", body: "..." });
@@ -170,7 +170,7 @@ test("create failure", function() {
 
 test("update", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/posts")
+    persistence: Model.REST("/posts")
   });
   var post = new Post({ id: 1, title: "Foo", body: "..." });
   post.attr("title", "Bar");
@@ -197,7 +197,7 @@ test("update", function() {
 
 test("update - blank response (Rails' `head :ok`)", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/posts-empty-response")
+    persistence: Model.REST("/posts-empty-response")
   });
   var post = new Post({ id: 1, title: "Foo", body: "..." });
   post.attr("title", "Bar");
@@ -224,7 +224,7 @@ test("update - blank response (Rails' `head :ok`)", function() {
 
 test("update - 422 response (failed validations)", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/posts-validations")
+    persistence: Model.REST("/posts-validations")
   });
   var post = new Post({ id: 1 });
   post.attr("title", "Foo");
@@ -243,7 +243,7 @@ test("update - 422 response (failed validations)", function() {
 
 test("update failure", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/posts-failure")
+    persistence: Model.REST("/posts-failure")
   });
   var post = new Post({ id: 1, title: "Foo" });
   post.attr("title", "Bar");
@@ -261,7 +261,7 @@ test("update failure", function() {
 
 test("destroy", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/posts")
+    persistence: Model.REST("/posts")
   });
   var post = new Post({ id: 1, title: "Foo", body: "..." });
 
@@ -285,7 +285,7 @@ test("destroy", function() {
 
 test("destroy failure", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/posts-failure")
+    persistence: Model.REST("/posts-failure")
   });
   var post = new Post({ id: 1, title: "Foo" });
 
@@ -305,7 +305,7 @@ test("destroy failure", function() {
 
 test("destroy - 422 response (failed validations)", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/posts-validations")
+    persistence: Model.REST("/posts-validations")
   });
   var post = new Post({ id: 1, title: "Foo" });
 
@@ -321,7 +321,7 @@ test("destroy - 422 response (failed validations)", function() {
 
 test("events", function() {
   var Post = Model("post", {
-    persistence: Model.RestPersistence("/posts")
+    persistence: Model.REST("/posts")
   });
 
   var events = [];
