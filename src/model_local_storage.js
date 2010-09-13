@@ -1,4 +1,4 @@
-Model.LocalStorage = function(klass) {
+Model.localStorage = function(klass) {
   if (!window.localStorage) {
     return {
       create: function(model, callback) {
