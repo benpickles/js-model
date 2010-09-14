@@ -7,6 +7,7 @@ Model.Errors.prototype = {
   add: function(attribute, message) {
     if (!this.errors[attribute]) this.errors[attribute] = [];
     this.errors[attribute].push(message);
+    return this
   },
 
   all: function() {
@@ -15,6 +16,7 @@ Model.Errors.prototype = {
 
   clear: function() {
     this.errors = {};
+    return this
   },
 
   each: function(func) {
@@ -23,6 +25,7 @@ Model.Errors.prototype = {
         func.call(this, attribute, this.errors[attribute][i]);
       }
     }
+    return this
   },
 
   on: function(attribute) {
