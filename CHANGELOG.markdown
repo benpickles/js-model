@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.9.0
+
+* Finder methods now return `undefined` for a missing model.
+* Remove #update method which you might guess acts like ActiveRecord's #update_attributes which is not the case - no calls are triggered on the persistence adapter.
+* Model.RestPersistence renamed to Model.REST - Model.RestPersistence can still be used but will be removed in version 1.0.
+* REST adapter now sends JSON instead of "application/x-www-form-urlencoded" (and so now requires the browser to be JSON-aware).
+* Add `reverse` class method.
+* Add Model.VERSION to allow inspection of js-model version.
+* Add Model.localStorage persistence adapter.
+* Stop jQuery's JSON parsing throwing an error when encountering Rails' none-empty " " JSON responses.
 * Remove Underscore dependency.
 * `Model.remove` method now takes a model instance rather than an id.
 * Rename `sort` to `sortBy` and add the ability to specify an attribute name as well as a custom function. Add `sort` method that acts on a collection just like `Array#sort`.
