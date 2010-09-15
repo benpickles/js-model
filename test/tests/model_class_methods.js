@@ -292,13 +292,3 @@ test("reverse", function() {
 
   same(Post.reverse().all(), [post2, post1])
 })
-
-test("create", function() {
-  var Post = Model("post")
-  var post = Post.create({ title: "blah" })
-
-  equals(Post.count(), 1)
-  same(post, Post.first())
-  same(post.attributes, Post.first().attributes)
-  equals(post.attributes, Post.first().attributes)
-})

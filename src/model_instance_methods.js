@@ -107,11 +107,6 @@ Model.InstanceMethods = {
     return this;
   },
 
-  update: function(attributes) {
-    this.merge(attributes).trigger("update");
-    return this;
-  },
-
   valid: function() {
     this.errors.clear();
     this.validate();

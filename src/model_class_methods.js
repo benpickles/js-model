@@ -28,12 +28,6 @@ Model.ClassMethods = {
     return this.collection.length;
   },
 
-  create: function(attributes) {
-    var model = new this(attributes)
-    this.add(model)
-    return model
-  },
-
   detect: function(func) {
     var all = this.all(),
         model
