@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>js-model &bull; models in your JavaScript</title>
+<link href="docs/style.css" rel="stylesheet">
+</head>
+<body>
+  <h1>js-model (0.9.0)</h1>
+
+  <p class="intro">js-model is a library built on top of <a href="http://jquery.com/">jQuery</a> that allows you to work with models in your JavaScript.</p>
+
+  <dl>
+<dt>Download</dt>
+    <dd>
+<a href="dist/js-model-0.9.0.min.js">js-model-0.9.0.min.js</a> (7.5Kb)</dd>
+    <dd>
+<a href="dist/js-model-0.9.0.js">js-model-0.9.0.js</a> (15.8Kb)</dd>
+    <dd>Also available on <a href="http://cachedcommons.org/">Cached Commons</a>
+</dd>
+
+    <dt>Source</dt>
+    <dd><a href="http://github.com/benpickles/js-model">github.com/benpickles/js-model</a></dd>
+  </dl>
+<nav><ol>
+<li>
+<a href="#getting-started">Getting started</a><ol>
+<li><a href="#manipulating-objects">Manipulating objects</a></li>
+<li><a href="#finding-objects">Finding objects</a></li>
+<li>
+<a href="#custom-properties">Custom properties</a><ol>
+<li><a href="#class-properties">Class properties</a></li>
+<li><a href="#instance-properties">Instance properties</a></li>
+</ol>
+</li>
+<li><a href="#associations">Associations</a></li>
+<li>
+<a href="#events">Events</a><ol>
+<li><a href="#class-events">Class events</a></li>
+<li><a href="#instance-events">Instance events</a></li>
+<li><a href="#custom-events">Custom events</a></li>
+</ol>
+</li>
+<li><a href="#validations">Validations</a></li>
+</ol>
+</li>
+<li>
+<a href="#persistence">Persistence</a><ol>
+<li><a href="#rest">REST</a></li>
+<li><a href="#localstorage">localStorage</a></li>
+<li><a href="#loading-data">Loading data</a></li>
+</ol>
+</li>
+<li><a href="#js-model-hearts-sammy">js-model &hearts; Sammy</a></li>
+<li>
+<a href="#api">API</a><ol>
+<li><a href="#model">Model()</a></li>
+<li>
+<a href="#api-class-properties">Class properties</a><ol>
+<li><a href="#add">add()</a></li>
+<li><a href="#all">all()</a></li>
+<li><a href="#chain">chain()</a></li>
+<li><a href="#count">count()</a></li>
+<li><a href="#detect">detect()</a></li>
+<li><a href="#each">each()</a></li>
+<li><a href="#find">find()</a></li>
+<li><a href="#first">first()</a></li>
+<li><a href="#last">last()</a></li>
+<li><a href="#load">load()</a></li>
+<li><a href="#new">new()</a></li>
+<li><a href="#pluck">pluck()</a></li>
+<li><a href="#remove">remove()</a></li>
+<li><a href="#reverse">reverse()</a></li>
+<li><a href="#select">select()</a></li>
+<li><a href="#sort">sort()</a></li>
+<li><a href="#sortby">sortBy()</a></li>
+</ol>
+</li>
+<li>
+<a href="#api-instance-properties">Instance properties</a><ol>
+<li><a href="#attr">attr()</a></li>
+<li><a href="#attributes">attributes</a></li>
+<li><a href="#changes">changes</a></li>
+<li><a href="#destroy">destroy()</a></li>
+<li><a href="#errors">errors</a></li>
+<li><a href="#id">id()</a></li>
+<li><a href="#merge">merge()</a></li>
+<li><a href="#newrecord">newRecord()</a></li>
+<li><a href="#reset">reset()</a></li>
+<li><a href="#save">save()</a></li>
+<li><a href="#uid">uid</a></li>
+<li><a href="#valid">valid()</a></li>
+<li><a href="#validate">validate()</a></li>
+</ol>
+</li>
+<li>
+<a href="#api-errors">Errors</a><ol>
+<li><a href="#api-errors-add">add()</a></li>
+<li><a href="#api-errors-all">all()</a></li>
+<li><a href="#clear">clear()</a></li>
+<li><a href="#api-errors-each">each()</a></li>
+<li><a href="#on">on()</a></li>
+<li><a href="#size">size()</a></li>
+</ol>
+</li>
+<li>
+<a href="#persistence-interface">Persistence interface</a><ol>
+<li><a href="#create">create()</a></li>
+<li><a href="#persistence-interface-destroy">destroy()</a></li>
+<li><a href="#read">read()</a></li>
+<li><a href="#update">update()</a></li>
+</ol>
+</li>
+</ol>
+</li>
+</ol></nav><div id="content">
+      <section><h2 id="getting-started">Getting started</h2>
+
+<p>The first thing to do is to create a model class using the factory <a href="#model"><code>Model()</code></a>.</p>
+
+<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">)</span></code></pre>
+
+<p>This allows you to create instances of &ldquo;project&rdquo; models and also contains an internal collection of all &ldquo;projects&rdquo; which can be used for querying.</p>
+
+<h3 id="manipulating-objects">Manipulating objects</h3>
+
+<p>Now you can create and manipulate instances of your new model. Attributes are read and set with the <a href="#attr"><code>attr()</code></a> method which works in a similar way to jQuery on the DOM.</p>
+
+<pre><code><span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Project</span><span class="p">({</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">"stuff"</span> <span class="p">})</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">,</span> <span class="s2">"nonsense"</span><span class="p">)</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">save</span><span class="p">()</span></code></pre>
+
+<h3 id="finding-objects">Finding objects</h3>
+
+<p>After calling <a href="#save"><code>save()</code></a> on a model it is added to the class&rsquo;s &ldquo;collection&rdquo; and can be retrieved again by its id by calling <a href="#find"><code>find()</code></a>.</p>
+
+<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1">// =&gt; project</span></code></pre>
+
+<p>You can retrieve all models from the collection with <a href="#all"><code>all()</code></a>.</p>
+
+<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
+<span class="c1">// =&gt; [project]</span></code></pre>
+
+<p>Check out <a href="#detect"><code>detect()</code></a> and <a href="#select"><code>select()</code></a> for more ways to query the collection.</p>
+
+<h3 id="custom-properties">Custom properties</h3>
+
+<p>You might need to give your model custom methods and properties. There are two parts to a model which can be extended, and these are akin to class and instance methods on an ORM such as ActiveRecord.</p>
+
+<h4 id="class-properties">Class properties</h4>
+
+<p>When setting up a model you can pass an object as the optional second argument, these properties will be defined on the class.</p>
+
+<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">find_by_title</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">detect</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span> <span class="o">==</span> <span class="nx">title</span>
+    <span class="p">})</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="nx">Project</span><span class="p">.</span><span class="nx">find_by_title</span><span class="p">(</span><span class="s2">"stuff"</span><span class="p">)</span>
+<span class="c1">// =&gt; "stuff" project model</span></code></pre>
+
+<h4 id="instance-properties">Instance properties</h4>
+
+<p>The optional third argument when setting up a model is used to define instance properties. They are often used to link objects together in a way which mimics the relationships the data might have in the remote database (&ldquo;has many&rdquo; etc). However, they can be pretty much anything. They are added to the model&rsquo;s <code>prototype</code> and can overwrite the defaults.</p>
+
+<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{</span>
+  <span class="nx">markAsDone</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"done"</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="nx">Project</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nx">markAsDone</span><span class="p">()</span>
+<span class="c1">// "stuff" project marked as done</span></code></pre>
+
+<h3 id="associations">Associations</h3>
+
+<p>Simple associations can be mimicked by adding a couple of instance methods. Here a <code>Cat</code> &ldquo;belongs to&rdquo; a <code>Mat</code> and a <code>Mat</code> &ldquo;has many&rdquo; <code>Cat</code>s.</p>
+
+<pre><code><span class="kd">var</span> <span class="nx">Cat</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"cat"</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{</span>
+  <span class="nx">mat</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">mat_id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"mat_id"</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nx">Mat</span><span class="p">.</span><span class="nx">detect</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">()</span> <span class="o">==</span> <span class="nx">mat_id</span>
+    <span class="p">})</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="kd">var</span> <span class="nx">Mat</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"mat"</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{</span>
+  <span class="nx">cats</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="nx">Cat</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"mat_id"</span><span class="p">)</span> <span class="o">==</span> <span class="nx">id</span>
+    <span class="p">})</span>
+  <span class="p">}</span>
+<span class="p">})</span></code></pre>
+
+<h3 id="events">Events</h3>
+
+<p>js-model allows you to listen to the lifecycle of objects based on the events they trigger at different points. Typically you&rsquo;ll use this to link your data objects to UI elements.</p>
+
+<h4 id="class-events">Class events</h4>
+
+<p>It is possible to bind to an event occurring when adding and removing an object to a collection.</p>
+
+<pre><code><span class="nx">Post</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s2">"add"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">new_object</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">add_object_to_ui</span><span class="p">(</span><span class="nx">new_object</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="nx">Post</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s2">"remove"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">removed_object</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">remove_object_from_ui</span><span class="p">(</span><span class="nx">removed_object</span><span class="p">)</span>
+<span class="p">})</span></code></pre>
+
+<h4 id="instance-events">Instance events</h4>
+
+<p>Parts of your application can be bound to changes which happen to a specific instance:</p>
+
+<pre><code><span class="nx">post</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s2">"update"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">my_ui_elem</span><span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">))</span>
+<span class="p">})</span></code></pre>
+
+<p>Including when the instance is destroyed:</p>
+
+<pre><code><span class="nx">post</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s2">"remove"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">my_ui_elem</span><span class="p">.</span><span class="nx">remove</span><span class="p">()</span>
+<span class="p">})</span></code></pre>
+
+<h4 id="custom-events">Custom events</h4>
+
+<p>You might also want to have custom events on objects which might be linked up to a UI element.</p>
+
+<pre><code><span class="nx">post</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s2">"turn_blue"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">my_ui_elem</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s2">"background"</span><span class="p">,</span> <span class="s2">"blue"</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="nx">post</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">"turn_blue"</span><span class="p">)</span></code></pre>
+
+<h3 id="validations">Validations</h3>
+
+<p>To add your own validations you should define a custom <a href="#validate"><code>validate()</code></a> method on your model that adds error messages to the <a href="#errors"><code>errors</code></a> object. <a href="#valid"><code>valid()</code></a> is called on <a href="#save"><code>save()</code></a> and checks that there are no errors. Validations are useful when using <a href="#localstorage">localStorage persistence</a> but can also help you avoid hitting your server unnecessarily if you&rsquo;re using <a href="#rest">REST persistence</a>.</p>
+</section><section><h2 id="persistence">Persistence</h2>
+
+<p>js-model is different to several other solutions, it&rsquo;s not a REST-based proxy for the objects on your server and doesn&rsquo;t rely on constant HTTP requests to gather information. Instead, it looks up objects in its own cache which can be populated via a persistence adapter &mdash; think of it as <a href="http://blog.new-bamboo.co.uk/2010/2/4/let-them-eat-state">maintaining the state of your objects in the browser</a>.</p>
+
+<p>Persistence is defined as a <a href="#class-properties">class property</a> and comes in two flavours: <a href="#rest">REST</a> and <a href="#localstorage">localStorage</a>. Both adapters encode/decode your attributes with JSON and so require the browser to be JSON-aware (or to include the <a href="http://www.json.org/js.html">JSON JavaScript library</a>).</p>
+
+<h3 id="rest">REST</h3>
+
+<p>Uses jQuery&rsquo;s <a href="http://api.jquery.com/jQuery.ajax/"><code>ajax()</code></a> method to GET, POST, PUT and DELETE model data to the server as JSON and expects JSON back.</p>
+
+<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">persistence</span><span class="o">:</span> <span class="nx">Model</span><span class="p">.</span><span class="nx">REST</span><span class="p">(</span><span class="s2">"/projects"</span><span class="p">)</span>
+<span class="p">})</span></code></pre>
+
+<p>Calling <a href="#save"><code>save()</code></a> or <a href="#destroy"><code>destroy()</code></a> on an object now fires a corresponding REST request:</p>
+
+<pre><code><span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Project</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"stuff"</span> <span class="p">})</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">save</span><span class="p">()</span>                            <span class="c1">//   POST /projects</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">"nonsense"</span><span class="p">).</span><span class="nx">save</span><span class="p">()</span>   <span class="c1">//    PUT /projects/1</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">destroy</span><span class="p">()</span>                         <span class="c1">// DELETE /projects/1</span></code></pre>
+
+<p>When responding to POST or PUT requests any JSON returned will be <a href="#merge">merged</a> into the model&rsquo;s <a href="#attributes"><code>attributes</code></a> &mdash; you should also make sure to include the id in the POST response so it can be assigned to the model. 422 responses from the server will be interpreted as having failed validations, any returned JSON will be assumed to be errors and replace client-side <a href="#api-errors"><code>errors</code></a>.</p>
+
+<p><strong>Note:</strong> If you&rsquo;re using Rails you should make sure to add the following setting in an initializer as js-model expects non-namespaced JSON:</p>
+
+<pre><code><span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">include_root_in_json</span> <span class="o">=</span> <span class="kp">false</span></code></pre>
+
+<h3 id="localstorage">localStorage</h3>
+
+<p>localStorage is a client-side key/value store that persists between page views and browser sessions, it&rsquo;s supported by Safari, Chrome, Firefox, IE8 and Safari Mobile (iPhone) &mdash; WebKit-based browsers have an excellent localStorage GUI in the Web Inspector.</p>
+
+<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">persistence</span><span class="o">:</span> <span class="nx">Model</span><span class="p">.</span><span class="nx">localStorage</span><span class="p">()</span>
+<span class="p">})</span></code></pre>
+
+<h3 id="loading-data">Loading data</h3>
+
+<p>If you have existing data stored in your persistence layer you&rsquo;ll want to be able to have it available when you next open your app. You&rsquo;ll typically call <a href="#load"><code>load()</code></a> when your document loads and perform an action when it has completed.</p>
+
+<pre><code><span class="c1">// wait for the document to load</span>
+<span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">Project</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// do something with the UI</span>
+  <span class="p">})</span>
+<span class="p">})</span></code></pre>
+</section><section><h2 id="js-model-hearts-sammy">js-model &hearts; Sammy</h2>
+
+<p>js-model works really well with Sammy &mdash; you <em>are</em> using <a href="http://code.quirkey.com/sammy/">Sammy</a> right? Your routes might look something like this:</p>
+
+<pre><code><span class="nx">$</span><span class="p">.</span><span class="nx">sammy</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"#/projects"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">projects</span> <span class="o">=</span> <span class="nx">Project</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
+    <span class="c1">// display list of projects</span>
+  <span class="p">})</span>
+
+  <span class="k">this</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s2">"#/projects"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Project</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">project</span><span class="p">)</span>
+    <span class="nx">project</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s2">"#/projects/"</span> <span class="o">+</span> <span class="nx">project</span><span class="p">.</span><span class="nx">id</span><span class="p">())</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">// display errors...</span>
+      <span class="p">}</span>
+    <span class="p">})</span>
+  <span class="p">})</span>
+
+  <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"#/projects/:id"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="nx">Project</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
+    <span class="c1">// display project</span>
+  <span class="p">})</span>
+
+  <span class="k">this</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s2">"#/projects/:id"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="nx">Project</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
+    <span class="nx">project</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">param</span><span class="p">.</span><span class="nx">project</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">context</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s2">"#/projects/"</span> <span class="o">+</span> <span class="nx">project</span><span class="p">.</span><span class="nx">id</span><span class="p">())</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="c1">// display errors...</span>
+        <span class="p">}</span>
+      <span class="p">})</span>
+  <span class="p">})</span>
+
+  <span class="k">this</span><span class="p">.</span><span class="nx">route</span><span class="p">(</span><span class="s2">"delete"</span><span class="p">,</span> <span class="s2">"#/projects/:id"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">Project</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">destroy</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nx">redirect</span><span class="p">(</span><span class="s2">"#/projects"</span><span class="p">)</span>
+      <span class="p">})</span>
+  <span class="p">})</span>
+<span class="p">})</span></code></pre>
+</section><section><h2 id="api">API</h2>
+<h3 id="model"><code>Model(name, classProperties, instanceProperties)</code></h3>
+
+<p><code>Model()</code> is a factory method that is used to generate model classes. At its simplest it can be used like so:</p>
+
+<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">)</span></code></pre>
+
+<p>The second and third arguments are optional and define properties on your newly defined class and model instances respectively.</p>
+
+<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">find_by_title</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">detect</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span> <span class="o">==</span> <span class="nx">title</span>
+    <span class="p">})</span>
+  <span class="p">}</span>
+<span class="p">},</span> <span class="p">{</span>
+  <span class="nx">markAsDone</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"done"</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="nx">Project</span><span class="p">.</span><span class="nx">find_by_title</span><span class="p">(</span><span class="s2">"stuff"</span><span class="p">).</span><span class="nx">markAsDone</span><span class="p">()</span>
+<span class="c1">// "stuff" project marked as done</span></code></pre>
+<h3 id="api-class-properties">Class properties</h3>
+
+<h4 id="add"><code>add(model)</code></h4>
+
+<p>Adds a model to a collection and is what <a href="#save"><code>save()</code></a> calls internally if it is successful. <code>add()</code> won&rsquo;t allow you to add a model to the collection if one already exists with the same <a href="#id"><code>id</code></a> or <a href="#uid"><code>uid</code></a>.</p>
+
+<pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
+<span class="c1">// =&gt; []</span>
+
+<span class="kd">var</span> <span class="nx">egg</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Food</span><span class="p">({</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"egg"</span> <span class="p">})</span>
+<span class="kd">var</span> <span class="nx">ham</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Food</span><span class="p">({</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"ham"</span> <span class="p">})</span>
+<span class="kd">var</span> <span class="nx">cheese</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Food</span><span class="p">({</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"cheese"</span> <span class="p">})</span>
+
+<span class="nx">Food</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">egg</span><span class="p">)</span>
+<span class="nx">Food</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
+<span class="c1">// =&gt; [egg]</span>
+
+<span class="nx">Food</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">ham</span><span class="p">,</span> <span class="nx">cheese</span><span class="p">)</span>
+<span class="nx">Food</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
+<span class="c1">// =&gt; [egg, ham, cheese]</span>
+
+<span class="kd">var</span> <span class="nx">not_egg</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Food</span><span class="p">({</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"not egg"</span> <span class="p">})</span>
+
+<span class="nx">Food</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">not_egg</span><span class="p">)</span>
+<span class="nx">Food</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
+<span class="c1">// =&gt; [egg, ham, cheese]</span></code></pre>
+
+<h4 id="all"><code>all()</code></h4>
+
+<p>Returns an array of the models contained in the collection.</p>
+
+<pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
+<span class="c1">// =&gt; [egg, ham, cheese]</span>
+
+<span class="nx">Food</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">"e"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span>
+<span class="p">}).</span><span class="nx">all</span><span class="p">()</span>
+<span class="c1">// =&gt; [egg, cheese]</span></code></pre>
+
+<h4 id="chain"><code>chain(arrayOfModels)</code></h4>
+
+<p>A utility method to enable chaining methods on a collection &mdash; used internally by <a href="#select"><code>select()</code></a> for instance.</p>
+
+<h4 id="count"><code>count()</code></h4>
+
+<p>Returns the size of the collection.</p>
+
+<pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">count</span><span class="p">()</span>
+<span class="c1">// =&gt; 3</span>
+
+<span class="nx">Food</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">"e"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span>
+<span class="p">}).</span><span class="nx">count</span><span class="p">()</span>
+<span class="c1">// =&gt; 2</span></code></pre>
+
+<h4 id="detect"><code>detect(func)</code></h4>
+
+<p>Operates on the collection returning the first model that matches the supplied function.</p>
+
+<pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">detect</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"ham"</span>
+<span class="p">})</span>
+<span class="c1">// =&gt; ham</span></code></pre>
+
+<h4 id="each"><code>each(func)</code></h4>
+
+<p>Iterates over the collection calling the supplied function for each model.</p>
+
+<pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">))</span>
+<span class="p">})</span>
+<span class="c1">// =&gt; logs "egg", "ham" and "cheese"</span>
+
+<span class="nx">Food</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">"e"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span>
+<span class="p">}).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">))</span>
+<span class="p">})</span>
+<span class="c1">// =&gt; logs "egg" and "cheese"</span></code></pre>
+
+<h4 id="find"><code>find(id)</code></h4>
+
+<p>Returns the model with the corresponding id.</p>
+
+<pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1">// =&gt; ham</span>
+
+<span class="nx">Food</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="mi">69</span><span class="p">)</span>
+<span class="c1">// =&gt; undefined</span></code></pre>
+
+<h4 id="first"><code>first()</code></h4>
+
+<p>Returns the first model in the collection.</p>
+
+<pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">first</span><span class="p">()</span>
+<span class="c1">// =&gt; egg</span>
+
+<span class="nx">Food</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">"h"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span>
+<span class="p">}).</span><span class="nx">first</span><span class="p">()</span>
+<span class="c1">// =&gt; ham</span></code></pre>
+
+<h4 id="last"><code>last()</code></h4>
+
+<p>Returns the last model in the collection.</p>
+
+<pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">last</span><span class="p">()</span>
+<span class="c1">// =&gt; cheese</span></code></pre>
+
+<h4 id="load"><code>load(callback)</code></h4>
+
+<p>Calls <a href="#read"><code>read()</code></a> on the persistence adapter and adds the returned models to the collection. The supplied callback is then passed an array of the newly added models.</p>
+
+<pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">models</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// do something...</span>
+<span class="p">})</span></code></pre>
+
+<h4 id="new"><code>new(attributes)</code></h4>
+
+<p>Instantiates a model, the supplied attributes get assigned directly to the model&rsquo;s <a href="#attributes"><code>attributes</code></a>.</p>
+
+<pre><code><span class="kd">var</span> <span class="nx">fish</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Food</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"fish"</span> <span class="p">})</span>
+
+<span class="nx">fish</span><span class="p">.</span><span class="nx">attributes</span>
+<span class="c1">// =&gt; { name: "fish" }</span>
+
+<span class="nx">fish</span><span class="p">.</span><span class="nx">changes</span>
+<span class="c1">// =&gt; {}</span></code></pre>
+
+<h4 id="pluck"><code>pluck(attributeName)</code></h4>
+
+<p>Operates on the collection returning an array of values for the specified attribute.</p>
+
+<pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">pluck</span><span class="p">(</span><span class="s2">"name"</span><span class="p">)</span>
+<span class="c1">// =&gt; ["egg", "ham", "cheese"]</span>
+
+<span class="nx">Food</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">"e"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span>
+<span class="p">}).</span><span class="nx">pluck</span><span class="p">(</span><span class="s2">"name"</span><span class="p">)</span>
+<span class="c1">// =&gt; ["egg", "cheese"]</span></code></pre>
+
+<h4 id="remove"><code>remove(model)</code></h4>
+
+<p>Removes a model from a collection.</p>
+
+<pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
+<span class="c1">// =&gt; [egg, ham, cheese]</span>
+
+<span class="nx">Food</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="nx">egg</span><span class="p">)</span>
+<span class="nx">Food</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
+<span class="c1">// =&gt; [ham, cheese]</span></code></pre>
+
+<h4 id="reverse"><code>reverse()</code></h4>
+
+<p>Returns a collection containing the models in reverse order.</p>
+
+<pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">reverse</span><span class="p">().</span><span class="nx">all</span><span class="p">()</span>
+<span class="c1">// =&gt; [cheese, ham, egg]</span></code></pre>
+
+<h4 id="select"><code>select(func)</code></h4>
+
+<p>Operates on the collection returning a collection containing all models that match the supplied function.</p>
+
+<pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">"e"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span>
+<span class="p">}).</span><span class="nx">all</span><span class="p">()</span>
+<span class="c1">// =&gt; [egg, cheese]</span></code></pre>
+
+<h4 id="sort"><code>sort(func)</code></h4>
+
+<p>Acts like <code>Array#sort()</code> on the collection. It&rsquo;s more likely you&rsquo;ll want to use <a href="#sortby"><code>sortBy()</code></a> which is a far more convenient wrapper to <code>sort()</code>.</p>
+
+<h4 id="sortby">
+<code>sortBy(attributeName</code> or <code>func)</code>
+</h4>
+
+<p>Returns the collection sorted by either an attribute or a custom function.</p>
+
+<pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">sortBy</span><span class="p">(</span><span class="s2">"name"</span><span class="p">).</span><span class="nx">all</span><span class="p">()</span>
+<span class="c1">// =&gt; [cheese, egg, ham]</span>
+
+<span class="nx">Food</span><span class="p">.</span><span class="nx">sortBy</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">).</span><span class="nx">length</span>
+<span class="p">}).</span><span class="nx">all</span><span class="p">()</span>
+<span class="c1">// =&gt; [egg, ham, cheese]</span></code></pre>
+<h3 id="api-instance-properties">Instance properties</h3>
+
+<h4 id="attr"><code>attr()</code></h4>
+
+<p>Get and set a model&rsquo;s attribute(s). <code>attr()</code> can be used in a few ways:</p>
+
+<ul>
+<li>
+<code>attr(name)</code> &mdash; Get the value of the named attribute.</li>
+<li>
+<code>attr(name, value)</code> &mdash; Set the value of the named attribute.</li>
+<li>
+<code>attr()</code> &mdash; Get an object containing all name/value attribute pairs.</li>
+<li>
+<code>attr(object)</code> &mdash; Set multiple name/value attribute pairs.</li>
+</ul>
+<p>Attributes modified using <code>attr()</code> can be reverted &mdash; see <a href="#changes"><code>changes</code></a> for more information.</p>
+
+<pre><code><span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Project</span><span class="p">({</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">"Foo"</span><span class="p">,</span> <span class="nx">category</span><span class="o">:</span> <span class="s2">"Stuff"</span> <span class="p">})</span>
+
+<span class="c1">// Get attribute</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span>
+<span class="c1">// =&gt; "Foo"</span>
+
+<span class="c1">// Set attribute</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">,</span> <span class="s2">"Bar"</span><span class="p">)</span>
+
+<span class="c1">// Get attribute again</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span>
+<span class="c1">// =&gt; "Bar"</span>
+
+<span class="c1">// Chain setters</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">,</span> <span class="s2">"Baz"</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"category"</span><span class="p">,</span> <span class="s2">"Nonsense"</span><span class="p">)</span>
+
+<span class="c1">// Set multiple attributes</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">attr</span><span class="p">({</span>
+  <span class="nx">title</span><span class="o">:</span> <span class="s2">"Foo again"</span><span class="p">,</span>
+  <span class="nx">tags</span><span class="o">:</span> <span class="s2">"stuff nonsense"</span>
+<span class="p">})</span>
+
+<span class="c1">// Get all attributes</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">attr</span><span class="p">()</span>
+<span class="c1">// =&gt; { title: "Foo again", category: "Nonsense", tags: "stuff nonsense" }</span></code></pre>
+
+<h4 id="attributes"><code>attributes</code></h4>
+
+<p>Direct access to a model&rsquo;s attributes object. Most of the time you won&rsquo;t need to use this and should use <a href="#attr"><code>attr()</code></a> instead.</p>
+
+<pre><code><span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Project</span><span class="p">({</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">"Foo"</span> <span class="p">})</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">attributes</span>
+<span class="c1">// =&gt; { title: "Foo" }</span></code></pre>
+
+<h4 id="changes"><code>changes</code></h4>
+
+<p>Attributes set with the <a href="#attr"><code>attr()</code></a> method are written to the <code>changes</code> intermediary object rather than directly to the <a href="#attributes"><code>attributes</code></a> object. This allows you to see any previous attribute values and enables validations &mdash; see <a href="#validate"><code>validate()</code></a> for more on validations. <code>changes</code> are committed to <a href="#attributes"><code>attributes</code></a> on successful <a href="#save"><code>save()</code></a>.</p>
+
+<pre><code><span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Project</span><span class="p">({</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">"Foo"</span> <span class="p">})</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">attributes</span>             <span class="c1">// =&gt; { title: "Foo" }</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">changes</span>                <span class="c1">// =&gt; {}</span>
+
+<span class="c1">// Change title</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">,</span> <span class="s2">"Bar"</span><span class="p">)</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">attributes</span>             <span class="c1">// =&gt; { title: "Foo" }</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">changes</span>                <span class="c1">// =&gt; { title: "Bar" }</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span>          <span class="c1">// =&gt; "Bar"</span>
+
+<span class="c1">// Change it back to what it was</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">,</span> <span class="s2">"Foo"</span><span class="p">)</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">attributes</span>             <span class="c1">// =&gt; { title: "Foo" }</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">changes</span>                <span class="c1">// =&gt; {}</span>
+
+<span class="c1">// Change title again and reset changes</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">,</span> <span class="s2">"Bar"</span><span class="p">)</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">attributes</span>             <span class="c1">// =&gt; { title: "Foo" }</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">changes</span>                <span class="c1">// =&gt; { title: "Bar" }</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">reset</span><span class="p">()</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">changes</span>                <span class="c1">// =&gt; {}</span></code></pre>
+
+<h4 id="destroy"><code>destroy(callback)</code></h4>
+
+<p>Removes the model from the collection and calls <a href="#destroy"><code>destroy()</code></a> on the persistence adapter if one is defined.</p>
+
+<pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
+<span class="c1">// =&gt; [egg, ham, cheese]</span>
+
+<span class="nx">ham</span><span class="p">.</span><span class="nx">destroy</span><span class="p">()</span>
+
+<span class="nx">Food</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
+<span class="c1">// =&gt; [egg, cheese]</span></code></pre>
+
+<h4 id="errors"><code>errors</code></h4>
+
+<p>Returns an <a href="#api-errors"><code>Errors</code></a> object containing information about any failed validations &mdash; similar to ActiveRecord&rsquo;s Errors object. See <a href="#api-errors"><code>Errors</code></a> for more information.</p>
+
+<h4 id="id"><code>id()</code></h4>
+
+<p>Convenience method, equivalent of calling <code>attr("id")</code>.</p>
+
+<h4 id="merge"><code>merge(object)</code></h4>
+
+<p>Destructivly merges the given object into the <a href="#attributes"><code>attributes</code></a> object. Used internally when saving and not really required for everyday use.</p>
+
+<pre><code><span class="kd">var</span> <span class="nx">User</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"user"</span><span class="p">)</span>
+<span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">User</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"Bob"</span><span class="p">,</span> <span class="nx">occupation</span><span class="o">:</span> <span class="s2">"Taxidermist"</span> <span class="p">})</span>
+
+<span class="nx">user</span><span class="p">.</span><span class="nx">attributes</span>
+<span class="c1">// =&gt; { name: "Bob", occupation: "Taxidermist" }</span>
+
+<span class="nx">user</span><span class="p">.</span><span class="nx">merge</span><span class="p">({</span> <span class="nx">occupation</span><span class="o">:</span> <span class="s2">"Stuffer"</span> <span class="p">})</span>
+<span class="nx">user</span><span class="p">.</span><span class="nx">attributes</span>
+<span class="c1">// =&gt; { name: "Bob", occupation: "Stuffer" }</span></code></pre>
+
+<h4 id="newrecord"><code>newRecord()</code></h4>
+
+<p>If the model doesn&rsquo;t have an id then it&rsquo;s new. This is what js-model checks when saving to decide whether it should call <a href="#create"><code>create()</code></a> or <a href="#update"><code>update()</code></a> on the persistence adapter.</p>
+
+<pre><code><span class="nx">egg</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Food</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"egg"</span> <span class="p">})</span>
+<span class="nx">ham</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Food</span><span class="p">({</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"ham"</span> <span class="p">})</span>
+
+<span class="nx">egg</span><span class="p">.</span><span class="nx">newRecord</span><span class="p">()</span>   <span class="c1">// =&gt; true</span>
+<span class="nx">ham</span><span class="p">.</span><span class="nx">newRecord</span><span class="p">()</span>   <span class="c1">// =&gt; false</span></code></pre>
+
+<h4 id="reset"><code>reset()</code></h4>
+
+<p>Clears all <a href="#changes"><code>changes</code></a> and <a href="#errors"><code>errors</code></a>.</p>
+
+<h4 id="save"><code>save(callback)</code></h4>
+
+<p><code>save()</code> encapsulates quite a bit of functionality:</p>
+
+<ul>
+<li>Check whether the model is <a href="#valid"><code>valid()</code></a>, if not then halt here passing the callback <code>false</code>.</li>
+<li>If the model is <a href="#newrecord">new</a> then call <a href="#create"><code>create()</code></a> on the persistence adapter otherwise call <a href="#update"><code>update()</code></a>.</li>
+<li>If the persistence call is successful then <a href="#merge"><code>merge()</code></a> any <a href="#changes"><code>changes</code></a> into <a href="#attributes"><code>attributes</code></a> and <a href="#add"><code>add()</code></a> the model to the collection if it&rsquo;s new.</li>
+<li>Finally the supplied callback is called with a boolean to indicate success/failure and any further arguments the persistence adapter supplies.</li>
+</ul>
+<p>If your persistence layer returns any data this will also be <a href="#merge">merged</a> into the attributes &mdash; this is how your server-assigned id gets assigned to the model when you use <a href="#rest">REST persistence</a>.</p>
+
+<p><strong>Note:</strong> It&rsquo;s important to understand that the callback passed to <code>save()</code> may take some time to be called as it may depend on a response from your server.</p>
+
+<pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
+<span class="c1">// =&gt; [egg, ham, cheese]</span>
+
+<span class="kd">var</span> <span class="nx">fish</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Food</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"fish"</span> <span class="p">})</span>
+
+<span class="nx">fish</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">Food</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
+    <span class="c1">// =&gt; [egg, ham, cheese, fish]</span>
+
+    <span class="nx">fish</span><span class="p">.</span><span class="nx">id</span><span class="p">()</span>
+    <span class="c1">// =&gt; 4</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// boo, something went wrong :(</span>
+  <span class="p">}</span>
+<span class="p">})</span></code></pre>
+
+<h4 id="uid"><code>uid</code></h4>
+
+<p>Automatically assigned on instantiation, this is a per-page-load-unique id &mdash; used by the <a href="#localstorage">localStorage persistence adapter</a>.</p>
+
+<h4 id="valid"><code>valid()</code></h4>
+
+<p>Calls <a href="#validate"><code>validate()</code></a> and checks for the existence of any errors returning <code>true</code> or <code>false</code>. Used by <a href="#save"><code>save()</code></a> which won&rsquo;t continue if <code>valid()</code> returns <code>false</code>.</p>
+
+<h4 id="validate"><code>validate()</code></h4>
+
+<p>Overwrite this method to add client-side validations to your model. This method is called on <a href="#save"><code>save()</code></a> which won&rsquo;t continue if the <a href="#errors"><code>errors</code></a> object is not empty.</p>
+
+<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{</span>
+  <span class="nx">validate</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"Bar"</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">"title"</span><span class="p">,</span> <span class="s2">"should be Bar"</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Project</span><span class="p">({</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">"Foo"</span> <span class="p">})</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">valid</span><span class="p">()</span>
+<span class="c1">// =&gt; false</span>
+
+<span class="nx">project</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">,</span> <span class="s2">"Bar"</span><span class="p">)</span>
+<span class="nx">project</span><span class="p">.</span><span class="nx">valid</span><span class="p">()</span>
+<span class="c1">// =&gt; true</span></code></pre>
+<h3 id="api-errors">Errors</h3>
+
+<p>Errors are used in conjunction with <a href="#validate"><code>validate()</code></a> and are modelled after ActiveModel&rsquo;s errors.</p>
+
+<p><strong>Note:</strong> If you&rsquo;re using Rails 2.x you can get Rails 3-style <code>errors.to_json</code> by dropping this simple monkey patch into an initializer (<a href="http://gist.github.com/350520">Gist</a>).</p>
+
+<pre><code><span class="k">module</span> <span class="nn">ActiveRecord</span>
+  <span class="k">class</span> <span class="nc">Errors</span>
+    <span class="k">def</span> <span class="nf">to_json</span>
+      <span class="n">inject</span><span class="p">({})</span> <span class="p">{</span> <span class="o">|</span><span class="nb">hash</span><span class="p">,</span> <span class="n">error</span><span class="o">|</span>
+        <span class="n">attribute</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="n">error</span>
+
+        <span class="nb">hash</span><span class="o">[</span><span class="n">attribute</span><span class="o">]</span> <span class="o">||=</span> <span class="o">[]</span>
+        <span class="nb">hash</span><span class="o">[</span><span class="n">attribute</span><span class="o">]</span> <span class="o">&lt;&lt;</span> <span class="n">message</span>
+        <span class="nb">hash</span>
+      <span class="p">}</span><span class="o">.</span><span class="n">to_json</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<h4 id="api-errors-add"><code>add(attributeName, errorMessage)</code></h4>
+
+<p>Add an error message for the specified attribute</p>
+
+<pre><code><span class="nx">project</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span>
+<span class="c1">// =&gt; []</span>
+
+<span class="nx">project</span><span class="p">.</span><span class="nx">errors</span>
+  <span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">"title"</span><span class="p">,</span> <span class="s2">"should not be blank"</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">"title"</span><span class="p">,</span> <span class="s2">"should be Bar"</span><span class="p">)</span>
+
+<span class="nx">project</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span>
+<span class="c1">// =&gt; ["should not be blank", "should be Bar"]</span></code></pre>
+
+<h4 id="api-errors-all"><code>all()</code></h4>
+
+<p>Returns an object containing all the errors.</p>
+
+<pre><code><span class="nx">project</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
+<span class="c1">// =&gt; { title: ["should not be blank", "should be Bar"] }</span></code></pre>
+
+<h4 id="clear"><code>clear()</code></h4>
+
+<p>Clears all error messages (making the model <a href="#valid">valid</a> once more).</p>
+
+<pre><code><span class="nx">project</span><span class="p">.</span><span class="nx">valid</span><span class="p">()</span>
+<span class="c1">// =&gt; false</span>
+
+<span class="nx">project</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">clear</span><span class="p">()</span>
+
+<span class="nx">project</span><span class="p">.</span><span class="nx">valid</span><span class="p">()</span>
+<span class="c1">// =&gt; true</span></code></pre>
+
+<h4 id="api-errors-each"><code>each(func)</code></h4>
+
+<p>Iterate over all error messages.</p>
+
+<pre><code><span class="nx">project</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">attribute</span><span class="p">,</span> <span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// display error messages somewhere</span>
+<span class="p">})</span></code></pre>
+
+<h4 id="on"><code>on(attributeName)</code></h4>
+
+<p>Return an array of error messages for the specified attribute.</p>
+
+<pre><code><span class="nx">project</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span>
+<span class="c1">// =&gt; ["should not be blank", "should be Bar"]</span>
+
+<span class="nx">project</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">"foo"</span><span class="p">)</span>
+<span class="c1">// =&gt; []</span></code></pre>
+
+<h4 id="size"><code>size()</code></h4>
+
+<p>Returns a count of the total error messages on the model.</p>
+
+<pre><code><span class="nx">project</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">size</span><span class="p">()</span>
+<span class="c1">// =&gt; 2</span></code></pre>
+<h3 id="persistence-interface">Persistence interface</h3>
+
+<p>Persistence adapters implement CRUD with the following interface. This is not really something you need to know but is documented here in case you want to implement your own.</p>
+
+<h4 id="create"><code>create(model, callback)</code></h4>
+
+<p>Calls the supplied callback with a boolean indicating whether the action was a success or not and any further parameters that the persistence adapter sends.</p>
+
+<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">persistence</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">project</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// do something...</span>
+<span class="p">})</span></code></pre>
+
+<h4 id="persistence-interface-destroy"><code>destroy(model, callback)</code></h4>
+
+<p>Calls the supplied callback with a boolean indicating whether the action was a success or not and any further parameters that the persistence adapter sends.</p>
+
+<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">persistence</span><span class="p">.</span><span class="nx">destroy</span><span class="p">(</span><span class="nx">project</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// do something...</span>
+<span class="p">})</span></code></pre>
+
+<h4 id="read"><code>read(callback)</code></h4>
+
+<p>Calls the supplied callback with an array of models &mdash; models are <strong>not</strong> automatically added to the collection when calling <code>read()</code>. You probably won&rsquo;t need to use this much as this functionality is taken care of by <a href="#load"><code>load()</code></a>.</p>
+
+<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">persistence</span><span class="p">.</span><span class="nx">read</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">models</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// do something with the models...</span>
+<span class="p">})</span></code></pre>
+
+<h4 id="update"><code>update(model, callback)</code></h4>
+
+<p>Calls the supplied callback with a boolean indicating whether the action was a success or not and any further parameters that the persistence adapter sends.</p>
+
+<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">persistence</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">project</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// do something...</span>
+<span class="p">})</span></code></pre>
+</section>
+</div>
+
+  <footer><p>&copy; 2010 <a href="http://benpickles.com/">Ben Pickles</a>. See <a href="http://github.com/benpickles/js-model/blob/master/LICENSE">LICENSE</a> for details.</p>
+  </footer><script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-117680-14']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+</body>
+</html>

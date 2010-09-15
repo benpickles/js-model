@@ -1,0 +1,123 @@
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  margin: 0;
+  padding: 0 4em;
+}
+
+h1 {
+  margin-bottom: 0;
+}
+.intro {
+  margin-top: 0.5em;
+}
+
+p {
+  line-height: 1.4em;
+}
+
+dt {
+  margin-top: 0.5em;
+}
+dd {
+  margin-left: 1em;
+}
+
+nav {
+  position: fixed;
+  right: 3em;
+  top: 1em;
+  width: 20em;
+}
+nav ol {
+  list-style: none;
+  margin: 0.1em 0 0;
+  padding: 0;
+}
+nav ol ol {
+  margin-left: 1em;
+}
+nav li {
+  margin: 0 0.3em 0.3em 0;
+}
+nav li li li {
+  display: inline;
+  white-space: nowrap;
+}
+
+#content {
+  margin-right: 21em;
+}
+#content li {
+  margin: 0.4em 0;
+}
+
+code {
+  background: #eee;
+  padding: 1px 3px 2px;
+}
+a:hover code {
+  background: #f4f4ff;
+}
+
+pre {
+  background: #eee;
+  border: 1px solid #ddd;
+  padding: 5px;
+}
+pre code {
+  background: none;
+  padding: 0;
+}
+
+ul {
+  list-style: square;
+  margin: 0;
+  padding-left: 2em;
+}
+
+code .c1 {
+  color: #999;
+}
+code .k {
+  font-weight: bold;
+}
+code .kc,
+code .kp {
+  color: #90d;
+}
+code .kd {
+  font-weight: bold;
+  color: #741;
+}
+code .mi {
+  color: #00f;
+}
+code .nc {
+  color: #789;
+  font-weight: bold;
+}
+code .no {
+  color: #355;
+  font-weight: bold;
+}
+code .nf {
+  color: #800;
+  font-weight: bold;
+}
+code .o {
+  font-weight: bold;
+}
+code .s2 {
+  color: #080;
+}
+
+footer {
+  border-top: 1px dotted #ccc;
+  display: block;
+  margin-top: 2em;
+  padding: 0.8em;
+}
+footer p {
+  margin-top: 0;
+}
