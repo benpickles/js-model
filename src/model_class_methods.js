@@ -36,8 +36,6 @@ Model.ClassMethods = {
       model = all[i]
       if (func.call(model, i)) return model
     }
-
-    return null
   },
 
   each: function(func) {
@@ -53,11 +51,11 @@ Model.ClassMethods = {
   find: function(id) {
     return this.detect(function() {
       return this.id() == id;
-    }) || null;
+    })
   },
 
   first: function() {
-    return this.all()[0] || null;
+    return this.all()[0]
   },
 
   load: function(callback) {
@@ -78,7 +76,7 @@ Model.ClassMethods = {
 
   last: function() {
     var all = this.all();
-    return all[all.length - 1] || null;
+    return all[all.length - 1]
   },
 
   pluck: function(attribute) {

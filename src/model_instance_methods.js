@@ -78,7 +78,7 @@ Model.InstanceMethods = {
   },
 
   id: function() {
-    return this.attributes.id || null;
+    return this.attributes.id
   },
 
   merge: function(attributes) {
@@ -87,7 +87,7 @@ Model.InstanceMethods = {
   },
 
   newRecord: function() {
-    return this.id() === null;
+    return this.id() === undefined
   },
 
   reset: function() {

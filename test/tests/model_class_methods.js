@@ -9,9 +9,9 @@ test("all, count, find, first, add, remove", function() {
 
   same(Post.all(), []);
   equals(Post.count(), 0);
-  ok(Post.find(1) === null);
-  ok(Post.first() === null);
-  ok(Post.last() === null);
+  ok(Post.find(1) === undefined);
+  ok(Post.first() === undefined);
+  ok(Post.last() === undefined);
 
   Post.add(post1, post2).add(post3);
 
@@ -20,7 +20,7 @@ test("all, count, find, first, add, remove", function() {
   equals(Post.find(1), post1);
   equals(Post.find(2), post2);
   equals(Post.find(3), post3);
-  equals(Post.find(4), null);
+  equals(Post.find(4), undefined);
   equals(Post.first(), post1);
 
   ok(Post.remove(post2));
@@ -28,11 +28,11 @@ test("all, count, find, first, add, remove", function() {
   same(Post.pluck("id"), [1, 3]);
   equals(Post.count(), 2);
   equals(Post.find(1), post1);
-  ok(Post.find(2) === null);
+  ok(Post.find(2) === undefined);
   equals(Post.find(3), post3);
-  ok(Post.find(4) === null);
+  ok(Post.find(4) === undefined);
 
-  ok(!Post.remove(null));
+  ok(!Post.remove(undefined));
 });
 
 test("maintaining a collection of unique models by object, id and uid", function() {
@@ -88,7 +88,7 @@ test("detect, select, first, last, count (with chaining)", function() {
   ok(Post.detect(function(i) {
     indexes.push(i);
     return this.attr("title") == "Baz";
-  }) === null);
+  }) === undefined);
 
   same(indexes, [0, 1, 2], "should yield index correctly");
   indexes = [];

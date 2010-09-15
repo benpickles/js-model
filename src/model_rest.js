@@ -79,7 +79,7 @@ Model.REST = function(resource, methods) {
     xhr: function(method, url, model, callback) {
       var self = this;
       var data = jQuery.inArray(method, ["DELETE", "GET"]) > -1 ?
-        null : this.params(model);
+        undefined : this.params(model);
 
       return jQuery.ajax({
         type: method,
@@ -88,7 +88,7 @@ Model.REST = function(resource, methods) {
         dataType: "json",
         data: data,
         dataFilter: function(data, type) {
-          return /\S/.test(data) ? data : null;
+          return /\S/.test(data) ? data : undefined;
         },
         complete: function(xhr, textStatus) {
           self.xhrComplete(xhr, textStatus, model, callback)
@@ -140,7 +140,7 @@ Model.REST.parseResponseData = function(xhr) {
   try {
     return /\S/.test(xhr.responseText) ?
       jQuery.parseJSON(xhr.responseText) :
-      null;
+      undefined;
   } catch(e) {
     Model.Log(e);
   }
