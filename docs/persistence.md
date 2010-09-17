@@ -27,7 +27,7 @@ When responding to POST or PUT requests any JSON returned will be [merged](#merg
 
 ### localStorage
 
-localStorage is a client-side key/value store that persists between page views and browser sessions, it's supported by Safari, Chrome, Firefox, IE8 and Safari Mobile (iPhone) -- WebKit-based browsers have an excellent localStorage GUI in the Web Inspector.
+localStorage is a client-side key/value store that persists between page views and browser sessions, it's supported by Safari, Chrome, Firefox, Opera, IE8 and Safari Mobile (iPhone) -- WebKit-based browsers have an excellent localStorage GUI in the Web Inspector.
 
     var Project = Model("project", {
       persistence: Model.localStorage()

@@ -16,7 +16,7 @@ Now create and manipulate model instances:
 
 ## Documentation / download / more
 
-For notes on [getting started](http://benpickles.github.com/js-model/#getting-started), [persisting via REST or localStorage](http://benpickles.github.com/js-model/#persistence), [using with Sammy](http://benpickles.github.com/js-model/#sammy), [API documentation](http://benpickles.github.com/js-model/#api) and download links visit the [js-model docs site](http://benpickles.github.com/js-model/).
+For notes on [getting started](http://benpickles.github.com/js-model/#getting-started), [persisting via REST or localStorage](http://benpickles.github.com/js-model/#persistence), [using with Sammy](http://benpickles.github.com/js-model/#js-model-hearts-sammy), [API documentation](http://benpickles.github.com/js-model/#api) and download links visit the [js-model docs site](http://benpickles.github.com/js-model/).
 
 ## Suggestions / questions / issues / comments
 
