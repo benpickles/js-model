@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.1
+
+* If defined, include jQuery.ajaxSetup data in REST parameters. [Ismael Celis]
+
 ## 0.9.0
 
 * Finder methods now return `undefined` for a missing model.
