@@ -46,6 +46,9 @@ Model.REST = function(resource, methods) {
       } else {
         params = null;
       }
+      if(jQuery.ajaxSettings.data){
+        params = jQuery.extend(jQuery.ajaxSettings.data, params || {});
+      }
       return JSON.stringify(params)
     },
 

@@ -168,6 +168,37 @@ test("create failure", function() {
   });
 });
 
+test("create with AjaxSetup", function() {
+  
+  jQuery.ajaxSetup({
+    data: {
+      socket_id: '111'
+    }
+  })
+  
+  var Post = Model("post", {
+    persistence: Model.REST("/posts")
+  });
+  var post = new Post({ title: "Foo", body: "..." });
+
+  equals(Post.count(), 0);
+
+  AjaxSpy.start();
+
+  stop();
+
+  post.save(function(success) {
+    ok(success);
+    same(this, post);
+    start();
+  });
+
+  equals(AjaxSpy.requests.length, 1, "one request should have been made");
+
+  var request = AjaxSpy.requests.shift();
+  same(JSON.parse(request.data), { socket_id: '111', post: { title: "Foo", body: "..." } });
+});
+
 test("update", function() {
   var Post = Model("post", {
     persistence: Model.REST("/posts")
