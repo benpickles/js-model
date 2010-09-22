@@ -1,6 +1,9 @@
 Model.JSONP = function(url, options) {
+  var noop = function() {}
   var settings = {
-    filter: function(data) { return data }
+    filter: function(data) { return data },
+    error: noop,
+    timeout: 5000
   }
 
   if (options) jQuery.extend(settings, options)
@@ -18,6 +21,7 @@ Model.JSONP = function(url, options) {
           url: url,
           dataType: "jsonp",
           success: function(data) {
+            success = true
             data = jQuery.makeArray(settings.filter(data))
             var models = []
 
@@ -28,6 +32,12 @@ Model.JSONP = function(url, options) {
             callback(models)
           }
         })
+
+        setTimeout(function() {
+          if (!success) {
+            if (settings.error() !== false) callback([])
+          }
+        }, settings.timeout)
 
         return this
       }
