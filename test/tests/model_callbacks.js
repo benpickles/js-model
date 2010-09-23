@@ -19,11 +19,17 @@ test("class-level", function() {
   Post.bind("remove", function() {
     results.push(this);
     results.push("remove");
+    for (var i = 0; i < arguments.length; i++) {
+      results.push(arguments[i].id())
+    };
   })
 
   Post.bind("custom", function() {
     results.push(this);
     results.push("custom");
+    for (var i = 0; i < arguments.length; i++) {
+      results.push(arguments[i].id())
+    };
   }).bind("custom", function() {
     results.push(this);
     results.push("custom-2");
@@ -38,13 +44,13 @@ test("class-level", function() {
   Post.add(post3);
   Post.remove(post1);
   Post.remove(666);
-  Post.trigger("custom");
+  Post.trigger("custom",[post1]);
 
   same(results, [
     Post, "add", 1, 2,
     Post, "add", 3,
-    Post, "remove",
-    Post, "custom",
+    Post, "remove", 1,
+    Post, "custom", 1,
     Post, "custom-2"
   ]);
 });

@@ -102,7 +102,7 @@ Model.ClassMethods = {
 
     if (index != undefined) {
       this.collection.splice(index, 1);
-      this.trigger("remove");
+      this.trigger("remove", [model]);
       return true;
     } else {
       return false;
