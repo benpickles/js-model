@@ -95,7 +95,7 @@ test("destroy with named params in resource path", function() {
 
   equals(request.type, "DELETE");
   equals(request.url, "/root/3/nested/2/posts/1");
-  same(request.data, undefined);
+  same(JSON.parse(request.data), {post: {title: 'Nested', body: "...", root_id: 3, nested_id: 2}});
 });
 
 test("create", function() {
@@ -311,7 +311,7 @@ test("destroy", function() {
 
   equals(request.type, "DELETE");
   equals(request.url, "/posts/1");
-  same(request.data, undefined);
+  same(JSON.parse(request.data), { post: { title: "Foo", body: "..." } });
 });
 
 test("destroy failure", function() {

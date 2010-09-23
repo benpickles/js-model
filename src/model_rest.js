@@ -81,8 +81,7 @@ Model.REST = function(resource, methods) {
 
     xhr: function(method, url, model, callback) {
       var self = this;
-      var data = jQuery.inArray(method, ["DELETE", "GET"]) > -1 ?
-        undefined : this.params(model);
+      var data = method == 'GET' ? undefined : this.params(model);
 
       return jQuery.ajax({
         type: method,
