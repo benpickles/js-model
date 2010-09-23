@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.2
+
+* Ajax DELETE sends JSON body, including AjaxSetup data if available. [Ismael Celis]
+* `Model.remove()` should include removed instance in event data. [Ismael Celis]
+* Call the `Model.load()` callback with the scope of the class.
+
 ## 0.9.1
 
 * If defined, include jQuery.ajaxSetup data in REST parameters. [Ismael Celis]
