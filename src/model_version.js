@@ -1,1 +1,1 @@
-Model.VERSION = "@VERSION"
+Model.VERSION = "@VERSION";
