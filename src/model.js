@@ -8,6 +8,7 @@ var Model = function(name, class_methods, instance_methods) {
     this.changes = {};
     this.errors = new Model.Errors(this);
     this.uid = [name, Model.UID.generate()].join("-")
+    if (jQuery.isFunction(this.initialize)) this.initialize()
   };
 
   // Persistence is special, remove it from class_methods.

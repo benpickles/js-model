@@ -249,3 +249,15 @@ test("persistence failure", function() {
 
   same(events, [], "should not trigger destroy event if persistence failed");
 });
+
+test("#initialize", function() {
+  var Post = Model("post", {}, {
+    initialize: function() {
+      this.initialized = true
+    }
+  })
+
+  var post = new Post()
+
+  ok(post.initialized)
+})

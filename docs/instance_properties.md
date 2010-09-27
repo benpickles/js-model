@@ -91,6 +91,20 @@ Returns an [`Errors`](#api-errors) object containing information about any faile
 
 Convenience method, equivalent of calling `attr("id")`.
 
+#### `initialize()`
+
+If an `initialize()` instance method is defined on a class it is called at the end of the initialization process.
+
+    var User = Model("user", {}, {
+      initialize: function() {
+        this.attr("state", "initialized")
+      }
+    })
+    var user = new User()
+
+    user.attr("state")
+    // => "initialized"
+
 #### `merge(object)`
 
 Destructivly merges the given object into the [`attributes`](#attributes) object. Used internally when saving and not really required for everyday use.

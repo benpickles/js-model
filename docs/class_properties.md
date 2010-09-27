@@ -117,7 +117,7 @@ Calls [`read()`](#read) on the persistence adapter and adds the returned models 
 
 #### `new(attributes)`
 
-Instantiates a model, the supplied attributes get assigned directly to the model's [`attributes`](#attributes).
+Instantiates a model, the supplied attributes get assigned directly to the model's [`attributes`](#attributes). Custom initialization behaviour can be added by defining an [`initialize()`](#initialize) instance method.
 
     var fish = new Food({ name: "fish" })
 
