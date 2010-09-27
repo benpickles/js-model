@@ -1,8 +1,13 @@
 require 'rubygems'
 require 'sinatra'
+require 'rack/contrib'
 require 'json'
 require 'erb'
+
 require File.expand_path('../../lib/bundler', __FILE__)
+require File.expand_path('../../lib/jsonp', __FILE__)
+
+use Rack::JSONP
 
 def json!
   content_type 'application/json'
@@ -114,4 +119,21 @@ delete '/posts-validations/:id' do
   JSON.generate({
     :title => ['must do something else before deleting']
   })
+end
+
+get '/jsonp/posts' do
+  json!
+  JSON.generate([
+    { :title => 'a' },
+    { :title => 'b' }
+  ])
+end
+
+get '/jsonp/posts-slooow' do
+  sleep 2
+  json!
+  JSON.generate([
+    { :title => 'a' },
+    { :title => 'b' }
+  ])
 end

@@ -33,6 +33,7 @@ class Bundler
           model_class_methods
           model_errors
           model_instance_methods
+          model_jsonp
           model_local_storage
           model_log
           model_rest
