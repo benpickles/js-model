@@ -120,7 +120,7 @@ Model.REST = function(resource, methods) {
 };
 
 // TODO: Remove in v1 if it ever gets there.
-Model.RestPersistence = Model.REST
+Model.RestPersistence = Model.REST;
 
 // Rails' preferred failed validation response code, assume the response
 // contains errors and replace current model errors with them.
@@ -136,7 +136,7 @@ Model.REST.handle422 = function(xhr, textStatus, model) {
       }
     }
   }
-}
+};
 
 Model.REST.parseResponseData = function(xhr) {
   try {
@@ -146,4 +146,4 @@ Model.REST.parseResponseData = function(xhr) {
   } catch(e) {
     Model.Log(e);
   }
-}
+};

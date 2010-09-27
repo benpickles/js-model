@@ -90,4 +90,4 @@ Model.localStorage = function() {
       }
     }
   }
-}
+};

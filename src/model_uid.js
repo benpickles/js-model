@@ -9,4 +9,4 @@ Model.UID = {
     this.counter = 0
     return this
   }
-}
+};
