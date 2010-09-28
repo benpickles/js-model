@@ -16,16 +16,16 @@ _gaq.push(['_trackPageview']);
 </script>
 </head>
 <body>
-  <h1>js-model (0.9.2)</h1>
+  <h1>js-model (0.9.3)</h1>
 
   <p class="intro">js-model is a library built on top of <a href="http://jquery.com/">jQuery</a> that allows you to work with models in your JavaScript.</p>
 
   <dl>
 <dt>Download</dt>
     <dd>
-<a href="dist/js-model-0.9.2.min.js">js-model-0.9.2.min.js</a> (7.5Kb)</dd>
+<a href="dist/js-model-0.9.3.min.js">js-model-0.9.3.min.js</a> (7.6Kb)</dd>
     <dd>
-<a href="dist/js-model-0.9.2.js">js-model-0.9.2.js</a> (15.9Kb)</dd>
+<a href="dist/js-model-0.9.3.js">js-model-0.9.3.js</a> (16.0Kb)</dd>
     <dd>Also available on <a href="http://cachedcommons.org/">Cached Commons</a>
 </dd>
 
@@ -94,6 +94,7 @@ _gaq.push(['_trackPageview']);
 <li><a href="#destroy">destroy()</a></li>
 <li><a href="#errors">errors</a></li>
 <li><a href="#id">id()</a></li>
+<li><a href="#initialize">initialize()</a></li>
 <li><a href="#merge">merge()</a></li>
 <li><a href="#newrecord">newRecord()</a></li>
 <li><a href="#reset">reset()</a></li>
@@ -485,7 +486,7 @@ _gaq.push(['_trackPageview']);
 
 <h4 id="new"><code>new(attributes)</code></h4>
 
-<p>Instantiates a model, the supplied attributes get assigned directly to the model&rsquo;s <a href="#attributes"><code>attributes</code></a>.</p>
+<p>Instantiates a model, the supplied attributes get assigned directly to the model&rsquo;s <a href="#attributes"><code>attributes</code></a>. Custom initialization behaviour can be added by defining an <a href="#initialize"><code>initialize()</code></a> instance method.</p>
 
 <pre><code><span class="kd">var</span> <span class="nx">fish</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Food</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"fish"</span> <span class="p">})</span>
 
@@ -648,6 +649,20 @@ _gaq.push(['_trackPageview']);
 <h4 id="id"><code>id()</code></h4>
 
 <p>Convenience method, equivalent of calling <code>attr("id")</code>.</p>
+
+<h4 id="initialize"><code>initialize()</code></h4>
+
+<p>If an <code>initialize()</code> instance method is defined on a class it is called at the end of the initialization process.</p>
+
+<pre><code><span class="kd">var</span> <span class="nx">User</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"user"</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{</span>
+  <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"state"</span><span class="p">,</span> <span class="s2">"initialized"</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+<span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">User</span><span class="p">()</span>
+
+<span class="nx">user</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"state"</span><span class="p">)</span>
+<span class="c1">// =&gt; "initialized"</span></code></pre>
 
 <h4 id="merge"><code>merge(object)</code></h4>
 

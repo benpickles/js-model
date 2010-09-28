@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.3
+
+* Add the ability to define a custom `initialize()` instance method that is called at the end of the initialization process. Thanks to Ismael Celis for the idea.
+
 ## 0.9.2
 
 * Ajax DELETE sends JSON body, including AjaxSetup data if available. [Ismael Celis]
