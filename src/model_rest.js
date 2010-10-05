@@ -40,7 +40,7 @@ Model.REST = function(resource, methods) {
       var params;
       if (model) {
         var attributes = model.attr();
-        delete attributes.id;
+        delete attributes[model.constructor.unique_key];
         params = {};
         params[model.constructor._name.toLowerCase()] = attributes;
       } else {

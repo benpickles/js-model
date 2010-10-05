@@ -1,4 +1,6 @@
 Model.ClassMethods = {
+  unique_key: 'id',
+  
   add: function() {
     var added = [];
     var uids = this.uids()

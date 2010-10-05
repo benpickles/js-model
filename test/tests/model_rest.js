@@ -75,6 +75,27 @@ test("update with named params in resource path", function() {
   equals(request.url, "/root/3/nested/2/posts/1");
 });
 
+test("update with custom unique_key field", function() {
+  var Post = Model("post", {
+    unique_key: '_id',
+    persistence: Model.REST("/root/:root_id/nested/:nested_id/posts")
+  });
+  var post = new Post({ '_id': 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
+
+  AjaxSpy.start();
+  stop();
+
+  post.save(function(success) {
+    ok(success);
+    start();
+  });
+
+  var request = AjaxSpy.requests.shift();
+
+  same(JSON.parse(request.data), {post: {title: 'Nested', body: "...", root_id: 3, nested_id: 2}});
+});
+
+
 test("destroy with named params in resource path", function() {
   var Post = Model("post", {
     persistence: Model.REST("/root/:root_id/nested/:nested_id/posts")

@@ -78,7 +78,7 @@ Model.InstanceMethods = {
   },
 
   id: function() {
-    return this.attributes.id
+    return this.attributes[this.constructor.unique_key];
   },
 
   merge: function(attributes) {
