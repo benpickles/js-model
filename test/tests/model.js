@@ -1,10 +1,20 @@
 module("Model");
 
+test("defining attributes when instanciating a model", function() {
+  var Post = Model("post")
+  var post
+
+  post = new Post(undefined)
+  same({}, post.attributes)
+
+  var attributes = { a: "a", b: "b" }
+  post = new Post(attributes)
+  attributes.a = "b"
+  same("a", post.attributes.a)
+})
+
 test("attr, attributes, changes, reset, save, destroy", function() {
   var Post = Model("post");
-
-  same(new Post().attributes, {});
-
   var post = new Post({ title: "Foo", body: "..." });
 
   same(post.attributes, { title: "Foo", body: "..." });
