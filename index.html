@@ -137,15 +137,15 @@ _gaq.push(['_trackPageview']);
 
 <p>Now you can create and manipulate instances of your new model. Attributes are read and set with the <a href="#attr"><code>attr()</code></a> method which works in a similar way to jQuery on the DOM.</p>
 
-<pre><code><span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Project</span><span class="p">({</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">"stuff"</span> <span class="p">})</span>
+<pre><code><span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Project</span><span class="p">({</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">"stuff"</span> <span class="p">})</span>
 <span class="nx">project</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">,</span> <span class="s2">"nonsense"</span><span class="p">)</span>
 <span class="nx">project</span><span class="p">.</span><span class="nx">save</span><span class="p">()</span></code></pre>
 
 <h3 id="finding-objects">Finding objects</h3>
 
-<p>After calling <a href="#save"><code>save()</code></a> on a model it is added to the class&rsquo;s &ldquo;collection&rdquo; and can be retrieved again by its id by calling <a href="#find"><code>find()</code></a>.</p>
+<p>After calling <a href="#save"><code>save()</code></a> on a model it is added to the class&rsquo;s &ldquo;collection&rdquo; and can be retrieved again by calling <a href="#first"><code>first()</code></a>.</p>
 
-<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">first</span><span class="p">()</span>
 <span class="c1">// =&gt; project</span></code></pre>
 
 <p>You can retrieve all models from the collection with <a href="#all"><code>all()</code></a>.</p>
@@ -153,7 +153,7 @@ _gaq.push(['_trackPageview']);
 <pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
 <span class="c1">// =&gt; [project]</span></code></pre>
 
-<p>Check out <a href="#detect"><code>detect()</code></a> and <a href="#select"><code>select()</code></a> for more ways to query the collection.</p>
+<p>For more ways to query the collection check out <a href="#find"><code>find()</code></a>, <a href="#detect"><code>detect()</code></a> and <a href="#select"><code>select()</code></a>.</p>
 
 <h3 id="custom-properties">Custom properties</h3>
 

@@ -10,15 +10,15 @@ This allows you to create instances of "project" models and also contains an int
 
 Now you can create and manipulate instances of your new model. Attributes are read and set with the [`attr()`](#attr) method which works in a similar way to jQuery on the DOM.
 
-    var project = new Project({ id: 1, title: "stuff" })
+    var project = new Project({ title: "stuff" })
     project.attr("title", "nonsense")
     project.save()
 
 ### Finding objects
 
-After calling [`save()`](#save) on a model it is added to the class's "collection" and can be retrieved again by its id by calling [`find()`](#find).
+After calling [`save()`](#save) on a model it is added to the class's "collection" and can be retrieved again by calling [`first()`](#first).
 
-    Project.find(1)
+    Project.first()
     // => project
 
 You can retrieve all models from the collection with [`all()`](#all).
@@ -26,7 +26,7 @@ You can retrieve all models from the collection with [`all()`](#all).
     Project.all()
     // => [project]
 
-Check out [`detect()`](#detect) and [`select()`](#select) for more ways to query the collection.
+For more ways to query the collection check out [`find()`](#find), [`detect()`](#detect) and [`select()`](#select).
 
 ### Custom properties
 
