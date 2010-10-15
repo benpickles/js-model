@@ -283,6 +283,22 @@ test("load", function() {
   ok(Post.load() === Post, "shouldn't fail if there's no callback (and return self)")
 })
 
+test("removeAll", function() {
+  var Post = Model("post")
+  var post1 = new Post()
+  var post2 = new Post()
+  var post3 = new Post()
+
+  Post.add(post1, post2, post3)
+
+  Post.removeAll()
+  equals(Post.count(), 0)
+
+  Post.add(post1, post2, post3)
+  Post.select(function(i) { return i > 0 }).removeAll()
+  equals(Post.count(), 1)
+})
+
 test("reverse", function() {
   var Post = Model("post")
   var post1 = new Post()

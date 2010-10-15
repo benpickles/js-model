@@ -109,6 +109,17 @@ Model.ClassMethods = {
     }
   },
 
+  removeAll: function() {
+    var all = this.all()
+    var klass = Model.klass_map[this._name]
+
+    for (var i = all.length; i >= 0; i--) {
+      klass.remove(all[i])
+    }
+
+    return this
+  },
+
   reverse: function() {
     return this.chain(this.all().reverse())
   },
