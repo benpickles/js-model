@@ -23,7 +23,7 @@ Model.ClassMethods = {
   },
 
   all: function() {
-    return this.collection;
+    return this.collection.slice()
   },
 
   count: function() {

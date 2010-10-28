@@ -167,6 +167,39 @@ test("each (and chaining)", function() {
   same(titles, ["Bar", "Baz"]);
 });
 
+test("collection should be protected from accidental modification", function() {
+  var Post = Model('post')
+
+  var post1 = new Post({ category_id: 2 })
+  var post2 = new Post({ category_id: 1 })
+  var post3 = new Post({ category_id: 2 })
+  var post4 = new Post({ category_id: 1 })
+  var post5 = new Post({ category_id: 2 })
+
+  Post.collection = [post1, post2, post3, post4, post5]
+
+  var all = Post.all()
+  all.shift()
+
+  equals(5, Post.count(), "value from all() should be safe to manipulate")
+
+  Post.each(function() {
+    Post.remove(this)
+  })
+
+  equals(Post.count(), 0)
+
+  Post.collection = [post1, post2, post3, post4, post5]
+
+  Post.select(function(i) {
+    return this.attr("category_id") == 2
+  }).each(function(i) {
+    Post.remove(this)
+  })
+
+  equals(Post.count(), 2)
+})
+
 test(".pluck", function() {
   var Post = Model('post')
 
