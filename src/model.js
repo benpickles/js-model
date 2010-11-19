@@ -23,7 +23,7 @@ var Model = function(name, func) {
   // Add default and custom instance methods.
   jQuery.extend(model.prototype, Model.Callbacks, Model.InstanceMethods)
 
-  if (jQuery.isFunction(func)) func.call(model)
+  if (jQuery.isFunction(func)) func.call(model, model, model.prototype)
 
   return model;
 };

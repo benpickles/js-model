@@ -83,15 +83,19 @@ test("attr, attributes, changes, reset, save, destroy", function() {
 });
 
 test("custom methods", function() {
-  var Post = Model("post", function() {
+  var Post = Model("post", function(klass, proto) {
     this.foo = function() { return "foo" }
+    klass.bar = function() { return "bar" }
+    proto.foo = function() { return "foo" }
     this.prototype.bar = function() { return "bar" }
   })
 
   equals(Post.foo(), "foo");
+  equals(Post.bar(), "bar");
 
   var post = new Post();
 
+  equals(post.foo(), "foo");
   equals(post.bar(), "bar");
 });
 
