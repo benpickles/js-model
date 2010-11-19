@@ -243,8 +243,8 @@ test("sort (and chaining)", function() {
 });
 
 test("Custom `all` method", function() {
-  var Post = Model('post', {
-    all: function() {
+  var Post = Model('post', function() {
+    this.all = function() {
       var not_deleted = []
       var i, model
       for (i = 0; i < this.collection.length; i++) {
@@ -270,12 +270,12 @@ test("Custom `all` method", function() {
 });
 
 test("Custom method with chaining, then more chaining", function() {
-  var Post = Model("post", {
-    not_first: function() {
+  var Post = Model("post", function() {
+    this.not_first = function() {
       return this.chain(this.all().slice(1));
     },
 
-    not_last: function() {
+    this.not_last = function() {
       return this.chain(this.all().slice(0, this.collection.length - 1));
     }
   });
@@ -304,7 +304,9 @@ test("load", function() {
     }
   }
 
-  var Post = Model("post", { persistence: TestPersistence })
+  var Post = Model("post", function() {
+    this.persistence(TestPersistence)
+  })
 
   equals(Post.count(), 0)
 

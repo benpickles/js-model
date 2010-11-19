@@ -61,10 +61,10 @@ Model.ClassMethods = {
   },
 
   load: function(callback) {
-    if (this.persistence) {
+    if (this._persistence) {
       var self = this
 
-      this.persistence.read(function(models) {
+      this._persistence.read(function(models) {
         for (var i = 0, length = models.length; i < length; i++) {
           self.add(models[i])
         }
@@ -79,6 +79,11 @@ Model.ClassMethods = {
   last: function() {
     var all = this.all();
     return all[all.length - 1]
+  },
+
+  persistence: function(adapter) {
+    this._persistence = adapter(this)
+    return this
   },
 
   pluck: function(attribute) {

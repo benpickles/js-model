@@ -1,7 +1,4 @@
-var Model = function(name, class_methods, instance_methods) {
-  class_methods = class_methods || {};
-  instance_methods = instance_methods || {};
-
+var Model = function(name, func) {
   // The model constructor.
   var model = function(attributes) {
     this.attributes = jQuery.extend({}, attributes)
@@ -11,13 +8,9 @@ var Model = function(name, class_methods, instance_methods) {
     if (jQuery.isFunction(this.initialize)) this.initialize()
   };
 
-  // Persistence is special, remove it from class_methods.
-  var persistence = class_methods.persistence
-  delete class_methods.persistence
-
   // Apply class methods and extend with any custom class methods. Make sure
   // vitals are added last so they can't be overridden.
-  jQuery.extend(model, Model.Callbacks, Model.ClassMethods, class_methods, {
+  jQuery.extend(model, Model.Callbacks, Model.ClassMethods, {
     _name: name,
     collection: [],
 
@@ -27,12 +20,10 @@ var Model = function(name, class_methods, instance_methods) {
     }
   });
 
-  // Initialise persistence with a reference to the class.
-  if (persistence) model.persistence = persistence(model)
-
   // Add default and custom instance methods.
-  jQuery.extend(model.prototype, Model.Callbacks, Model.InstanceMethods,
-    instance_methods);
+  jQuery.extend(model.prototype, Model.Callbacks, Model.InstanceMethods)
+
+  if (jQuery.isFunction(func)) func.call(model)
 
   return model;
 };
