@@ -14,7 +14,7 @@ if (window.localStorage) {
       this.persistence(Model.localStorage())
     })
 
-    Post._persistence.read(function(models) {
+    Post.persistence().read(function(models) {
       equals(models.length, 0)
     })
 
@@ -22,7 +22,7 @@ if (window.localStorage) {
     localStorage.setItem("post-b", JSON.stringify({ b: "b" }))
     localStorage.setItem("post-collection", '["post-a","post-b"]')
 
-    Post._persistence.read(function(models) {
+    Post.persistence().read(function(models) {
       equals(models.length, 2)
 
       var post1 = models[0]
@@ -52,7 +52,7 @@ if (window.localStorage) {
     equals(localStorage["post-collection"], '["' + post.uid + '"]',
       "should be stored in localStorage")
 
-    Post._persistence.read(function(models) {
+    Post.persistence().read(function(models) {
       equals(models.length, 1)
       same(models[0].attr(), post.attr())
     })
@@ -66,7 +66,7 @@ if (window.localStorage) {
     equals(localStorage["post-collection"], '["' + post.uid + '"]',
       "should not alter localStorage list")
 
-    Post._persistence.read(function(models) {
+    Post.persistence().read(function(models) {
       equals(models.length, 1)
       same(models[0].attr(), post.attr())
     })
@@ -79,7 +79,7 @@ if (window.localStorage) {
     equals(localStorage["post-collection"], "[]",
       "should be removed from localStorage list")
 
-    Post._persistence.read(function(models) {
+    Post.persistence().read(function(models) {
       equals(models.length, 0)
     })
   })
@@ -90,7 +90,7 @@ if (window.localStorage) {
       this.persistence(Model.localStorage())
     })
 
-    Post._persistence.read(function(models) {
+    Post.persistence().read(function(models) {
       equals(models.length, 0)
     })
   })
@@ -107,7 +107,7 @@ if (window.localStorage) {
 
     equals(Post.count(), 1)
 
-    Post._persistence.read(function(models) {
+    Post.persistence().read(function(models) {
       equals(models.length, 0)
     })
 
@@ -116,7 +116,7 @@ if (window.localStorage) {
 
     equals(Post.count(), 1)
 
-    Post._persistence.read(function(models) {
+    Post.persistence().read(function(models) {
       equals(models.length, 0)
     })
 
@@ -124,7 +124,7 @@ if (window.localStorage) {
 
     equals(Post.count(), 0)
 
-    Post._persistence.read(function(models) {
+    Post.persistence().read(function(models) {
       equals(models.length, 0)
     })
   })

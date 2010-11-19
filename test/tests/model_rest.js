@@ -5,7 +5,7 @@ asyncTest("read", 3, function() {
     this.persistence(Model.REST("/posts"))
   })
 
-  Post._persistence.read(function(models) {
+  Post.persistence().read(function(models) {
     equals(models.length, 2)
 
     var post1 = models[0]
@@ -23,7 +23,7 @@ asyncTest("read", 2, function() {
     this.persistence(Model.REST("/posts-single"))
   })
 
-  Post._persistence.read(function(models) {
+  Post.persistence().read(function(models) {
     equals(models.length, 1)
     same({ id: 1, title: "Bar" }, models[0].attributes)
     start()

@@ -82,8 +82,12 @@ Model.ClassMethods = {
   },
 
   persistence: function(adapter) {
-    this._persistence = adapter(this)
-    return this
+    if (arguments.length == 0) {
+      return this._persistence
+    } else {
+      this._persistence = adapter(this)
+      return this
+    }
   },
 
   pluck: function(attribute) {
