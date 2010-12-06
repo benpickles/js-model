@@ -81,6 +81,17 @@ Model.ClassMethods = {
     return all[all.length - 1]
   },
 
+  map: function(func) {
+    var all = this.all()
+    var values = []
+
+    for (var i = 0, length = all.length; i < length; i++) {
+      values.push(func.call(all[i], all[i], i))
+    }
+
+    return values
+  },
+
   pluck: function(attribute) {
     var all = this.all()
     var plucked = []

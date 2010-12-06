@@ -115,6 +115,22 @@ Calls [`read()`](#read) on the persistence adapter and adds the returned models 
       // do something...
     })
 
+#### `map(func)`
+
+Operates on the collection returning an array of values by calling the specified method on each instance.
+
+    Food.map(function() {
+      return this.attr("name").toUpperCase()
+    })
+    // => ["EGG", "HAM", "CHEESE"]
+
+    Food.select(function() {
+      return this.attr("name").indexOf("e") > -1
+    }).map(function() {
+      return this.attr("name").toUpperCase()
+    })
+    // => ["EGG", "CHEESE"]
+
 #### `new(attributes)`
 
 Instantiates a model, the supplied attributes get assigned directly to the model's [`attributes`](#attributes). Custom initialization behaviour can be added by defining an [`initialize()`](#initialize) instance method.

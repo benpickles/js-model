@@ -325,3 +325,22 @@ test("reverse", function() {
 
   same(Post.reverse().all(), [post2, post1])
 })
+
+test("map", function() {
+  var Post = Model("post")
+  var post1 = new Post({ id: 1, title: "egg" })
+  var post2 = new Post({ id: 2, title: "ham" })
+  var post3 = new Post({ id: 3, title: "cheese" })
+
+  Post.add(post1, post2, post3)
+
+  var mapped = Post.map(function(model, i) {
+    return [model.id(), i, this.attr("title").toUpperCase()].join("-")
+  })
+
+  same(mapped, [
+    "1-0-EGG",
+    "2-1-HAM",
+    "3-2-CHEESE"
+  ])
+})
