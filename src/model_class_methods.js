@@ -36,7 +36,7 @@ Model.ClassMethods = {
 
     for (var i = 0, length = all.length; i < length; i++) {
       model = all[i]
-      if (func.call(model, i)) return model
+      if (func.call(model, model, i)) return model
     }
   },
 
@@ -44,7 +44,7 @@ Model.ClassMethods = {
     var all = this.all()
 
     for (var i = 0, length = all.length; i < length; i++) {
-      func.call(all[i], i)
+      func.call(all[i], all[i], i)
     }
 
     return this;
@@ -144,7 +144,7 @@ Model.ClassMethods = {
 
     for (var i = 0, length = all.length; i < length; i++) {
       model = all[i]
-      if (func.call(model, i)) selected.push(model)
+      if (func.call(model, model, i)) selected.push(model)
     }
 
     return this.chain(selected);
