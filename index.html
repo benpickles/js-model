@@ -16,18 +16,16 @@ _gaq.push(['_trackPageview']);
 </script>
 </head>
 <body>
-  <h1>js-model (0.9.3)</h1>
+  <h1>js-model (0.9.4)</h1>
 
   <p class="intro">js-model is a library built on top of <a href="http://jquery.com/">jQuery</a> that allows you to work with models in your JavaScript.</p>
 
   <dl>
 <dt>Download</dt>
     <dd>
-<a href="dist/js-model-0.9.3.min.js">js-model-0.9.3.min.js</a> (7.6Kb)</dd>
+<a href="dist/js-model-0.9.4.min.js">js-model-0.9.4.min.js</a> (7.7Kb)</dd>
     <dd>
-<a href="dist/js-model-0.9.3.js">js-model-0.9.3.js</a> (16.0Kb)</dd>
-    <dd>Also available on <a href="http://cachedcommons.org/">Cached Commons</a>
-</dd>
+<a href="dist/js-model-0.9.4.js">js-model-0.9.4.js</a> (16.2Kb)</dd>
 
     <dt>Source</dt>
     <dd><a href="http://github.com/benpickles/js-model">github.com/benpickles/js-model</a></dd>
@@ -77,6 +75,7 @@ _gaq.push(['_trackPageview']);
 <li><a href="#first">first()</a></li>
 <li><a href="#last">last()</a></li>
 <li><a href="#load">load()</a></li>
+<li><a href="#map">map()</a></li>
 <li><a href="#new">new()</a></li>
 <li><a href="#pluck">pluck()</a></li>
 <li><a href="#remove">remove()</a></li>
@@ -483,6 +482,22 @@ _gaq.push(['_trackPageview']);
 <pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">models</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// do something...</span>
 <span class="p">})</span></code></pre>
+
+<h4 id="map"><code>map(func)</code></h4>
+
+<p>Operates on the collection returning an array of values by calling the specified method on each instance.</p>
+
+<pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">).</span><span class="nx">toUpperCase</span><span class="p">()</span>
+<span class="p">})</span>
+<span class="c1">// =&gt; ["EGG", "HAM", "CHEESE"]</span>
+
+<span class="nx">Food</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">"e"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span>
+<span class="p">}).</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">).</span><span class="nx">toUpperCase</span><span class="p">()</span>
+<span class="p">})</span>
+<span class="c1">// =&gt; ["EGG", "CHEESE"]</span></code></pre>
 
 <h4 id="new"><code>new(attributes)</code></h4>
 

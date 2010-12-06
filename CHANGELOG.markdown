@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.4
+
+ * Add `Model.map()` method.
+ * Protect the collection from accidental modification allowing you to safely `remove()` a model from within an `each` loop.
+ * Added configurable Model.unique_key, exposed as instance.id() and used in finders. Defaults to 'id'. [Ismael Celis and Oliver Nightingale]
+ * Protect an instance's initial attributes from accidental modification.
+
 ## 0.9.3
 
 * Add the ability to define a custom `initialize()` instance method that is called at the end of the initialization process. Thanks to Ismael Celis for the idea.
