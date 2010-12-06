@@ -3,15 +3,12 @@ Model.ClassMethods = {
   
   add: function() {
     var added = [];
-    var uids = this.uids()
 
     for (var i = 0; i < arguments.length; i++) {
       var model = arguments[i];
+      var id = model.id()
 
-      if (jQuery.inArray(model, this.collection) === -1 &&
-        !(model.id() && this.find(model.id())) &&
-        jQuery.inArray(model.uid, uids) === -1)
-      {
+      if (jQuery.inArray(model, this.collection) === -1 && !(id && this.find(id))) {
         this.collection.push(model);
         added.push(model);
       }
@@ -162,16 +159,5 @@ Model.ClassMethods = {
         return 0
       }
     })
-  },
-
-  uids: function() {
-    var all = this.all()
-    var uids = []
-
-    for (var i = 0, length = all.length; i < length; i++) {
-      uids.push(all[i].uid)
-    }
-
-    return uids
   }
 };

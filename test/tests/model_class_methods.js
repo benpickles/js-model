@@ -35,37 +35,6 @@ test("all, count, find, first, add, remove", function() {
   ok(!Post.remove(undefined));
 });
 
-test("maintaining a collection of unique models by object, id and uid", function() {
-  var Post = Model("post")
-
-  equals(Post.count(), 0)
-
-  var post = new Post().save()
-
-  equals(Post.count(), 1)
-
-  post.save()
-
-  equals(Post.count(), 1)
-
-  post.attributes.id = 1
-  var post_duplicate = new Post({ id: 1 })
-  Post.add(post_duplicate)
-
-  equals(Post.count(), 1)
-
-  new Post().save()
-
-  equals(Post.count(), 2)
-
-  var another_post = new Post()
-  another_post.uid = post.uid
-
-  Post.add(another_post)
-
-  equals(Post.count(), 2)
-})
-
 test("detect, select, first, last, count (with chaining)", function() {
   var Post = Model('post');
 

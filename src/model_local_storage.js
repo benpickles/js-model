@@ -69,16 +69,20 @@ Model.localStorage = function() {
       read: function(callback) {
         if (!callback) return false
 
+        var existing_uids = klass.map(function() { return this.uid })
         var uids = readIndex()
         var models = []
         var attributes, model, uid
 
         for (var i = 0, length = uids.length; i < length; i++) {
           uid = uids[i]
-          attributes = JSON.parse(localStorage[uid])
-          model = new klass(attributes)
-          model.uid = uid
-          models.push(model)
+
+          if (jQuery.inArray(uid, existing_uids) == -1) {
+            attributes = JSON.parse(localStorage[uid])
+            model = new klass(attributes)
+            model.uid = uid
+            models.push(model)
+          }
         }
 
         callback(models)

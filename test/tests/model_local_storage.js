@@ -30,6 +30,12 @@ if (window.localStorage) {
       same({ a: "a" }, post1.attr())
       equals("post-b", post2.uid)
       same({ b: "b" }, post2.attr())
+
+      Post.collection = [post1, post2]
+    })
+
+    Post.persistence.read(function(models) {
+      equals(models.length, 0, "filters models already in the collection")
     })
   })
 
@@ -48,11 +54,6 @@ if (window.localStorage) {
     equals(localStorage["post-collection"], '["' + post.uid + '"]',
       "should be stored in localStorage")
 
-    Post.persistence.read(function(models) {
-      equals(models.length, 1)
-      same(models[0].attr(), post.attr())
-    })
-
     post.attr({ title: ".", foo: null, bar: "baz" })
     post.save()
 
@@ -61,11 +62,6 @@ if (window.localStorage) {
     same({ title: ".", foo: null, bar: "baz" }, JSON.parse(localStorage[post.uid]))
     equals(localStorage["post-collection"], '["' + post.uid + '"]',
       "should not alter localStorage list")
-
-    Post.persistence.read(function(models) {
-      equals(models.length, 1)
-      same(models[0].attr(), post.attr())
-    })
 
     post.destroy()
 
