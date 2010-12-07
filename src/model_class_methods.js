@@ -24,7 +24,7 @@ Model.ClassMethods = {
   },
 
   count: function() {
-    return this.collection.length;
+    return this.all().length;
   },
 
   detect: function(func) {
