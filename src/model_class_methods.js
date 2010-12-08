@@ -137,7 +137,7 @@ Model.ClassMethods = {
   },
 
   sort: function(func) {
-    var sorted = this.all().slice().sort(func)
+    var sorted = this.all().sort(func)
     return this.chain(sorted);
   },
 
