@@ -11,7 +11,7 @@ if (window.localStorage) {
 
   localStorageTest("read", function() {
     var Post = Model("post", function() {
-      this.persistence(Model.localStorage())
+      this.persistence(Model.localStorage)
     })
 
     Post.persistence().read(function(models) {
@@ -37,7 +37,7 @@ if (window.localStorage) {
 
   localStorageTest("create, update, destroy", function() {
     var Post = Model("post", function() {
-      this.persistence(Model.localStorage())
+      this.persistence(Model.localStorage)
     })
 
     equals(Post.count(), 0)
@@ -87,7 +87,7 @@ if (window.localStorage) {
   // localStorage not supported tests
   test("read", function() {
     var Post = Model("post", function() {
-      this.persistence(Model.localStorage())
+      this.persistence(Model.localStorage)
     })
 
     Post.persistence().read(function(models) {
@@ -97,7 +97,7 @@ if (window.localStorage) {
 
   test("create, update, destroy", function() {
     var Post = Model("post", function() {
-      this.persistence(Model.localStorage())
+      this.persistence(Model.localStorage)
     })
 
     equals(Post.count(), 0)

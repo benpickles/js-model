@@ -85,7 +85,9 @@ Model.ClassMethods = {
     if (arguments.length == 0) {
       return this._persistence
     } else {
-      this._persistence = adapter(this)
+      var options = Array.prototype.slice.call(arguments, 1)
+      options.unshift(this)
+      this._persistence = adapter.apply(adapter, options)
       return this
     }
   },
