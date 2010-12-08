@@ -14,7 +14,7 @@ Model.REST = function(resource, methods) {
   var rest_persistence = jQuery.extend({
 		path: function(model) {
       var path = resource;
-      $.each(resource_param_names, function(i, param) {
+      jQuery.each(resource_param_names, function(i, param) {
 				path = path.replace(":" + param, model.attributes[param]);
 			});
 			return path;
