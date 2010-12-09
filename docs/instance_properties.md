@@ -95,8 +95,8 @@ Convenience method, equivalent of calling `attr("id")`.
 
 If an `initialize()` instance method is defined on a class it is called at the end of the initialization process.
 
-    var User = Model("user", {}, {
-      initialize: function() {
+    var User = Model("user", function(klass, proto) {
+      proto.initialize = function() {
         this.attr("state", "initialized")
       }
     })
@@ -175,8 +175,8 @@ Calls [`validate()`](#validate) and checks for the existence of any errors retur
 
 Overwrite this method to add client-side validations to your model. This method is called on [`save()`](#save) which won't continue if the [`errors`](#errors) object is not empty.
 
-    var Project = Model("project", {}, {
-      validate: function() {
+    var Project = Model("project", function(klass, proto) {
+      proto.validate = function() {
         if (this.attr("title") != "Bar") {
           this.errors.add("title", "should be Bar")
         }

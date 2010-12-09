@@ -1,19 +1,19 @@
-### `Model(name, classProperties, instanceProperties)`
+### `Model(name, func)`
 
 `Model()` is a factory method that is used to generate model classes. At its simplest it can be used like so:
 
     var Project = Model("project")
 
-The second and third arguments are optional and define properties on your newly defined class and model instances respectively.
+The optional function is used to define custom methods and properties on your newly defined class and its prototype. It is called with the scope of the class and with two arguments: the class and the prototype.
 
-    var Project = Model("project", {
-      find_by_title: function(title) {
+    var Project = Model("project", function(klass, proto) {
+      klass.find_by_title = function(title) {
         return this.detect(function() {
           return this.attr("title") == title
         })
       }
-    }, {
-      markAsDone: function() {
+
+      proto.markAsDone = function() {
         this.attr("done", true)
       }
     })

@@ -127,6 +127,15 @@ Instantiates a model, the supplied attributes get assigned directly to the model
     fish.changes
     // => {}
 
+#### `persistence(adapter, ...)`
+
+Set or get the persistence adapter for a class. The first argument is a reference to the adapter which is initialised with a reference to the class and any further arguments provided. See [persistence](#persistence) for more.
+
+    Project.persistence(Model.REST, "/projects")
+
+    Project.persistence()
+    // => the initialised REST persistence adapter
+
 #### `pluck(attributeName)`
 
 Operates on the collection returning an array of values for the specified attribute.
