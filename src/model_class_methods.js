@@ -23,6 +23,11 @@ Model.ClassMethods = {
     return this.collection.slice()
   },
 
+  // Convenience method to allow a simple method of chaining class methods.
+  chain: function(collection) {
+    return jQuery.extend({}, this, { collection: collection })
+  },
+
   count: function() {
     return this.all().length;
   },

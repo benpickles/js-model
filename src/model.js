@@ -19,12 +19,7 @@ var Model = function(name, class_methods, instance_methods) {
   // vitals are added last so they can't be overridden.
   jQuery.extend(model, Model.Callbacks, Model.ClassMethods, class_methods, {
     _name: name,
-    collection: [],
-
-    // Convenience method to allow a simple method of chaining class methods.
-    chain: function(collection) {
-      return jQuery.extend({}, this, { collection: collection });
-    }
+    collection: []
   });
 
   // Initialise persistence with a reference to the class.
