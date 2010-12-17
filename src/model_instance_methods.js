@@ -1,4 +1,8 @@
 Model.InstanceMethods = {
+  asJSON: function() {
+    return this.attr()
+  },
+
   attr: function(name, value) {
     if (arguments.length === 0) {
       // Combined attributes/changes object.

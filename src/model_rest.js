@@ -39,7 +39,7 @@ Model.REST = function(klass, resource, methods) {
     params: function(model) {
       var params;
       if (model) {
-        var attributes = model.attr();
+        var attributes = model.asJSON()
         delete attributes[model.constructor.unique_key];
         params = {};
         params[model.constructor._name.toLowerCase()] = attributes;

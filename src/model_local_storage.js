@@ -45,10 +45,8 @@ Model.localStorage = function(klass) {
     }
   }
   var store = function(model) {
-    var uid = model.uid,
-       data = JSON.stringify(model.attr())
-    localStorage.setItem(uid, data)
-    addToIndex(uid)
+    localStorage.setItem(model.uid, JSON.stringify(model.asJSON()))
+    addToIndex(model.uid)
   }
 
   return {
