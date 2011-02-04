@@ -34,10 +34,10 @@ You might need to give your model custom methods and properties. There are two p
 
 #### Class properties
 
-When setting up a model you can pass an object as the optional second argument, these properties will be defined on the class.
+When setting up a model you can pass a function as the optional second argument, these properties will be defined on the class.
 
-    var Project = Model("project", {
-      find_by_title: function(title) {
+    var Project = Model("project", function() {
+      this.find_by_title = function(title) {
         return this.detect(function() {
           return this.attr("title") == title
         })
@@ -49,10 +49,10 @@ When setting up a model you can pass an object as the optional second argument, 
 
 #### Instance properties
 
-The optional third argument when setting up a model is used to define instance properties. They are often used to link objects together in a way which mimics the relationships the data might have in the remote database ("has many" etc). However, they can be pretty much anything. They are added to the model's `prototype` and can overwrite the defaults.
+The technique above can also be used to define properties on the model's prototype. These are often used to link objects together in a way that mimics the relationships the data might have in the remote database ("has many" etc). However, they can be pretty much anything and can overwrite the defaults.
 
-    var Project = Model("project", {}, {
-      markAsDone: function() {
+    var Project = Model("project", function(klass, proto) {
+      proto.markAsDone = function() {
         this.attr("done", true)
       }
     })
@@ -64,8 +64,8 @@ The optional third argument when setting up a model is used to define instance p
 
 Simple associations can be mimicked by adding a couple of instance methods. Here a `Cat` "belongs to" a `Mat` and a `Mat` "has many" `Cat`s.
 
-    var Cat = Model("cat", {}, {
-      mat: function() {
+    var Cat = Model("cat", function(klass, proto) {
+      proto.mat = function() {
         var mat_id = this.attr("mat_id")
 
         return Mat.detect(function() {
@@ -74,8 +74,8 @@ Simple associations can be mimicked by adding a couple of instance methods. Here
       }
     })
 
-    var Mat = Model("mat", {}, {
-      cats: function() {
+    var Mat = Model("mat", function(klass, proto) {
+      proto.cats = function() {
         var id = this.id()
 
         return Cat.select(function() {

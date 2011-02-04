@@ -65,8 +65,8 @@ Model.InstanceMethods = {
       return value;
     };
 
-    if (this.constructor.persistence) {
-      this.constructor.persistence[method](this, wrappedCallback);
+    if (this.constructor._persistence) {
+      this.constructor._persistence[method](this, wrappedCallback);
     } else {
       wrappedCallback.call(this, true);
     }

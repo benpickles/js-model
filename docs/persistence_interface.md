@@ -1,12 +1,12 @@
 ### Persistence interface
 
-Persistence adapters implement CRUD with the following interface. This is not really something you need to know but is documented here in case you want to implement your own.
+Persistence adapters implement CRUD and return an object with the following interface. You probably don't need to know this but is documented here in case you want to implement your own.
 
 #### `create(model, callback)`
 
 Calls the supplied callback with a boolean indicating whether the action was a success or not and any further parameters that the persistence adapter sends.
 
-    Project.persistence.create(project, function(success) {
+    Project.persistence().create(project, function(success) {
       // do something...
     })
 
@@ -14,7 +14,7 @@ Calls the supplied callback with a boolean indicating whether the action was a s
 
 Calls the supplied callback with a boolean indicating whether the action was a success or not and any further parameters that the persistence adapter sends.
 
-    Project.persistence.destroy(project, function(success) {
+    Project.persistence().destroy(project, function(success) {
       // do something...
     })
 
@@ -22,7 +22,7 @@ Calls the supplied callback with a boolean indicating whether the action was a s
 
 Calls the supplied callback with an array of models -- models are **not** automatically added to the collection when calling `read()`. You probably won't need to use this much as this functionality is taken care of by [`load()`](#load).
 
-    Project.persistence.read(function(models) {
+    Project.persistence().read(function(models) {
       // do something with the models...
     })
 
@@ -30,6 +30,6 @@ Calls the supplied callback with an array of models -- models are **not** automa
 
 Calls the supplied callback with a boolean indicating whether the action was a success or not and any further parameters that the persistence adapter sends.
 
-    Project.persistence.update(project, function(success) {
+    Project.persistence().update(project, function(success) {
       // do something...
     })

@@ -1,4 +1,4 @@
-Model.REST = function(resource, methods) {
+Model.REST = function(klass, resource, methods) {
 	var PARAM_NAME_MATCHER = /:([\w\d]+)/g;
   var resource_param_names = (function() {
     var resource_param_names = []
@@ -11,7 +11,7 @@ Model.REST = function(resource, methods) {
     return resource_param_names
   })()
 
-  var rest_persistence = jQuery.extend({
+  return jQuery.extend({
 		path: function(model) {
       var path = resource;
       jQuery.each(resource_param_names, function(i, param) {
@@ -53,8 +53,6 @@ Model.REST = function(resource, methods) {
     },
 
     read: function(callback) {
-      var klass = this.klass
-
       return this.xhr("GET", this.read_path(), null, function(success, xhr, data) {
         data = jQuery.makeArray(data)
         var models = []
@@ -112,11 +110,6 @@ Model.REST = function(resource, methods) {
       if (callback) callback.call(model, success, xhr, data)
     }
   }, methods)
-
-  return function(klass) {
-    rest_persistence.klass = klass
-    return rest_persistence
-  }
 };
 
 // TODO: Remove in v1 if it ever gets there.
