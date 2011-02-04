@@ -35,6 +35,7 @@ class Bundler
           model_instance_methods
           model_local_storage
           model_log
+          model_module
           model_rest
           model_uid
           model_version

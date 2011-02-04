@@ -8,12 +8,15 @@ var Model = function(name, func) {
     if (jQuery.isFunction(this.initialize)) this.initialize()
   };
 
-  // Apply class methods and extend with any custom class methods. Make sure
-  // vitals are added last so they can't be overridden.
-  jQuery.extend(model, Model.Callbacks, Model.ClassMethods, {
-    _name: name,
-    collection: []
-  });
+  // Use module functionality to extend itself onto the constructor. Meta!
+  Model.Module.extend.call(model, Model.Module)
+
+  model._name = name
+  model.collection = []
+  model.unique_key = "id"
+  model
+    .extend(Model.Callbacks)
+    .extend(Model.ClassMethods)
 
   // Add default and custom instance methods.
   jQuery.extend(model.prototype, Model.Callbacks, Model.InstanceMethods)
