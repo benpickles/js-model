@@ -17,9 +17,8 @@ var Model = function(name, func) {
   model
     .extend(Model.Callbacks)
     .extend(Model.ClassMethods)
-
-  // Add default and custom instance methods.
-  jQuery.extend(model.prototype, Model.Callbacks, Model.InstanceMethods)
+    .include(Model.Callbacks)
+    .include(Model.InstanceMethods)
 
   if (jQuery.isFunction(func)) func.call(model, model, model.prototype)
 
