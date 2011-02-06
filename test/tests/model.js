@@ -270,3 +270,10 @@ test("#initialize", function() {
 
   ok(post.initialized)
 })
+
+test("saving a model with an id should add it to the collection if it isn't already present", function() {
+  var Post = Model("post")
+  var post = new Post({ id: 1 }).save()
+
+  ok(Post.first() === post)
+})

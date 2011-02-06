@@ -35,10 +35,10 @@ Model.InstanceMethods = {
 
     // Automatically manage adding and removing from the model's Collection.
     var manageCollection = function() {
-      if (method === "create") {
-        self.constructor.add(self);
-      } else if (method === "destroy") {
+      if (method === "destroy") {
         self.constructor.remove(self)
+      } else {
+        self.constructor.add(self)
       }
     };
 
