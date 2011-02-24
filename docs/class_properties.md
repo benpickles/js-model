@@ -78,6 +78,21 @@ Iterates over the collection calling the supplied function for each model.
     })
     // => logs "egg" and "cheese"
 
+#### `extend(object)`
+
+Add class methods.
+
+    Food.extend({
+      nameHasLetter: function(letter) {
+        return this.select(function() {
+          return this.attr("name").indexOf(letter) > -1
+        })
+      }
+    })
+
+    Food.nameHasLetter("e")
+    // => [egg, cheese]
+
 #### `find(id)`
 
 Returns the model with the corresponding id.
@@ -99,6 +114,67 @@ Returns the first model in the collection.
       return this.attr("name").indexOf("h") > -1
     }).first()
     // => ham
+
+#### `include(object)`
+
+Add methods to the class's `prototype`.
+
+    Food.include({
+      reverseName: function() {
+        return this.attr("name").split("").reverse().join("")
+      }
+    })
+
+    var carrot = new Food({ name: "Carrot" })
+    carrot.reverseName()
+    // => "torraC"
+
+**Note:** Be careful when adding properties that aren't primitives to an object's `prototype`, this can result in unexpected behaviour as the `prototype` is shared across all instances, for example:
+
+    var Post = Model("post")
+    Post.include({
+      comments: [],
+
+      comment: function(text) {
+        this.comments.push(text)
+      }
+    })
+
+    var post1 = new Post({ title: "Ham" })
+    var post2 = new Post({ title: "Egg" })
+
+    post1.comments  // => []
+    post2.comments  // => []
+
+    post1.comment("Tasty")
+
+    post1.comments  // => ["Tasty"]
+    post2.comments  // => ["Tasty"]
+
+In the above case an [initializer](#initialize) would take care of things:
+
+    var Post = Model("post", function() {
+      this.include({
+        initialize: function() {
+          this.comments = []
+        },
+
+        comment: function(text) {
+          this.comments.push(text)
+        }
+      })
+    })
+
+    var post1 = new Post({ title: "Ham" })
+    var post2 = new Post({ title: "Egg" })
+
+    post1.comments  // => []
+    post2.comments  // => []
+
+    post1.comment("Tasty")
+
+    post1.comments  // => ["Tasty"]
+    post2.comments  // => []
 
 #### `last()`
 

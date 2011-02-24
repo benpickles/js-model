@@ -37,14 +37,16 @@ You might need to give your model custom methods and properties. There are two p
 
 #### Class properties
 
-When setting up a model you can pass a function as the optional second argument, these properties will be defined on the class.
+When [creating a model](#model) you can pass a function as the optional second argument and "[extend](#extend)" the class by adding methods to it.
 
     var Project = Model("project", function() {
-      this.find_by_title = function(title) {
-        return this.detect(function() {
-          return this.attr("title") == title
-        })
-      }
+      this.extend({
+        find_by_title: function(title) {
+          return this.detect(function() {
+            return this.attr("title") == title
+          })
+        }
+      })
     })
 
     Project.find_by_title("stuff")
@@ -52,12 +54,14 @@ When setting up a model you can pass a function as the optional second argument,
 
 #### Instance properties
 
-The technique above can also be used to define properties on the model's prototype. These are often used to link objects together in a way that mimics the relationships the data might have in the remote database ("has many" etc). However, they can be pretty much anything and can overwrite the defaults.
+You can also "[include](#include)" instance methods on the model's prototype. These are often used to link objects together in a way that mimics the relationships the data might have in the remote database ("has many" etc). However, they can be pretty much anything and can overwrite the defaults.
 
-    var Project = Model("project", function(klass, proto) {
-      proto.markAsDone = function() {
-        this.attr("done", true)
-      }
+    var Project = Model("project", function() {
+      this.include({
+        markAsDone: function() {
+          this.attr("done", true)
+        }
+      })
     })
 
     Project.find(1).markAsDone()
@@ -67,24 +71,28 @@ The technique above can also be used to define properties on the model's prototy
 
 Simple associations can be mimicked by adding a couple of instance methods. Here a `Cat` "belongs to" a `Mat` and a `Mat` "has many" `Cat`s.
 
-    var Cat = Model("cat", function(klass, proto) {
-      proto.mat = function() {
-        var mat_id = this.attr("mat_id")
+    var Cat = Model("cat", function() {
+      this.include({
+        mat: function() {
+          var mat_id = this.attr("mat_id")
 
-        return Mat.detect(function() {
-          return this.id() == mat_id
-        })
-      }
+          return Mat.detect(function() {
+            return this.id() == mat_id
+          })
+        }
+      })
     })
 
-    var Mat = Model("mat", function(klass, proto) {
-      proto.cats = function() {
-        var id = this.id()
+    var Mat = Model("mat", function() {
+      this.include({
+        cats: function() {
+          var id = this.id()
 
-        return Cat.select(function() {
-          return this.attr("mat_id") == id
-        })
-      }
+          return Cat.select(function() {
+            return this.attr("mat_id") == id
+          })
+        }
+      })
     })
 
 ### Events
