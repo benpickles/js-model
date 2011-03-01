@@ -24,4 +24,4 @@ Feel free to use [Github issues](http://github.com/benpickles/js-model/issues) f
 
 ## Copyright
 
-Copyright 2010 [Ben Pickles](http://benpickles.com/). See [LICENSE](http://github.com/benpickles/js-model/blob/master/LICENSE) for details.
+Copyright 2010-2011 [Ben Pickles](http://benpickles.com/). See [LICENSE](http://github.com/benpickles/js-model/blob/master/LICENSE) for details.
