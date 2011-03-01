@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.10.0
+
+ * Add `extend()` and `include()` methods to add class and instance methods respectively.
+ * New declaration syntax - pass a function giving you access to the newly created class instead of two separate objects.
+ * A model with an id will be added to the collection when saved (like the docs said originally).
+ * `count()` now follows suit with the rest of js-model and returns the number of models in `all()` allowing you to overwrite `all()` with your own custom implementation - or "Eggs Fish Ham" as he put it ;) [Mark Evans]
+
 ## 0.9.4
 
  * Add `Model.map()` method.
