@@ -10,13 +10,16 @@ This allows you to create instances of "project" models and also contains an int
 
 Now you can create and manipulate instances of your new model. Attributes are read and set with the [`attr()`](#attr) method which works in a similar way to jQuery on the DOM.
 
-    var project = new Project({ title: "stuff" })
+    var project = new Project({ id: 1, title: "stuff" })
     project.attr("title", "nonsense")
     project.save()
 
 ### Finding objects
 
-After calling [`save()`](#save) on a model it is added to the class's "collection" and can be retrieved again by calling [`first()`](#first).
+After calling [`save()`](#save) on a model it is added to the class's "collection" and can be retrieved again by calling [`find()`](#find) (or [`first()`](#first) as it is the first model in the collection).
+
+    Project.find(1)
+    // => project
 
     Project.first()
     // => project
@@ -26,7 +29,7 @@ You can retrieve all models from the collection with [`all()`](#all).
     Project.all()
     // => [project]
 
-For more ways to query the collection check out [`find()`](#find), [`detect()`](#detect) and [`select()`](#select).
+For more ways to query the collection check out [`detect()`](#detect) and [`select()`](#select).
 
 ### Custom properties
 
@@ -34,14 +37,16 @@ You might need to give your model custom methods and properties. There are two p
 
 #### Class properties
 
-When setting up a model you can pass an object as the optional second argument, these properties will be defined on the class.
+When [creating a model](#model) you can pass a function as the optional second argument and "[extend](#extend)" the class by adding methods to it.
 
-    var Project = Model("project", {
-      find_by_title: function(title) {
-        return this.detect(function() {
-          return this.attr("title") == title
-        })
-      }
+    var Project = Model("project", function() {
+      this.extend({
+        find_by_title: function(title) {
+          return this.detect(function() {
+            return this.attr("title") == title
+          })
+        }
+      })
     })
 
     Project.find_by_title("stuff")
@@ -49,12 +54,14 @@ When setting up a model you can pass an object as the optional second argument, 
 
 #### Instance properties
 
-The optional third argument when setting up a model is used to define instance properties. They are often used to link objects together in a way which mimics the relationships the data might have in the remote database ("has many" etc). However, they can be pretty much anything. They are added to the model's `prototype` and can overwrite the defaults.
+You can also "[include](#include)" instance methods on the model's prototype. These are often used to link objects together in a way that mimics the relationships the data might have in the remote database ("has many" etc). However, they can be pretty much anything and can overwrite the defaults.
 
-    var Project = Model("project", {}, {
-      markAsDone: function() {
-        this.attr("done", true)
-      }
+    var Project = Model("project", function() {
+      this.include({
+        markAsDone: function() {
+          this.attr("done", true)
+        }
+      })
     })
 
     Project.find(1).markAsDone()
@@ -64,24 +71,28 @@ The optional third argument when setting up a model is used to define instance p
 
 Simple associations can be mimicked by adding a couple of instance methods. Here a `Cat` "belongs to" a `Mat` and a `Mat` "has many" `Cat`s.
 
-    var Cat = Model("cat", {}, {
-      mat: function() {
-        var mat_id = this.attr("mat_id")
+    var Cat = Model("cat", function() {
+      this.include({
+        mat: function() {
+          var mat_id = this.attr("mat_id")
 
-        return Mat.detect(function() {
-          return this.id() == mat_id
-        })
-      }
+          return Mat.detect(function() {
+            return this.id() == mat_id
+          })
+        }
+      })
     })
 
-    var Mat = Model("mat", {}, {
-      cats: function() {
-        var id = this.id()
+    var Mat = Model("mat", function() {
+      this.include({
+        cats: function() {
+          var id = this.id()
 
-        return Cat.select(function() {
-          return this.attr("mat_id") == id
-        })
-      }
+          return Cat.select(function() {
+            return this.attr("mat_id") == id
+          })
+        }
+      })
     })
 
 ### Events

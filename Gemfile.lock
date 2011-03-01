@@ -1,0 +1,22 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    activesupport (3.0.4)
+    closure-compiler (1.0.0)
+    fewer (0.2.0)
+      rack
+    highlight (1.1.2)
+      activesupport (>= 2.0.0)
+    nokogiri (1.4.4)
+    rack (1.2.1)
+    rdiscount (1.6.8)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  closure-compiler
+  fewer (~> 0.2.0)
+  highlight
+  nokogiri
+  rdiscount

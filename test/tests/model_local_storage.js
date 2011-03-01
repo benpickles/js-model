@@ -10,9 +10,11 @@ if (window.localStorage) {
   }
 
   localStorageTest("read", function() {
-    var Post = Model("post", { persistence: Model.localStorage() })
+    var Post = Model("post", function() {
+      this.persistence(Model.localStorage)
+    })
 
-    Post.persistence.read(function(models) {
+    Post.persistence().read(function(models) {
       equals(models.length, 0)
     })
 
@@ -20,7 +22,7 @@ if (window.localStorage) {
     localStorage.setItem("post-b", JSON.stringify({ b: "b" }))
     localStorage.setItem("post-collection", '["post-a","post-b"]')
 
-    Post.persistence.read(function(models) {
+    Post.persistence().read(function(models) {
       equals(models.length, 2)
 
       var post1 = models[0]
@@ -34,13 +36,15 @@ if (window.localStorage) {
       Post.collection = [post1, post2]
     })
 
-    Post.persistence.read(function(models) {
+    Post.persistence().read(function(models) {
       equals(models.length, 0, "filters models already in the collection")
     })
   })
 
   localStorageTest("create, update, destroy", function() {
-    var Post = Model("post", { persistence: Model.localStorage() })
+    var Post = Model("post", function() {
+      this.persistence(Model.localStorage)
+    })
 
     equals(Post.count(), 0)
     equals(localStorage.length, 0)
@@ -71,22 +75,26 @@ if (window.localStorage) {
     equals(localStorage["post-collection"], "[]",
       "should be removed from localStorage list")
 
-    Post.persistence.read(function(models) {
+    Post.persistence().read(function(models) {
       equals(models.length, 0)
     })
   })
 } else {
   // localStorage not supported tests
   test("read", function() {
-    var Post = Model("post", { persistence: Model.localStorage() })
+    var Post = Model("post", function() {
+      this.persistence(Model.localStorage)
+    })
 
-    Post.persistence.read(function(models) {
+    Post.persistence().read(function(models) {
       equals(models.length, 0)
     })
   })
 
   test("create, update, destroy", function() {
-    var Post = Model("post", { persistence: Model.localStorage() })
+    var Post = Model("post", function() {
+      this.persistence(Model.localStorage)
+    })
 
     equals(Post.count(), 0)
 
@@ -95,7 +103,7 @@ if (window.localStorage) {
 
     equals(Post.count(), 1)
 
-    Post.persistence.read(function(models) {
+    Post.persistence().read(function(models) {
       equals(models.length, 0)
     })
 
@@ -104,7 +112,7 @@ if (window.localStorage) {
 
     equals(Post.count(), 1)
 
-    Post.persistence.read(function(models) {
+    Post.persistence().read(function(models) {
       equals(models.length, 0)
     })
 
@@ -112,7 +120,7 @@ if (window.localStorage) {
 
     equals(Post.count(), 0)
 
-    Post.persistence.read(function(models) {
+    Post.persistence().read(function(models) {
       equals(models.length, 0)
     })
   })

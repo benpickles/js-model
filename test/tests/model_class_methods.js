@@ -44,56 +44,71 @@ test("detect, select, first, last, count (with chaining)", function() {
 
   Post.add(post1, post2, post3);
 
+  var models = []
   var indexes = [];
 
-  equals(Post.detect(function(i) {
+  equals(Post.detect(function(model, i) {
+    models.push(model);
     indexes.push(i);
-    return this.attr("title") == "Bar";
+    return model.attr("title") == "Bar";
   }), post2);
 
+  same(models, [post1, post2])
   same(indexes, [0, 1]);
+
+  models = []
   indexes = [];
 
-  ok(Post.detect(function(i) {
+  ok(Post.detect(function(model, i) {
+    models.push(model);
     indexes.push(i);
     return this.attr("title") == "Baz";
   }) === undefined);
 
+  same(models, [post1, post2, post3])
   same(indexes, [0, 1, 2], "should yield index correctly");
+
+  models = []
   indexes = [];
 
-  same(Post.select(function(i) {
+  same(Post.select(function(model, i) {
+    models.push(model);
     indexes.push(i);
     return this.attr("title") == "Bar";
   }).all(), [post2, post3]);
 
-  same(Post.select(function(i) {
+  same(Post.select(function(model, i) {
+    models.push(model);
     indexes.push(i);
     return this.attr("title") == "Bar";
   }).first(), post2);
 
-  same(Post.select(function(i) {
+  same(Post.select(function(model, i) {
+    models.push(model);
     indexes.push(i);
     return this.attr("title") == "Bar";
   }).last(), post3);
 
-  same(Post.select(function(i) {
+  same(Post.select(function(model, i) {
+    models.push(model);
     indexes.push(i);
     return this.attr("title") == "Baz";
   }).all(), []);
 
+  same(models, [post1, post2, post3, post1, post2, post3, post1, post2, post3,
+    post1, post2, post3])
   same(indexes, [0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2],
     "should yield index correctly");
 
-  same(Post.select(function(i) {
+  same(Post.select(function(model, i) {
     return this.attr("title") == "Foo";
   }).count(), 1);
 
-  same(Post.select(function(i) {
+  same(Post.select(function(model, i) {
     return this.attr("title") == "Bar";
   }).count(), 2);
 
-  same(Post.select(function(i) {
+  same(Post.select(function(model, i) {
     return this.attr("title") == "Baz";
   }).count(), 0);
 })
@@ -111,10 +126,10 @@ test("each (and chaining)", function() {
   var ids = [];
   var titles = [];
 
-  var eachFunc = function(i) {
+  var eachFunc = function(model, i) {
     indexes.push(i);
     ids.push(this.id());
-    titles.push(this.attr("title"));
+    titles.push(model.attr("title"));
   };
 
   Post.each(eachFunc);
@@ -160,9 +175,9 @@ test("collection should be protected from accidental modification", function() {
 
   Post.collection = [post1, post2, post3, post4, post5]
 
-  Post.select(function(i) {
-    return this.attr("category_id") == 2
-  }).each(function(i) {
+  Post.select(function(model, i) {
+    return model.attr("category_id") == 2
+  }).each(function() {
     Post.remove(this)
   })
 
@@ -212,8 +227,8 @@ test("sort (and chaining)", function() {
 });
 
 test("Custom `all` method", function() {
-  var Post = Model('post', {
-    all: function() {
+  var Post = Model('post', function() {
+    this.all = function() {
       var not_deleted = []
       var i, model
       for (i = 0; i < this.collection.length; i++) {
@@ -239,12 +254,12 @@ test("Custom `all` method", function() {
 });
 
 test("Custom method with chaining, then more chaining", function() {
-  var Post = Model("post", {
-    not_first: function() {
+  var Post = Model("post", function() {
+    this.not_first = function() {
       return this.chain(this.all().slice(1));
     },
 
-    not_last: function() {
+    this.not_last = function() {
       return this.chain(this.all().slice(0, this.collection.length - 1));
     }
   });
@@ -273,7 +288,9 @@ test("load", function() {
     }
   }
 
-  var Post = Model("post", { persistence: TestPersistence })
+  var Post = Model("post", function() {
+    this.persistence(TestPersistence)
+  })
 
   equals(Post.count(), 0)
 

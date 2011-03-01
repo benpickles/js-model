@@ -1,4 +1,8 @@
 Model.InstanceMethods = {
+  asJSON: function() {
+    return this.attr()
+  },
+
   attr: function(name, value) {
     if (arguments.length === 0) {
       // Combined attributes/changes object.
@@ -31,10 +35,10 @@ Model.InstanceMethods = {
 
     // Automatically manage adding and removing from the model's Collection.
     var manageCollection = function() {
-      if (method === "create") {
-        self.constructor.add(self);
-      } else if (method === "destroy") {
+      if (method === "destroy") {
         self.constructor.remove(self)
+      } else {
+        self.constructor.add(self)
       }
     };
 
@@ -65,8 +69,8 @@ Model.InstanceMethods = {
       return value;
     };
 
-    if (this.constructor.persistence) {
-      this.constructor.persistence[method](this, wrappedCallback);
+    if (this.constructor._persistence) {
+      this.constructor._persistence[method](this, wrappedCallback);
     } else {
       wrappedCallback.call(this, true);
     }

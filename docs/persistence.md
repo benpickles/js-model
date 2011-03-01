@@ -2,14 +2,14 @@
 
 js-model is different to several other solutions, it's not a REST-based proxy for the objects on your server and doesn't rely on constant HTTP requests to gather information. Instead, it looks up objects in its own cache which can be populated via a persistence adapter -- think of it as [maintaining the state of your objects in the browser](http://blog.new-bamboo.co.uk/2010/2/4/let-them-eat-state).
 
-Persistence is defined as a [class property](#class-properties) and comes in two flavours: [REST](#rest) and [localStorage](#localstorage). Both adapters encode/decode your attributes with JSON and so require the browser to be JSON-aware (or to include the [JSON JavaScript library](http://www.json.org/js.html)).
+Persistence is defined as a [class property](#class-properties) and comes in two flavours: [REST](#rest) and [localStorage](#localstorage). Both adapters encode/decode your attributes with JSON and so require the browser to be JSON-aware (or to include the [JSON JavaScript library](http://www.json.org/js.html)). Persistence is defined using the [`persistence()`](#api-class-properties-persistence) method.
 
 ### REST
 
 Uses jQuery's [`ajax()`](http://api.jquery.com/jQuery.ajax/) method to GET, POST, PUT and DELETE model data to the server as JSON and expects JSON back.
 
-    var Project = Model("project", {
-      persistence: Model.REST("/projects")
+    var Project = Model("project", function() {
+      this.persistence(Model.REST, "/projects")
     })
 
 Calling [`save()`](#save) or [`destroy()`](#destroy) on an object now fires a corresponding REST request:
@@ -29,8 +29,8 @@ When responding to POST or PUT requests any JSON returned will be [merged](#merg
 
 localStorage is a client-side key/value store that persists between page views and browser sessions, it's supported by Safari, Chrome, Firefox, Opera, IE8 and Safari Mobile (iPhone) -- WebKit-based browsers have an excellent localStorage GUI in the Web Inspector.
 
-    var Project = Model("project", {
-      persistence: Model.localStorage()
+    var Project = Model("project", function() {
+      this.persistence(Model.localStorage)
     })
 
 ### Loading data

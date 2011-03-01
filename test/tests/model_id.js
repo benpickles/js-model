@@ -8,8 +8,8 @@ test("id() should default to attributes.id", function() {
 });
 
 test("id field should be configurable via Model.unique_key", function() {
-  var Post = Model("post", {
-    unique_key: '_id'
+  var Post = Model("post", function() {
+    this.unique_key = '_id'
   }),
   post = new Post({'id': 111, '_id': 222});
   
@@ -17,8 +17,8 @@ test("id field should be configurable via Model.unique_key", function() {
 });
 
 test("it should find by configured unique_key field", function() {
-  var Post = Model("post", {
-    unique_key: '_id'
+  var Post = Model("post", function() {
+    this.unique_key = '_id'
   }),
   post = Post.add(new Post({'_id': 222}));
   

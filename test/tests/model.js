@@ -83,26 +83,25 @@ test("attr, attributes, changes, reset, save, destroy", function() {
 });
 
 test("custom methods", function() {
-  var Post = Model("post", {
-    foo: function() {
-      return "foo";
-    }
-  }, {
-    foo: function() {
-      return "foo";
-    }
-  });
+  var Post = Model("post", function(klass, proto) {
+    this.foo = function() { return "foo" }
+    klass.bar = function() { return "bar" }
+    proto.foo = function() { return "foo" }
+    this.prototype.bar = function() { return "bar" }
+  })
 
   equals(Post.foo(), "foo");
+  equals(Post.bar(), "bar");
 
   var post = new Post();
 
   equals(post.foo(), "foo");
+  equals(post.bar(), "bar");
 });
 
 test("valid, validate, errors", function() {
-  var Post = Model("post", {}, {
-    validate: function() {
+  var Post = Model("post", function() {
+    this.prototype.validate = function() {
       if (!/\S/.test(this.attr("body") || ""))
         this.errors.add("body", "can't be blank");
 
@@ -173,30 +172,30 @@ test("persistence", function() {
   var results = [];
   var post;
 
-  var TestPersistance = function() {
+  var TestPersistence = function() {
     return {
       create: function(model, callback) {
-        results.push(model);
+        same(model, post)
         results.push("create");
         results.push(callback());
       },
 
       destroy: function(model, callback) {
-        results.push(model);
+        same(model, post)
         results.push("destroy");
         results.push(callback());
       },
 
       update: function(model, callback) {
-        results.push(model);
+        same(model, post)
         results.push("update");
         results.push(callback());
       }
     }
   };
 
-  var Post = Model("post", {
-    persistence: TestPersistance
+  var Post = Model("post", function() {
+    this.persistence(TestPersistence)
   });
 
   var callback = function() {
@@ -210,14 +209,14 @@ test("persistence", function() {
   post.destroy(callback);
 
   same(results, [
-    post, "create", "callback",
-    post, "update", "callback",
-    post, "destroy", "callback"
+    "create", "callback",
+    "update", "callback",
+    "destroy", "callback"
   ]);
 });
 
 test("persistence failure", function() {
-  var TestPersistance = function() {
+  var TestPersistence = function() {
     return {
       create: function(model, callback) {
         callback(false);
@@ -233,8 +232,8 @@ test("persistence failure", function() {
     }
   };
 
-  var Post = Model("post", {
-    persistence: TestPersistance
+  var Post = Model("post", function() {
+    this.persistence(TestPersistence)
   });
 
   var events = [];
@@ -261,8 +260,8 @@ test("persistence failure", function() {
 });
 
 test("#initialize", function() {
-  var Post = Model("post", {}, {
-    initialize: function() {
+  var Post = Model("post", function() {
+    this.prototype.initialize = function() {
       this.initialized = true
     }
   })
@@ -270,4 +269,11 @@ test("#initialize", function() {
   var post = new Post()
 
   ok(post.initialized)
+})
+
+test("saving a model with an id should add it to the collection if it isn't already present", function() {
+  var Post = Model("post")
+  var post = new Post({ id: 1 }).save()
+
+  ok(Post.first() === post)
 })

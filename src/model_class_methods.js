@@ -1,6 +1,4 @@
 Model.ClassMethods = {
-  unique_key: 'id',
-  
   add: function() {
     var added = [];
 
@@ -38,7 +36,7 @@ Model.ClassMethods = {
 
     for (var i = 0, length = all.length; i < length; i++) {
       model = all[i]
-      if (func.call(model, i)) return model
+      if (func.call(model, model, i)) return model
     }
   },
 
@@ -46,7 +44,7 @@ Model.ClassMethods = {
     var all = this.all()
 
     for (var i = 0, length = all.length; i < length; i++) {
-      func.call(all[i], i)
+      func.call(all[i], all[i], i)
     }
 
     return this;
@@ -63,10 +61,10 @@ Model.ClassMethods = {
   },
 
   load: function(callback) {
-    if (this.persistence) {
+    if (this._persistence) {
       var self = this
 
-      this.persistence.read(function(models) {
+      this._persistence.read(function(models) {
         for (var i = 0, length = models.length; i < length; i++) {
           self.add(models[i])
         }
@@ -92,6 +90,17 @@ Model.ClassMethods = {
     }
 
     return values
+  },
+
+  persistence: function(adapter) {
+    if (arguments.length == 0) {
+      return this._persistence
+    } else {
+      var options = Array.prototype.slice.call(arguments, 1)
+      options.unshift(this)
+      this._persistence = adapter.apply(adapter, options)
+      return this
+    }
   },
 
   pluck: function(attribute) {
@@ -135,7 +144,7 @@ Model.ClassMethods = {
 
     for (var i = 0, length = all.length; i < length; i++) {
       model = all[i]
-      if (func.call(model, i)) selected.push(model)
+      if (func.call(model, model, i)) selected.push(model)
     }
 
     return this.chain(selected);
