@@ -8,9 +8,6 @@ body {
 h1 {
   margin-bottom: 0;
 }
-.intro {
-  margin-top: 0.5em;
-}
 
 p {
   line-height: 1.4em;
@@ -48,7 +45,7 @@ nav li li li {
 #content {
   margin-right: 21em;
 }
-#content li {
+li {
   margin: 0.4em 0;
 }
 
@@ -120,4 +117,10 @@ footer {
 }
 footer p {
   margin-top: 0;
+}
+
+.archive {
+  background: #fee;
+  margin: 1em 0;
+  padding: 5px;
 }

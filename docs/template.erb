@@ -6,22 +6,24 @@
 <%= analytics %>
 </head>
 <body>
-  <h1>js-model (<%= @version %>)</h1>
-
-  <p class="intro">js-model is a library built on top of <a href="http://jquery.com/">jQuery</a> that allows you to work with models in your JavaScript.</p>
-
-  <dl>
-    <dt>Download</dt>
-    <dd><a href="dist/js-model-<%= @version %>.min.js">js-model-<%= @version %>.min.js</a> (<%= @file_size_min %>Kb)</dd>
-    <dd><a href="dist/js-model-<%= @version %>.js">js-model-<%= @version %>.js</a> (<%= @file_size %>Kb)</dd>
-
-    <dt>Source</dt>
-    <dd><a href="http://github.com/benpickles/js-model">github.com/benpickles/js-model</a></dd>
-  </dl>
-
-  <nav></nav>
-
   <div id="content">
+    <h1>js-model (<%= @version %>)</h1>
+
+    <p>js-model is a library built on top of <a href="http://jquery.com/">jQuery</a> that allows you to work with models in your JavaScript.</p>
+
+    <dl>
+      <dt>Download</dt>
+      <dd><a href="dist/js-model-<%= @version %>.min.js">js-model-<%= @version %>.min.js</a> (<%= @file_size_min %>Kb)</dd>
+      <dd><a href="dist/js-model-<%= @version %>.js">js-model-<%= @version %>.js</a> (<%= @file_size %>Kb)</dd>
+
+      <dt>Source</dt>
+      <dd><a href="http://github.com/benpickles/js-model">github.com/benpickles/js-model</a></dd>
+    </dl>
+
+    <div class="archive"><a href="docs/v0.9.4.html">Version 0.9.4 docs</a></div>
+
+    <nav></nav>
+
     <%- @sections.each do |section| -%>
       <section><%= section %></section>
     <%- end -%>

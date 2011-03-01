@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <title>js-model &bull; models in your JavaScript</title>
-<link href="docs/style.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
 <script type="text/javascript">
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-117680-14']);
@@ -16,24 +16,21 @@ _gaq.push(['_trackPageview']);
 </script>
 </head>
 <body>
-  <div id="content">
-    <h1>js-model (0.10.0)</h1>
+  <h1>js-model (0.9.4)</h1>
 
-    <p>js-model is a library built on top of <a href="http://jquery.com/">jQuery</a> that allows you to work with models in your JavaScript.</p>
+  <p class="intro">js-model is a library built on top of <a href="http://jquery.com/">jQuery</a> that allows you to work with models in your JavaScript.</p>
 
-    <dl>
+  <dl>
 <dt>Download</dt>
-      <dd>
-<a href="dist/js-model-0.10.0.min.js">js-model-0.10.0.min.js</a> (7.9Kb)</dd>
-      <dd>
-<a href="dist/js-model-0.10.0.js">js-model-0.10.0.js</a> (15.9Kb)</dd>
+    <dd>
+<a href="dist/js-model-0.9.4.min.js">js-model-0.9.4.min.js</a> (7.7Kb)</dd>
+    <dd>
+<a href="dist/js-model-0.9.4.js">js-model-0.9.4.js</a> (16.2Kb)</dd>
 
-      <dt>Source</dt>
-      <dd><a href="http://github.com/benpickles/js-model">github.com/benpickles/js-model</a></dd>
-    </dl>
-<div class="archive"><a href="docs/v0.9.4.html">Version 0.9.4 docs</a></div>
-
-    <nav><ol>
+    <dt>Source</dt>
+    <dd><a href="http://github.com/benpickles/js-model">github.com/benpickles/js-model</a></dd>
+  </dl>
+<nav><ol>
 <li>
 <a href="#getting-started">Getting started</a><ol>
 <li><a href="#manipulating-objects">Manipulating objects</a></li>
@@ -74,15 +71,12 @@ _gaq.push(['_trackPageview']);
 <li><a href="#count">count()</a></li>
 <li><a href="#detect">detect()</a></li>
 <li><a href="#each">each()</a></li>
-<li><a href="#extend">extend()</a></li>
 <li><a href="#find">find()</a></li>
 <li><a href="#first">first()</a></li>
-<li><a href="#include">include()</a></li>
 <li><a href="#last">last()</a></li>
 <li><a href="#load">load()</a></li>
 <li><a href="#map">map()</a></li>
 <li><a href="#new">new()</a></li>
-<li><a href="#api-class-properties-persistence">persistence()</a></li>
 <li><a href="#pluck">pluck()</a></li>
 <li><a href="#remove">remove()</a></li>
 <li><a href="#reverse">reverse()</a></li>
@@ -129,7 +123,8 @@ _gaq.push(['_trackPageview']);
 </li>
 </ol>
 </li>
-</ol></nav><section><h2 id="getting-started">Getting started</h2>
+</ol></nav><div id="content">
+      <section><h2 id="getting-started">Getting started</h2>
 
 <p>The first thing to do is to create a model class using the factory <a href="#model"><code>Model()</code></a>.</p>
 
@@ -141,18 +136,15 @@ _gaq.push(['_trackPageview']);
 
 <p>Now you can create and manipulate instances of your new model. Attributes are read and set with the <a href="#attr"><code>attr()</code></a> method which works in a similar way to jQuery on the DOM.</p>
 
-<pre><code><span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Project</span><span class="p">({</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">"stuff"</span> <span class="p">})</span>
+<pre><code><span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Project</span><span class="p">({</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">"stuff"</span> <span class="p">})</span>
 <span class="nx">project</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">,</span> <span class="s2">"nonsense"</span><span class="p">)</span>
 <span class="nx">project</span><span class="p">.</span><span class="nx">save</span><span class="p">()</span></code></pre>
 
 <h3 id="finding-objects">Finding objects</h3>
 
-<p>After calling <a href="#save"><code>save()</code></a> on a model it is added to the class&rsquo;s &ldquo;collection&rdquo; and can be retrieved again by calling <a href="#find"><code>find()</code></a> (or <a href="#first"><code>first()</code></a> as it is the first model in the collection).</p>
+<p>After calling <a href="#save"><code>save()</code></a> on a model it is added to the class&rsquo;s &ldquo;collection&rdquo; and can be retrieved again by calling <a href="#first"><code>first()</code></a>.</p>
 
-<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="c1">// =&gt; project</span>
-
-<span class="nx">Project</span><span class="p">.</span><span class="nx">first</span><span class="p">()</span>
+<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">first</span><span class="p">()</span>
 <span class="c1">// =&gt; project</span></code></pre>
 
 <p>You can retrieve all models from the collection with <a href="#all"><code>all()</code></a>.</p>
@@ -160,7 +152,7 @@ _gaq.push(['_trackPageview']);
 <pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
 <span class="c1">// =&gt; [project]</span></code></pre>
 
-<p>For more ways to query the collection check out <a href="#detect"><code>detect()</code></a> and <a href="#select"><code>select()</code></a>.</p>
+<p>For more ways to query the collection check out <a href="#find"><code>find()</code></a>, <a href="#detect"><code>detect()</code></a> and <a href="#select"><code>select()</code></a>.</p>
 
 <h3 id="custom-properties">Custom properties</h3>
 
@@ -168,16 +160,14 @@ _gaq.push(['_trackPageview']);
 
 <h4 id="class-properties">Class properties</h4>
 
-<p>When <a href="#model">creating a model</a> you can pass a function as the optional second argument and &ldquo;<a href="#extend">extend</a>&rdquo; the class by adding methods to it.</p>
+<p>When setting up a model you can pass an object as the optional second argument, these properties will be defined on the class.</p>
 
-<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-    <span class="nx">find_by_title</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">detect</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span> <span class="o">==</span> <span class="nx">title</span>
-      <span class="p">})</span>
-    <span class="p">}</span>
-  <span class="p">})</span>
+<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">find_by_title</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">detect</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span> <span class="o">==</span> <span class="nx">title</span>
+    <span class="p">})</span>
+  <span class="p">}</span>
 <span class="p">})</span>
 
 <span class="nx">Project</span><span class="p">.</span><span class="nx">find_by_title</span><span class="p">(</span><span class="s2">"stuff"</span><span class="p">)</span>
@@ -185,14 +175,12 @@ _gaq.push(['_trackPageview']);
 
 <h4 id="instance-properties">Instance properties</h4>
 
-<p>You can also &ldquo;<a href="#include">include</a>&rdquo; instance methods on the model&rsquo;s prototype. These are often used to link objects together in a way that mimics the relationships the data might have in the remote database (&ldquo;has many&rdquo; etc). However, they can be pretty much anything and can overwrite the defaults.</p>
+<p>The optional third argument when setting up a model is used to define instance properties. They are often used to link objects together in a way which mimics the relationships the data might have in the remote database (&ldquo;has many&rdquo; etc). However, they can be pretty much anything. They are added to the model&rsquo;s <code>prototype</code> and can overwrite the defaults.</p>
 
-<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">include</span><span class="p">({</span>
-    <span class="nx">markAsDone</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"done"</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
-    <span class="p">}</span>
-  <span class="p">})</span>
+<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{</span>
+  <span class="nx">markAsDone</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"done"</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+  <span class="p">}</span>
 <span class="p">})</span>
 
 <span class="nx">Project</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nx">markAsDone</span><span class="p">()</span>
@@ -202,28 +190,24 @@ _gaq.push(['_trackPageview']);
 
 <p>Simple associations can be mimicked by adding a couple of instance methods. Here a <code>Cat</code> &ldquo;belongs to&rdquo; a <code>Mat</code> and a <code>Mat</code> &ldquo;has many&rdquo; <code>Cat</code>s.</p>
 
-<pre><code><span class="kd">var</span> <span class="nx">Cat</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"cat"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">include</span><span class="p">({</span>
-    <span class="nx">mat</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">mat_id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"mat_id"</span><span class="p">)</span>
+<pre><code><span class="kd">var</span> <span class="nx">Cat</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"cat"</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{</span>
+  <span class="nx">mat</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">mat_id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"mat_id"</span><span class="p">)</span>
 
-      <span class="k">return</span> <span class="nx">Mat</span><span class="p">.</span><span class="nx">detect</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">()</span> <span class="o">==</span> <span class="nx">mat_id</span>
-      <span class="p">})</span>
-    <span class="p">}</span>
-  <span class="p">})</span>
+    <span class="k">return</span> <span class="nx">Mat</span><span class="p">.</span><span class="nx">detect</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">()</span> <span class="o">==</span> <span class="nx">mat_id</span>
+    <span class="p">})</span>
+  <span class="p">}</span>
 <span class="p">})</span>
 
-<span class="kd">var</span> <span class="nx">Mat</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"mat"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">include</span><span class="p">({</span>
-    <span class="nx">cats</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">()</span>
+<span class="kd">var</span> <span class="nx">Mat</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"mat"</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{</span>
+  <span class="nx">cats</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">()</span>
 
-      <span class="k">return</span> <span class="nx">Cat</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"mat_id"</span><span class="p">)</span> <span class="o">==</span> <span class="nx">id</span>
-      <span class="p">})</span>
-    <span class="p">}</span>
-  <span class="p">})</span>
+    <span class="k">return</span> <span class="nx">Cat</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"mat_id"</span><span class="p">)</span> <span class="o">==</span> <span class="nx">id</span>
+    <span class="p">})</span>
+  <span class="p">}</span>
 <span class="p">})</span></code></pre>
 
 <h3 id="events">Events</h3>
@@ -273,14 +257,14 @@ _gaq.push(['_trackPageview']);
 
 <p>js-model is different to several other solutions, it&rsquo;s not a REST-based proxy for the objects on your server and doesn&rsquo;t rely on constant HTTP requests to gather information. Instead, it looks up objects in its own cache which can be populated via a persistence adapter &mdash; think of it as <a href="http://blog.new-bamboo.co.uk/2010/2/4/let-them-eat-state">maintaining the state of your objects in the browser</a>.</p>
 
-<p>Persistence is defined as a <a href="#class-properties">class property</a> and comes in two flavours: <a href="#rest">REST</a> and <a href="#localstorage">localStorage</a>. Both adapters encode/decode your attributes with JSON and so require the browser to be JSON-aware (or to include the <a href="http://www.json.org/js.html">JSON JavaScript library</a>). Persistence is defined using the <a href="#api-class-properties-persistence"><code>persistence()</code></a> method.</p>
+<p>Persistence is defined as a <a href="#class-properties">class property</a> and comes in two flavours: <a href="#rest">REST</a> and <a href="#localstorage">localStorage</a>. Both adapters encode/decode your attributes with JSON and so require the browser to be JSON-aware (or to include the <a href="http://www.json.org/js.html">JSON JavaScript library</a>).</p>
 
 <h3 id="rest">REST</h3>
 
 <p>Uses jQuery&rsquo;s <a href="http://api.jquery.com/jQuery.ajax/"><code>ajax()</code></a> method to GET, POST, PUT and DELETE model data to the server as JSON and expects JSON back.</p>
 
-<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">persistence</span><span class="p">(</span><span class="nx">Model</span><span class="p">.</span><span class="nx">REST</span><span class="p">,</span> <span class="s2">"/projects"</span><span class="p">)</span>
+<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">persistence</span><span class="o">:</span> <span class="nx">Model</span><span class="p">.</span><span class="nx">REST</span><span class="p">(</span><span class="s2">"/projects"</span><span class="p">)</span>
 <span class="p">})</span></code></pre>
 
 <p>Calling <a href="#save"><code>save()</code></a> or <a href="#destroy"><code>destroy()</code></a> on an object now fires a corresponding REST request:</p>
@@ -300,8 +284,8 @@ _gaq.push(['_trackPageview']);
 
 <p>localStorage is a client-side key/value store that persists between page views and browser sessions, it&rsquo;s supported by Safari, Chrome, Firefox, Opera, IE8 and Safari Mobile (iPhone) &mdash; WebKit-based browsers have an excellent localStorage GUI in the Web Inspector.</p>
 
-<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">persistence</span><span class="p">(</span><span class="nx">Model</span><span class="p">.</span><span class="nx">localStorage</span><span class="p">)</span>
+<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">persistence</span><span class="o">:</span> <span class="nx">Model</span><span class="p">.</span><span class="nx">localStorage</span><span class="p">()</span>
 <span class="p">})</span></code></pre>
 
 <h3 id="loading-data">Loading data</h3>
@@ -360,43 +344,22 @@ _gaq.push(['_trackPageview']);
   <span class="p">})</span>
 <span class="p">})</span></code></pre>
 </section><section><h2 id="api">API</h2>
-<h3 id="model"><code>Model(name, func)</code></h3>
+<h3 id="model"><code>Model(name, classProperties, instanceProperties)</code></h3>
 
 <p><code>Model()</code> is a factory method that is used to generate model classes. At its simplest it can be used like so:</p>
 
 <pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">)</span></code></pre>
 
-<p>The optional function is used to define custom methods and properties on your newly defined class and its prototype using <a href="#extend"><code>extend()</code></a> and <a href="#include"><code>include()</code></a>.</p>
+<p>The second and third arguments are optional and define properties on your newly defined class and model instances respectively.</p>
 
-<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-    <span class="nx">find_by_title</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">detect</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span> <span class="o">==</span> <span class="nx">title</span>
-      <span class="p">})</span>
-    <span class="p">}</span>
-  <span class="p">})</span>
-
-  <span class="k">this</span><span class="p">.</span><span class="nx">include</span><span class="p">({</span>
-    <span class="nx">markAsDone</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"done"</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
-    <span class="p">}</span>
-  <span class="p">})</span>
-<span class="p">})</span>
-
-<span class="nx">Project</span><span class="p">.</span><span class="nx">find_by_title</span><span class="p">(</span><span class="s2">"stuff"</span><span class="p">).</span><span class="nx">markAsDone</span><span class="p">()</span>
-<span class="c1">// "stuff" project marked as done</span></code></pre>
-
-<p>The function is also called with two arguments: the class itself and its prototype. The above could be written as:</p>
-
-<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">klass</span><span class="p">,</span> <span class="nx">proto</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">klass</span><span class="p">.</span><span class="nx">find_by_title</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span> <span class="p">{</span>
+<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">find_by_title</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">detect</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
       <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span> <span class="o">==</span> <span class="nx">title</span>
     <span class="p">})</span>
   <span class="p">}</span>
-
-  <span class="nx">proto</span><span class="p">.</span><span class="nx">markAsDone</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<span class="p">},</span> <span class="p">{</span>
+  <span class="nx">markAsDone</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"done"</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
   <span class="p">}</span>
 <span class="p">})</span>
@@ -483,21 +446,6 @@ _gaq.push(['_trackPageview']);
 <span class="p">})</span>
 <span class="c1">// =&gt; logs "egg" and "cheese"</span></code></pre>
 
-<h4 id="extend"><code>extend(object)</code></h4>
-
-<p>Add class methods.</p>
-
-<pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
-  <span class="nx">nameHasLetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">letter</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">select</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">letter</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span>
-    <span class="p">})</span>
-  <span class="p">}</span>
-<span class="p">})</span>
-
-<span class="nx">Food</span><span class="p">.</span><span class="nx">nameHasLetter</span><span class="p">(</span><span class="s2">"e"</span><span class="p">)</span>
-<span class="c1">// =&gt; [egg, cheese]</span></code></pre>
-
 <h4 id="find"><code>find(id)</code></h4>
 
 <p>Returns the model with the corresponding id.</p>
@@ -519,67 +467,6 @@ _gaq.push(['_trackPageview']);
   <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">"h"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span>
 <span class="p">}).</span><span class="nx">first</span><span class="p">()</span>
 <span class="c1">// =&gt; ham</span></code></pre>
-
-<h4 id="include"><code>include(object)</code></h4>
-
-<p>Add methods to the class&rsquo;s <code>prototype</code>.</p>
-
-<pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">include</span><span class="p">({</span>
-  <span class="nx">reverseName</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">).</span><span class="nx">split</span><span class="p">(</span><span class="s2">""</span><span class="p">).</span><span class="nx">reverse</span><span class="p">().</span><span class="nx">join</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
-  <span class="p">}</span>
-<span class="p">})</span>
-
-<span class="kd">var</span> <span class="nx">carrot</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Food</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"Carrot"</span> <span class="p">})</span>
-<span class="nx">carrot</span><span class="p">.</span><span class="nx">reverseName</span><span class="p">()</span>
-<span class="c1">// =&gt; "torraC"</span></code></pre>
-
-<p><strong>Note:</strong> Be careful when adding properties that aren&rsquo;t primitives to an object&rsquo;s <code>prototype</code>, this can result in unexpected behaviour as the <code>prototype</code> is shared across all instances, for example:</p>
-
-<pre><code><span class="kd">var</span> <span class="nx">Post</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"post"</span><span class="p">)</span>
-<span class="nx">Post</span><span class="p">.</span><span class="nx">include</span><span class="p">({</span>
-  <span class="nx">comments</span><span class="o">:</span> <span class="p">[],</span>
-
-  <span class="nx">comment</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">comments</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span>
-  <span class="p">}</span>
-<span class="p">})</span>
-
-<span class="kd">var</span> <span class="nx">post1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Post</span><span class="p">({</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">"Ham"</span> <span class="p">})</span>
-<span class="kd">var</span> <span class="nx">post2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Post</span><span class="p">({</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">"Egg"</span> <span class="p">})</span>
-
-<span class="nx">post1</span><span class="p">.</span><span class="nx">comments</span>  <span class="c1">// =&gt; []</span>
-<span class="nx">post2</span><span class="p">.</span><span class="nx">comments</span>  <span class="c1">// =&gt; []</span>
-
-<span class="nx">post1</span><span class="p">.</span><span class="nx">comment</span><span class="p">(</span><span class="s2">"Tasty"</span><span class="p">)</span>
-
-<span class="nx">post1</span><span class="p">.</span><span class="nx">comments</span>  <span class="c1">// =&gt; ["Tasty"]</span>
-<span class="nx">post2</span><span class="p">.</span><span class="nx">comments</span>  <span class="c1">// =&gt; ["Tasty"]</span></code></pre>
-
-<p>In the above case an <a href="#initialize">initializer</a> would take care of things:</p>
-
-<pre><code><span class="kd">var</span> <span class="nx">Post</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"post"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">include</span><span class="p">({</span>
-    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">comments</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="p">},</span>
-
-    <span class="nx">comment</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">comments</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span>
-    <span class="p">}</span>
-  <span class="p">})</span>
-<span class="p">})</span>
-
-<span class="kd">var</span> <span class="nx">post1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Post</span><span class="p">({</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">"Ham"</span> <span class="p">})</span>
-<span class="kd">var</span> <span class="nx">post2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Post</span><span class="p">({</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">"Egg"</span> <span class="p">})</span>
-
-<span class="nx">post1</span><span class="p">.</span><span class="nx">comments</span>  <span class="c1">// =&gt; []</span>
-<span class="nx">post2</span><span class="p">.</span><span class="nx">comments</span>  <span class="c1">// =&gt; []</span>
-
-<span class="nx">post1</span><span class="p">.</span><span class="nx">comment</span><span class="p">(</span><span class="s2">"Tasty"</span><span class="p">)</span>
-
-<span class="nx">post1</span><span class="p">.</span><span class="nx">comments</span>  <span class="c1">// =&gt; ["Tasty"]</span>
-<span class="nx">post2</span><span class="p">.</span><span class="nx">comments</span>  <span class="c1">// =&gt; []</span></code></pre>
 
 <h4 id="last"><code>last()</code></h4>
 
@@ -623,15 +510,6 @@ _gaq.push(['_trackPageview']);
 
 <span class="nx">fish</span><span class="p">.</span><span class="nx">changes</span>
 <span class="c1">// =&gt; {}</span></code></pre>
-
-<h4 id="api-class-properties-persistence"><code>persistence(adapter, ...)</code></h4>
-
-<p>Set or get the persistence adapter for a class. The first argument is a reference to the adapter which is initialised with a reference to the class and any further arguments provided. See <a href="#persistence">persistence</a> for more.</p>
-
-<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">persistence</span><span class="p">(</span><span class="nx">Model</span><span class="p">.</span><span class="nx">REST</span><span class="p">,</span> <span class="s2">"/projects"</span><span class="p">)</span>
-
-<span class="nx">Project</span><span class="p">.</span><span class="nx">persistence</span><span class="p">()</span>
-<span class="c1">// =&gt; the initialised REST persistence adapter</span></code></pre>
 
 <h4 id="pluck"><code>pluck(attributeName)</code></h4>
 
@@ -791,12 +669,10 @@ _gaq.push(['_trackPageview']);
 
 <p>If an <code>initialize()</code> instance method is defined on a class it is called at the end of the initialization process.</p>
 
-<pre><code><span class="kd">var</span> <span class="nx">User</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"user"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">include</span><span class="p">({</span>
-    <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"state"</span><span class="p">,</span> <span class="s2">"initialized"</span><span class="p">)</span>
-    <span class="p">}</span>
-  <span class="p">})</span>
+<pre><code><span class="kd">var</span> <span class="nx">User</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"user"</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{</span>
+  <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"state"</span><span class="p">,</span> <span class="s2">"initialized"</span><span class="p">)</span>
+  <span class="p">}</span>
 <span class="p">})</span>
 <span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">User</span><span class="p">()</span>
 
@@ -874,14 +750,12 @@ _gaq.push(['_trackPageview']);
 
 <p>Overwrite this method to add client-side validations to your model. This method is called on <a href="#save"><code>save()</code></a> which won&rsquo;t continue if the <a href="#errors"><code>errors</code></a> object is not empty.</p>
 
-<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">include</span><span class="p">({</span>
-    <span class="nx">validate</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"Bar"</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">"title"</span><span class="p">,</span> <span class="s2">"should be Bar"</span><span class="p">)</span>
-      <span class="p">}</span>
+<pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{</span>
+  <span class="nx">validate</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"title"</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"Bar"</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">errors</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">"title"</span><span class="p">,</span> <span class="s2">"should be Bar"</span><span class="p">)</span>
     <span class="p">}</span>
-  <span class="p">})</span>
+  <span class="p">}</span>
 <span class="p">})</span>
 
 <span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Project</span><span class="p">({</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">"Foo"</span> <span class="p">})</span>
@@ -970,13 +844,13 @@ _gaq.push(['_trackPageview']);
 <span class="c1">// =&gt; 2</span></code></pre>
 <h3 id="persistence-interface">Persistence interface</h3>
 
-<p>Persistence adapters implement CRUD and return an object with the following interface. You probably don&rsquo;t need to know this but is documented here in case you want to implement your own.</p>
+<p>Persistence adapters implement CRUD with the following interface. This is not really something you need to know but is documented here in case you want to implement your own.</p>
 
 <h4 id="create"><code>create(model, callback)</code></h4>
 
 <p>Calls the supplied callback with a boolean indicating whether the action was a success or not and any further parameters that the persistence adapter sends.</p>
 
-<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">persistence</span><span class="p">().</span><span class="nx">create</span><span class="p">(</span><span class="nx">project</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">persistence</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">project</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// do something...</span>
 <span class="p">})</span></code></pre>
 
@@ -984,7 +858,7 @@ _gaq.push(['_trackPageview']);
 
 <p>Calls the supplied callback with a boolean indicating whether the action was a success or not and any further parameters that the persistence adapter sends.</p>
 
-<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">persistence</span><span class="p">().</span><span class="nx">destroy</span><span class="p">(</span><span class="nx">project</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">persistence</span><span class="p">.</span><span class="nx">destroy</span><span class="p">(</span><span class="nx">project</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// do something...</span>
 <span class="p">})</span></code></pre>
 
@@ -992,7 +866,7 @@ _gaq.push(['_trackPageview']);
 
 <p>Calls the supplied callback with an array of models &mdash; models are <strong>not</strong> automatically added to the collection when calling <code>read()</code>. You probably won&rsquo;t need to use this much as this functionality is taken care of by <a href="#load"><code>load()</code></a>.</p>
 
-<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">persistence</span><span class="p">().</span><span class="nx">read</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">models</span><span class="p">)</span> <span class="p">{</span>
+<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">persistence</span><span class="p">.</span><span class="nx">read</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">models</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// do something with the models...</span>
 <span class="p">})</span></code></pre>
 
@@ -1000,7 +874,7 @@ _gaq.push(['_trackPageview']);
 
 <p>Calls the supplied callback with a boolean indicating whether the action was a success or not and any further parameters that the persistence adapter sends.</p>
 
-<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">persistence</span><span class="p">().</span><span class="nx">update</span><span class="p">(</span><span class="nx">project</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">persistence</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">project</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// do something...</span>
 <span class="p">})</span></code></pre>
 </section>
