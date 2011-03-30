@@ -13,7 +13,7 @@ test("all, count, find, first, add, remove", function() {
   ok(Post.first() === undefined);
   ok(Post.last() === undefined);
 
-  Post.add(post1, post2).add(post3);
+  Post.add(post1).add(post2).add(post3)
 
   same(Post.pluck("id"), [1, 2, 3]);
   equals(Post.count(), 3);
@@ -42,7 +42,7 @@ test("detect, select, first, last, count (with chaining)", function() {
   var post2 = new Post({ id: 2, title: "Bar" });
   var post3 = new Post({ id: 3, title: "Bar" });
 
-  Post.add(post1, post2, post3);
+  Post.add(post1).add(post2).add(post3)
 
   var models = []
   var indexes = [];
@@ -120,7 +120,7 @@ test("each (and chaining)", function() {
   var post2 = new Post({ id: 2, title: "Bar" });
   var post3 = new Post({ id: 3, title: "Baz" });
 
-  Post.add(post1, post2, post3);
+  Post.add(post1).add(post2).add(post3)
 
   var indexes = [];
   var ids = [];
@@ -192,7 +192,7 @@ test(".pluck", function() {
   var post3 = new Post({ id: 3, title: "c" })
   var post4 = new Post({ id: 4, title: "d" })
 
-  Post.add(post1, post2, post3, post4)
+  Post.add(post1).add(post2).add(post3).add(post4)
 
   same(Post.pluck("id"), [1, 2, 3, 4])
   same(Post.pluck("title"), ["a", "b", "c", "d"])
@@ -206,7 +206,7 @@ test("sort (and chaining)", function() {
   var post3 = new Post({ number: 2, title: "Acd" });
   var post4 = new Post({ number: 1, title: "abc" });
 
-  Post.add(post1, post2, post3, post4);
+  Post.add(post1).add(post2).add(post3).add(post4)
 
   same(Post.pluck("title"), ["bcd", "xyz", "Acd", "abc"])
 
@@ -242,7 +242,7 @@ test("Custom `all` method", function() {
   var post2 = new Post({ id: 2, deleted: true })
   var post3 = new Post({ id: 3, deleted: false })
 
-  Post.add(post1, post2, post3);
+  Post.add(post1).add(post2).add(post3)
 
   var results = [];
 
@@ -268,7 +268,7 @@ test("Custom method with chaining, then more chaining", function() {
   var post3 = new Post({ id: 3 });
   var post4 = new Post({ id: 4 });
 
-  Post.add(post1, post2, post3, post4);
+  Post.add(post1).add(post2).add(post3).add(post4)
 
   equals(Post.not_first().first(), post2);
   equals(Post.not_last().last(), post3);
@@ -307,7 +307,7 @@ test("reverse", function() {
   var post1 = new Post()
   var post2 = new Post()
 
-  Post.add(post1, post2)
+  Post.add(post1).add(post2)
 
   same(Post.reverse().all(), [post2, post1])
 })
@@ -318,7 +318,7 @@ test("map", function() {
   var post2 = new Post({ id: 2, title: "ham" })
   var post3 = new Post({ id: 3, title: "cheese" })
 
-  Post.add(post1, post2, post3)
+  Post.add(post1).add(post2).add(post3)
 
   var mapped = Post.map(function(model, i) {
     return [model.id(), i, this.attr("title").toUpperCase()].join("-")

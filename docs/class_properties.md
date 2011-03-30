@@ -15,7 +15,7 @@ Adds a model to a collection and is what [`save()`](#save) calls internally if i
     Food.all()
     // => [egg]
 
-    Food.add(ham, cheese)
+    Food.add(ham).add(cheese)
     Food.all()
     // => [egg, ham, cheese]
 

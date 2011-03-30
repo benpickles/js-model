@@ -1,18 +1,11 @@
 Model.ClassMethods = {
-  add: function() {
-    var added = [];
+  add: function(model) {
+    var id = model.id()
 
-    for (var i = 0; i < arguments.length; i++) {
-      var model = arguments[i];
-      var id = model.id()
-
-      if (jQuery.inArray(model, this.collection) === -1 && !(id && this.find(id))) {
-        this.collection.push(model);
-        added.push(model);
-      }
+    if (jQuery.inArray(model, this.collection) === -1 && !(id && this.find(id))) {
+      this.collection.push(model)
+      this.trigger("add", [model])
     }
-
-    if (added.length > 0) this.trigger("add", added);
 
     return this;
   },
