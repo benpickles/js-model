@@ -111,6 +111,20 @@ test("detect, select, first, last, count (with chaining)", function() {
   same(Post.select(function(model, i) {
     return this.attr("title") == "Baz";
   }).count(), 0);
+
+  assertSameModels(Post.select(function(model, i, all) {
+    assertSameModels(all, [post1, post2, post3])
+    return this.id() > 1
+  }).select(function(model, i, all) {
+    assertSameModels(all, [post2, post3])
+    return this.id() < 3
+  }).all(), [post2])
+
+  var obj = {}
+
+  Post.select(function() {
+    ok(this === obj)
+  }, obj)
 })
 
 test("each (and chaining)", function() {
@@ -126,13 +140,12 @@ test("each (and chaining)", function() {
   var ids = [];
   var titles = [];
 
-  var eachFunc = function(model, i) {
+  Post.each(function(model, i, all) {
+    assertSameModels(all, [post1, post2, post3])
     indexes.push(i);
     ids.push(this.id());
     titles.push(model.attr("title"));
-  };
-
-  Post.each(eachFunc);
+  })
 
   same(indexes, [0, 1, 2]);
   same(ids, [1, 2, 3]);
@@ -144,11 +157,22 @@ test("each (and chaining)", function() {
 
   Post.select(function() {
     return this.attr("title").indexOf("a") > -1;
-  }).each(eachFunc);
+  }).each(function(model, i, all) {
+    assertSameModels(all, [post2, post3])
+    indexes.push(i);
+    ids.push(this.id());
+    titles.push(model.attr("title"));
+  })
 
   same(indexes, [0, 1]);
   same(ids, [2, 3]);
   same(titles, ["Bar", "Baz"]);
+
+  var obj = {}
+
+  Post.each(function() {
+    ok(this === obj)
+  }, obj)
 });
 
 test("collection should be protected from accidental modification", function() {
@@ -320,7 +344,8 @@ test("map", function() {
 
   Post.add(post1).add(post2).add(post3)
 
-  var mapped = Post.map(function(model, i) {
+  var mapped = Post.map(function(model, i, all) {
+    assertSameModels(all, [post1, post2, post3])
     return [model.id(), i, this.attr("title").toUpperCase()].join("-")
   })
 
@@ -329,4 +354,10 @@ test("map", function() {
     "2-1-HAM",
     "3-2-CHEESE"
   ])
+
+  var obj = {}
+
+  Post.map(function() {
+    ok(this === obj)
+  }, obj)
 })

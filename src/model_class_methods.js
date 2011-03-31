@@ -33,11 +33,11 @@ Model.ClassMethods = {
     }
   },
 
-  each: function(func) {
+  each: function(func, context) {
     var all = this.all()
 
     for (var i = 0, length = all.length; i < length; i++) {
-      func.call(all[i], all[i], i)
+      func.call(context || all[i], all[i], i, all)
     }
 
     return this;
@@ -74,12 +74,12 @@ Model.ClassMethods = {
     return all[all.length - 1]
   },
 
-  map: function(func) {
+  map: function(func, context) {
     var all = this.all()
     var values = []
 
     for (var i = 0, length = all.length; i < length; i++) {
-      values.push(func.call(all[i], all[i], i))
+      values.push(func.call(context || all[i], all[i], i, all))
     }
 
     return values
@@ -130,14 +130,14 @@ Model.ClassMethods = {
     return this.chain(this.all().reverse())
   },
 
-  select: function(func) {
+  select: function(func, context) {
     var all = this.all(),
         selected = [],
         model
 
     for (var i = 0, length = all.length; i < length; i++) {
       model = all[i]
-      if (func.call(model, model, i)) selected.push(model)
+      if (func.call(context || model, model, i, all)) selected.push(model)
     }
 
     return this.chain(selected);
