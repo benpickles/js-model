@@ -54,30 +54,31 @@ test("class-level", function() {
 
 test("instance-level", function() {
   var Post = Model("post");
+  var models = []
   var results = [];
 
   var post = new Post({ title: "Foo", body: "..." });
 
   post.bind("create", function() {
-    results.push(this);
+    models.push(this);
     results.push("create");
   }).bind("update", function() {
-    results.push(this);
+    models.push(this);
     results.push("update");
   }).bind("custom", function(data1, data2, data3) {
-    results.push(this);
+    models.push(this);
     results.push("custom");
     results.push(data1);
     results.push(data2);
     results.push(data3);
   }).bind("custom", function(data1, data2, data3) {
-    results.push(this);
+    models.push(this);
     results.push("custom-2");
     results.push(data1);
     results.push(data2);
     results.push(data3);
   }).bind("destroy", function() {
-    results.push(this);
+    models.push(this);
     results.push("destroy");
   });
 
@@ -91,12 +92,13 @@ test("instance-level", function() {
   post.trigger("custom", [1, 2]);
   post.destroy();
 
+  assertSameModels(models, [post, post, post, post, post])
   same(results, [
-    post, "create",
-    post, "update",
-    post, "custom", 1, 2, undefined,
-    post, "custom-2", 1, 2, undefined,
-    post, "destroy"
+    "create",
+    "update",
+    "custom", 1, 2, undefined,
+    "custom-2", 1, 2, undefined,
+    "destroy"
   ]);
 });
 

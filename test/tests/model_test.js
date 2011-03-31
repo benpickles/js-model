@@ -41,7 +41,7 @@ test("attr, attributes, changes, reset, save, destroy", function() {
   same(post.attr(), { title: "Foo", body: "..." });
 
   // Set attribute using attr.
-  equals(post.attr("title", "Bar"), post, "returns self");
+  ok(post.attr("title", "Bar") === post, "returns self");
 
   // Check attributes and changes.
   equals(post.attr("title"), "Bar");
@@ -49,7 +49,7 @@ test("attr, attributes, changes, reset, save, destroy", function() {
   same(post.changes, { title: "Bar" });
   same(post.attr(), { title: "Bar", body: "..." });
 
-  equals(post.reset(), post, "returns self");
+  ok(post.reset() === post, "returns self");
 
   equals(post.attr("title"), "Foo");
   same(post.changes, {});
@@ -60,19 +60,19 @@ test("attr, attributes, changes, reset, save, destroy", function() {
   same(post.attributes, { title: "Foo", body: "..." });
   same(post.changes, { title: "Bar" });
 
-  same(post.save(), post);
+  ok(post.save() === post);
 
   same(post.attributes, { title: "Bar", body: "..." });
   same(post.changes, {});
 
-  equals(post.attr({ title: "Foo", bar: "Bar" }), post, "returns self");
+  ok(post.attr({ title: "Foo", bar: "Bar" }) === post, "returns self");
 
   same(post.attributes, { title: "Bar", body: "..." });
   same(post.changes, { title: "Foo", bar: "Bar" });
 
-  same(post.save(function(success) {
+  ok(post.save(function(success) {
     ok(success);
-  }), post);
+  }) === post);
 
   same(post.attributes, { bar: "Bar", body: "...", title: "Foo" });
   same(post.changes, {});
@@ -156,16 +156,16 @@ test("valid, validate, errors", function() {
 test('model collection "class" methods', function() {
   var Post = Model("post");
 
-  ok(Post.first() == null, "collection starts empty");
+  ok(Post.first() === undefined, "collection starts empty");
 
   var post = new Post();
-  ok(Post.first() == null, "collection is unaffected");
+  ok(Post.first() === undefined, "collection is unaffected");
 
   post.save();
-  same(Post.first(), post, "post added to collection automatically");
+  ok(Post.first() === post, "post added to collection automatically");
 
   post.destroy();
-  ok(Post.first() == null, "post removed from collection automatically");
+  ok(Post.first() === undefined, "post removed from collection automatically");
 });
 
 test("persistence", function() {
@@ -175,19 +175,19 @@ test("persistence", function() {
   var TestPersistence = function() {
     return {
       create: function(model, callback) {
-        same(model, post)
+        ok(model === post)
         results.push("create");
         results.push(callback());
       },
 
       destroy: function(model, callback) {
-        same(model, post)
+        ok(model === post)
         results.push("destroy");
         results.push(callback());
       },
 
       update: function(model, callback) {
-        same(model, post)
+        ok(model === post)
         results.push("update");
         results.push(callback());
       }

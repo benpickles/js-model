@@ -133,7 +133,7 @@ test("create", function() {
 
   post.save(function(success) {
     ok(success);
-    same(this, post);
+    ok(this === post);
     same(post.attributes, { id: 1, title: "Foo amended", body: "...", foo: "bar" });
     equals(post.id(), 1);
     equals(Post.count(), 1);
@@ -160,7 +160,7 @@ test("create - 422 response (failed validations)", function() {
 
   post.save(function(success) {
     ok(!success);
-    same(this, post);
+    ok(this === post);
     same(this.attributes, {}, "changes should not have been merged");
     same(this.attr(), { title: "Foo" });
     same(this.errors.on("title"), ['should not be "Foo"', 'should be "Bar"']);
@@ -181,7 +181,7 @@ test("create failure", function() {
 
   post.save(function(success) {
     ok(!success);
-    same(this, post);
+    ok(this === post);
     same(this.attributes, {}, "changes should not have been merged");
     same(this.attr(), { title: "Foo", body: "..." });
     equals(Post.count(), 0);
@@ -210,7 +210,7 @@ test("create with AjaxSetup", function() {
 
   post.save(function(success) {
     ok(success);
-    same(this, post);
+    ok(this === post);
     start();
   });
 
@@ -233,7 +233,7 @@ test("update", function() {
 
   post.save(function(success) {
     ok(success);
-    same(this, post);
+    ok(this === post);
     same(post.attributes, { id: 1, title: "Bar amended", body: "..." });
     start();
   });
@@ -285,7 +285,7 @@ test("update - 422 response (failed validations)", function() {
 
   post.save(function(success) {
     ok(!success);
-    same(this, post);
+    ok(this === post);
     same(this.attributes, { id: 1 }, "changes should not have been merged");
     same(this.attr(), { id: 1, title: "Foo" });
     same(this.errors.on("title"), ['should not be "Foo"', 'should be "Bar"']);
@@ -304,7 +304,7 @@ test("update failure", function() {
 
   post.save(function(success) {
     ok(!success);
-    same(this, post);
+    ok(this === post);
     same(this.attributes, { id: 1, title: "Foo" }, "changes should not have been merged");
     same(this.attr(), { id: 1, title: "Bar" });
     start();
@@ -349,7 +349,7 @@ test("destroy failure", function() {
 
   post.destroy(function(success) {
     ok(!success);
-    same(this, post);
+    ok(this === post);
     equals(Post.count(), 1);
     start();
   });
@@ -365,7 +365,7 @@ test("destroy - 422 response (failed validations)", function() {
 
   post.destroy(function(success) {
     ok(!success);
-    same(this, post);
+    ok(this === post);
     same(this.errors.on("title"), ["must do something else before deleting"]);
     start();
   });

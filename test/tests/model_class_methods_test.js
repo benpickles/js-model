@@ -17,19 +17,19 @@ test("all, count, find, first, add, remove", function() {
 
   same(Post.pluck("id"), [1, 2, 3]);
   equals(Post.count(), 3);
-  equals(Post.find(1), post1);
-  equals(Post.find(2), post2);
-  equals(Post.find(3), post3);
-  equals(Post.find(4), undefined);
-  equals(Post.first(), post1);
+  ok(Post.find(1) === post1);
+  ok(Post.find(2) === post2);
+  ok(Post.find(3) === post3);
+  ok(Post.find(4) === undefined);
+  ok(Post.first() === post1);
 
   ok(Post.remove(post2));
 
   same(Post.pluck("id"), [1, 3]);
   equals(Post.count(), 2);
-  equals(Post.find(1), post1);
+  ok(Post.find(1) === post1);
   ok(Post.find(2) === undefined);
-  equals(Post.find(3), post3);
+  ok(Post.find(3) === post3);
   ok(Post.find(4) === undefined);
 
   ok(!Post.remove(undefined));
@@ -47,13 +47,13 @@ test("detect, select, first, last, count (with chaining)", function() {
   var models = []
   var indexes = [];
 
-  equals(Post.detect(function(model, i) {
+  ok(Post.detect(function(model, i) {
     models.push(model);
     indexes.push(i);
     return model.attr("title") == "Bar";
-  }), post2);
+  }) === post2);
 
-  same(models, [post1, post2])
+  assertSameModels(models, [post1, post2])
   same(indexes, [0, 1]);
 
   models = []
@@ -65,37 +65,37 @@ test("detect, select, first, last, count (with chaining)", function() {
     return this.attr("title") == "Baz";
   }) === undefined);
 
-  same(models, [post1, post2, post3])
+  assertSameModels(models, [post1, post2, post3])
   same(indexes, [0, 1, 2], "should yield index correctly");
 
   models = []
   indexes = [];
 
-  same(Post.select(function(model, i) {
+  assertSameModels(Post.select(function(model, i) {
     models.push(model);
     indexes.push(i);
     return this.attr("title") == "Bar";
   }).all(), [post2, post3]);
 
-  same(Post.select(function(model, i) {
+  ok(Post.select(function(model, i) {
     models.push(model);
     indexes.push(i);
     return this.attr("title") == "Bar";
-  }).first(), post2);
+  }).first() === post2);
 
-  same(Post.select(function(model, i) {
+  ok(Post.select(function(model, i) {
     models.push(model);
     indexes.push(i);
     return this.attr("title") == "Bar";
-  }).last(), post3);
+  }).last() === post3);
 
-  same(Post.select(function(model, i) {
+  assertSameModels(Post.select(function(model, i) {
     models.push(model);
     indexes.push(i);
     return this.attr("title") == "Baz";
   }).all(), []);
 
-  same(models, [post1, post2, post3, post1, post2, post3, post1, post2, post3,
+  assertSameModels(models, [post1, post2, post3, post1, post2, post3, post1, post2, post3,
     post1, post2, post3])
   same(indexes, [0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2],
     "should yield index correctly");
@@ -270,9 +270,9 @@ test("Custom method with chaining, then more chaining", function() {
 
   Post.add(post1).add(post2).add(post3).add(post4)
 
-  equals(Post.not_first().first(), post2);
-  equals(Post.not_last().last(), post3);
-  equals(Post.not_first().not_last().last(), post3,
+  ok(Post.not_first().first() === post2);
+  ok(Post.not_last().last() === post3);
+  ok(Post.not_first().not_last().last() === post3,
     "custom methods should be available after chaining");
 });
 
@@ -309,7 +309,7 @@ test("reverse", function() {
 
   Post.add(post1).add(post2)
 
-  same(Post.reverse().all(), [post2, post1])
+  assertSameModels(Post.reverse().all(), [post2, post1])
 })
 
 test("map", function() {
