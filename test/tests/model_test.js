@@ -5,77 +5,77 @@ test("defining attributes when instanciating a model", function() {
   var post
 
   post = new Post(undefined)
-  same({}, post.attributes)
+  deepEqual({}, post.attributes)
 
   var attributes = { a: "a", b: "b" }
   post = new Post(attributes)
   attributes.a = "b"
-  same("a", post.attributes.a)
+  deepEqual("a", post.attributes.a)
 })
 
 test("attr, attributes, changes, reset, save, destroy", function() {
   var Post = Model("post");
   var post = new Post({ title: "Foo", body: "..." });
 
-  same(post.attributes, { title: "Foo", body: "..." });
-  same(post.changes, {});
+  deepEqual(post.attributes, { title: "Foo", body: "..." });
+  deepEqual(post.changes, {});
 
   var attr = post.attr();
-  same(attr, { title: "Foo", body: "..." });
+  deepEqual(attr, { title: "Foo", body: "..." });
   attr.title = "Bar";
-  equals(post.attributes.title, "Foo", "`attr` should return a copy of attributes not the real thing");
+  equal(post.attributes.title, "Foo", "`attr` should return a copy of attributes not the real thing");
 
   post.attr("title", null);
-  equals(post.attributes.title, "Foo", "attributes should be unchanged");
-  equals(post.changes.title, null);
-  equals(post.attr("title"), null, "null value should be read back as null");
+  equal(post.attributes.title, "Foo", "attributes should be unchanged");
+  equal(post.changes.title, null);
+  equal(post.attr("title"), null, "null value should be read back as null");
 
   post.attr("title", "Foo");
-  equals(post.attributes.title, "Foo");
+  equal(post.attributes.title, "Foo");
   ok(!("title" in post.changes), "unchanged value shouldn't appear in changes");
-  equals(post.attr("title"), "Foo");
+  equal(post.attr("title"), "Foo");
 
   post.reset();
-  same(post.attributes, { title: "Foo", body: "..." });
-  same(post.changes, {});
-  same(post.attr(), { title: "Foo", body: "..." });
+  deepEqual(post.attributes, { title: "Foo", body: "..." });
+  deepEqual(post.changes, {});
+  deepEqual(post.attr(), { title: "Foo", body: "..." });
 
   // Set attribute using attr.
   ok(post.attr("title", "Bar") === post, "returns self");
 
   // Check attributes and changes.
-  equals(post.attr("title"), "Bar");
-  same(post.attributes, { title: "Foo", body: "..." }, "attributes should be unchanged");
-  same(post.changes, { title: "Bar" });
-  same(post.attr(), { title: "Bar", body: "..." });
+  equal(post.attr("title"), "Bar");
+  deepEqual(post.attributes, { title: "Foo", body: "..." }, "attributes should be unchanged");
+  deepEqual(post.changes, { title: "Bar" });
+  deepEqual(post.attr(), { title: "Bar", body: "..." });
 
   ok(post.reset() === post, "returns self");
 
-  equals(post.attr("title"), "Foo");
-  same(post.changes, {});
+  equal(post.attr("title"), "Foo");
+  deepEqual(post.changes, {});
 
   // Set again
   post.attr("title", "Bar");
 
-  same(post.attributes, { title: "Foo", body: "..." });
-  same(post.changes, { title: "Bar" });
+  deepEqual(post.attributes, { title: "Foo", body: "..." });
+  deepEqual(post.changes, { title: "Bar" });
 
   ok(post.save() === post);
 
-  same(post.attributes, { title: "Bar", body: "..." });
-  same(post.changes, {});
+  deepEqual(post.attributes, { title: "Bar", body: "..." });
+  deepEqual(post.changes, {});
 
   ok(post.attr({ title: "Foo", bar: "Bar" }) === post, "returns self");
 
-  same(post.attributes, { title: "Bar", body: "..." });
-  same(post.changes, { title: "Foo", bar: "Bar" });
+  deepEqual(post.attributes, { title: "Bar", body: "..." });
+  deepEqual(post.changes, { title: "Foo", bar: "Bar" });
 
   ok(post.save(function(success) {
     ok(success);
   }) === post);
 
-  same(post.attributes, { bar: "Bar", body: "...", title: "Foo" });
-  same(post.changes, {});
+  deepEqual(post.attributes, { bar: "Bar", body: "...", title: "Foo" });
+  deepEqual(post.changes, {});
 
   post.destroy(function(success) {
     ok(success);
@@ -90,13 +90,13 @@ test("custom methods", function() {
     this.prototype.bar = function() { return "bar" }
   })
 
-  equals(Post.foo(), "foo");
-  equals(Post.bar(), "bar");
+  equal(Post.foo(), "foo");
+  equal(Post.bar(), "bar");
 
   var post = new Post();
 
-  equals(post.foo(), "foo");
-  equals(post.bar(), "bar");
+  equal(post.foo(), "foo");
+  equal(post.bar(), "bar");
 });
 
 test("valid, validate, errors", function() {
@@ -115,9 +115,9 @@ test("valid, validate, errors", function() {
   var post = new Post();
 
   ok(!post.valid());
-  equals(post.errors.size(), 2);
-  same(post.errors.on("body"), ["can't be blank"]);
-  same(post.errors.on("title"), ["should be Bar"]);
+  equal(post.errors.size(), 2);
+  deepEqual(post.errors.on("body"), ["can't be blank"]);
+  deepEqual(post.errors.on("title"), ["should be Bar"]);
 
   post.save(function(success) {
     ok(!success);
@@ -126,15 +126,15 @@ test("valid, validate, errors", function() {
   post.attr("title", "Foo");
 
   ok(!post.valid());
-  equals(post.errors.size(), 3);
-  same(post.errors.on("body"), ["can't be blank"]);
-  same(post.errors.on("title"), ["should not be Foo", "should be Bar"]);
+  equal(post.errors.size(), 3);
+  deepEqual(post.errors.on("body"), ["can't be blank"]);
+  deepEqual(post.errors.on("title"), ["should not be Foo", "should be Bar"]);
 
   post.reset();
 
-  equals(post.errors.size(), 0);
-  same(post.errors.on("body"), []);
-  same(post.errors.on("title"), []);
+  equal(post.errors.size(), 0);
+  deepEqual(post.errors.on("body"), []);
+  deepEqual(post.errors.on("title"), []);
 
   post.attr({
     body: "...",
@@ -142,15 +142,15 @@ test("valid, validate, errors", function() {
   });
 
   ok(post.valid());
-  equals(post.errors.size(), 0);
-  same(post.errors.on("body"), []);
-  same(post.errors.on("title"), []);
+  equal(post.errors.size(), 0);
+  deepEqual(post.errors.on("body"), []);
+  deepEqual(post.errors.on("title"), []);
 
   post.save(function(success) {
     ok(success);
   });
 
-  same(post.changes, {});
+  deepEqual(post.changes, {});
 });
 
 test('model collection "class" methods', function() {
@@ -208,7 +208,7 @@ test("persistence", function() {
   post.save(callback);
   post.destroy(callback);
 
-  same(results, [
+  deepEqual(results, [
     "create", "callback",
     "update", "callback",
     "destroy", "callback"
@@ -246,17 +246,17 @@ test("persistence failure", function() {
   post = new Post();
   post.save();
 
-  same(events, [], "should not trigger create event if persistence failed");
-  same(Post.all(), [], "post should not be added to collection");
+  deepEqual(events, [], "should not trigger create event if persistence failed");
+  deepEqual(Post.all(), [], "post should not be added to collection");
 
   post.attributes.id = 1;
   post.save();
 
-  same(events, [], "should not trigger update event if persistence failed");
+  deepEqual(events, [], "should not trigger update event if persistence failed");
 
   post.destroy();
 
-  same(events, [], "should not trigger destroy event if persistence failed");
+  deepEqual(events, [], "should not trigger destroy event if persistence failed");
 });
 
 test("#initialize", function() {

@@ -9,8 +9,8 @@ test("extend", function() {
   A.extend(module)
   B.extend(module)
 
-  equals(A.greet(), "Hi A")
-  equals(B.greet(), "Hi B")
+  equal(A.greet(), "Hi A")
+  equal(B.greet(), "Hi B")
 })
 
 test("include", function() {
@@ -22,6 +22,6 @@ test("include", function() {
   A.include(module)
   B.include(module)
 
-  equals(new A({ name: "a" }).greet(), "Hi a")
-  equals(new B({ name: "b" }).greet(), "Hi b")
+  equal(new A({ name: "a" }).greet(), "Hi a")
+  equal(new B({ name: "b" }).greet(), "Hi b")
 })

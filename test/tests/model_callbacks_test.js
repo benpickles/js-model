@@ -42,7 +42,7 @@ test("class-level", function() {
   Post.remove(666);
   Post.trigger("custom",[post1]);
 
-  same(results, [
+  deepEqual(results, [
     Post, "add", 1,
     Post, "add", 2,
     Post, "add", 3,
@@ -93,7 +93,7 @@ test("instance-level", function() {
   post.destroy();
 
   assertSameModels(models, [post, post, post, post, post])
-  same(results, [
+  deepEqual(results, [
     "create",
     "update",
     "custom", 1, 2, undefined,
@@ -150,7 +150,7 @@ test("unbind all callbacks for an event", function() {
   post.trigger("custom");
   post.destroy();
 
-  same(results, []);
+  deepEqual(results, []);
 });
 
 test("unbind a specific event callback by function", function() {
@@ -168,5 +168,5 @@ test("unbind a specific event callback by function", function() {
   post.unbind("custom", callback);
   post.trigger("custom");
 
-  same(results, ["good"]);
+  deepEqual(results, ["good"]);
 });

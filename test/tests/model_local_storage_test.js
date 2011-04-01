@@ -15,7 +15,7 @@ if (window.localStorage) {
     })
 
     Post.persistence().read(function(models) {
-      equals(models.length, 0)
+      equal(models.length, 0)
     })
 
     localStorage.setItem("post-a", JSON.stringify({ a: "a" }))
@@ -23,21 +23,21 @@ if (window.localStorage) {
     localStorage.setItem("post-collection", '["post-a","post-b"]')
 
     Post.persistence().read(function(models) {
-      equals(models.length, 2)
+      equal(models.length, 2)
 
       var post1 = models[0]
       var post2 = models[1]
 
-      equals("post-a", post1.uid)
-      same({ a: "a" }, post1.attr())
-      equals("post-b", post2.uid)
-      same({ b: "b" }, post2.attr())
+      equal("post-a", post1.uid)
+      deepEqual({ a: "a" }, post1.attr())
+      equal("post-b", post2.uid)
+      deepEqual({ b: "b" }, post2.attr())
 
       Post.collection = [post1, post2]
     })
 
     Post.persistence().read(function(models) {
-      equals(models.length, 0, "filters models already in the collection")
+      equal(models.length, 0, "filters models already in the collection")
     })
   })
 
@@ -46,37 +46,37 @@ if (window.localStorage) {
       this.persistence(Model.localStorage)
     })
 
-    equals(Post.count(), 0)
-    equals(localStorage.length, 0)
+    equal(Post.count(), 0)
+    equal(localStorage.length, 0)
 
     var post = new Post({ title: "foo", foo: "bar" })
     post.save()
 
-    equals(Post.count(), 1)
-    equals(localStorage.length, 2)
-    same({ title: "foo", foo: "bar" }, JSON.parse(localStorage[post.uid]))
-    equals(localStorage["post-collection"], '["' + post.uid + '"]',
+    equal(Post.count(), 1)
+    equal(localStorage.length, 2)
+    deepEqual({ title: "foo", foo: "bar" }, JSON.parse(localStorage[post.uid]))
+    equal(localStorage["post-collection"], '["' + post.uid + '"]',
       "should be stored in localStorage")
 
     post.attr({ title: ".", foo: null, bar: "baz" })
     post.save()
 
-    equals(Post.count(), 1)
-    equals(localStorage.length, 2)
-    same({ title: ".", foo: null, bar: "baz" }, JSON.parse(localStorage[post.uid]))
-    equals(localStorage["post-collection"], '["' + post.uid + '"]',
+    equal(Post.count(), 1)
+    equal(localStorage.length, 2)
+    deepEqual({ title: ".", foo: null, bar: "baz" }, JSON.parse(localStorage[post.uid]))
+    equal(localStorage["post-collection"], '["' + post.uid + '"]',
       "should not alter localStorage list")
 
     post.destroy()
 
-    equals(Post.count(), 0)
-    equals(localStorage.length, 1)
+    equal(Post.count(), 0)
+    equal(localStorage.length, 1)
     ok(!localStorage[post.uid])
-    equals(localStorage["post-collection"], "[]",
+    equal(localStorage["post-collection"], "[]",
       "should be removed from localStorage list")
 
     Post.persistence().read(function(models) {
-      equals(models.length, 0)
+      equal(models.length, 0)
     })
   })
 } else {
@@ -87,7 +87,7 @@ if (window.localStorage) {
     })
 
     Post.persistence().read(function(models) {
-      equals(models.length, 0)
+      equal(models.length, 0)
     })
   })
 
@@ -96,32 +96,32 @@ if (window.localStorage) {
       this.persistence(Model.localStorage)
     })
 
-    equals(Post.count(), 0)
+    equal(Post.count(), 0)
 
     var post = new Post({ title: "foo", foo: "bar" })
     post.save()
 
-    equals(Post.count(), 1)
+    equal(Post.count(), 1)
 
     Post.persistence().read(function(models) {
-      equals(models.length, 0)
+      equal(models.length, 0)
     })
 
     post.attr({ title: ".", foo: null, bar: "baz" })
     post.save()
 
-    equals(Post.count(), 1)
+    equal(Post.count(), 1)
 
     Post.persistence().read(function(models) {
-      equals(models.length, 0)
+      equal(models.length, 0)
     })
 
     post.destroy()
 
-    equals(Post.count(), 0)
+    equal(Post.count(), 0)
 
     Post.persistence().read(function(models) {
-      equals(models.length, 0)
+      equal(models.length, 0)
     })
   })
 }

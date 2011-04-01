@@ -7,16 +7,16 @@ test("all, count, find, first, add, remove", function() {
   var post2 = new Post({ id: 2 });
   var post3 = new Post({ id: 3 });
 
-  same(Post.all(), []);
-  equals(Post.count(), 0);
+  deepEqual(Post.all(), []);
+  equal(Post.count(), 0);
   ok(Post.find(1) === undefined);
   ok(Post.first() === undefined);
   ok(Post.last() === undefined);
 
   Post.add(post1).add(post2).add(post3)
 
-  same(Post.pluck("id"), [1, 2, 3]);
-  equals(Post.count(), 3);
+  deepEqual(Post.pluck("id"), [1, 2, 3]);
+  equal(Post.count(), 3);
   ok(Post.find(1) === post1);
   ok(Post.find(2) === post2);
   ok(Post.find(3) === post3);
@@ -25,8 +25,8 @@ test("all, count, find, first, add, remove", function() {
 
   ok(Post.remove(post2));
 
-  same(Post.pluck("id"), [1, 3]);
-  equals(Post.count(), 2);
+  deepEqual(Post.pluck("id"), [1, 3]);
+  equal(Post.count(), 2);
   ok(Post.find(1) === post1);
   ok(Post.find(2) === undefined);
   ok(Post.find(3) === post3);
@@ -54,7 +54,7 @@ test("detect, select, first, last, count (with chaining)", function() {
   }) === post2);
 
   assertSameModels(models, [post1, post2])
-  same(indexes, [0, 1]);
+  deepEqual(indexes, [0, 1]);
 
   models = []
   indexes = [];
@@ -66,7 +66,7 @@ test("detect, select, first, last, count (with chaining)", function() {
   }) === undefined);
 
   assertSameModels(models, [post1, post2, post3])
-  same(indexes, [0, 1, 2], "should yield index correctly");
+  deepEqual(indexes, [0, 1, 2], "should yield index correctly");
 
   models = []
   indexes = [];
@@ -97,18 +97,18 @@ test("detect, select, first, last, count (with chaining)", function() {
 
   assertSameModels(models, [post1, post2, post3, post1, post2, post3, post1, post2, post3,
     post1, post2, post3])
-  same(indexes, [0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2],
+  deepEqual(indexes, [0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2],
     "should yield index correctly");
 
-  same(Post.select(function(model, i) {
+  deepEqual(Post.select(function(model, i) {
     return this.attr("title") == "Foo";
   }).count(), 1);
 
-  same(Post.select(function(model, i) {
+  deepEqual(Post.select(function(model, i) {
     return this.attr("title") == "Bar";
   }).count(), 2);
 
-  same(Post.select(function(model, i) {
+  deepEqual(Post.select(function(model, i) {
     return this.attr("title") == "Baz";
   }).count(), 0);
 
@@ -147,9 +147,9 @@ test("each (and chaining)", function() {
     titles.push(model.attr("title"));
   })
 
-  same(indexes, [0, 1, 2]);
-  same(ids, [1, 2, 3]);
-  same(titles, ["Foo", "Bar", "Baz"]);
+  deepEqual(indexes, [0, 1, 2]);
+  deepEqual(ids, [1, 2, 3]);
+  deepEqual(titles, ["Foo", "Bar", "Baz"]);
 
   indexes = [];
   ids = [];
@@ -164,9 +164,9 @@ test("each (and chaining)", function() {
     titles.push(model.attr("title"));
   })
 
-  same(indexes, [0, 1]);
-  same(ids, [2, 3]);
-  same(titles, ["Bar", "Baz"]);
+  deepEqual(indexes, [0, 1]);
+  deepEqual(ids, [2, 3]);
+  deepEqual(titles, ["Bar", "Baz"]);
 
   var obj = {}
 
@@ -189,13 +189,13 @@ test("collection should be protected from accidental modification", function() {
   var all = Post.all()
   all.shift()
 
-  equals(5, Post.count(), "value from all() should be safe to manipulate")
+  equal(5, Post.count(), "value from all() should be safe to manipulate")
 
   Post.each(function() {
     Post.remove(this)
   })
 
-  equals(Post.count(), 0)
+  equal(Post.count(), 0)
 
   Post.collection = [post1, post2, post3, post4, post5]
 
@@ -205,7 +205,7 @@ test("collection should be protected from accidental modification", function() {
     Post.remove(this)
   })
 
-  equals(Post.count(), 2)
+  equal(Post.count(), 2)
 })
 
 test(".pluck", function() {
@@ -218,8 +218,8 @@ test(".pluck", function() {
 
   Post.add(post1).add(post2).add(post3).add(post4)
 
-  same(Post.pluck("id"), [1, 2, 3, 4])
-  same(Post.pluck("title"), ["a", "b", "c", "d"])
+  deepEqual(Post.pluck("id"), [1, 2, 3, 4])
+  deepEqual(Post.pluck("title"), ["a", "b", "c", "d"])
 })
 
 test("sort (and chaining)", function() {
@@ -232,21 +232,21 @@ test("sort (and chaining)", function() {
 
   Post.add(post1).add(post2).add(post3).add(post4)
 
-  same(Post.pluck("title"), ["bcd", "xyz", "Acd", "abc"])
+  deepEqual(Post.pluck("title"), ["bcd", "xyz", "Acd", "abc"])
 
-  same(Post.sortBy("title").pluck("title"), ["Acd", "abc", "bcd", "xyz"])
+  deepEqual(Post.sortBy("title").pluck("title"), ["Acd", "abc", "bcd", "xyz"])
 
-  same(Post.select(function() {
+  deepEqual(Post.select(function() {
     return this.attr("title").indexOf("c") > -1;
   }).sortBy(function() {
     return this.attr("title").toLowerCase()
   }).pluck("title"), ["abc", "Acd", "bcd"])
 
-  same(Post.sort(function(a, b) {
+  deepEqual(Post.sort(function(a, b) {
     return a.attr("number") - b.attr("number")
   }).pluck("title"), ["abc", "Acd", "xyz", "bcd"])
 
-  same(Post.pluck("title"), ["bcd", "xyz", "Acd", "abc"],
+  deepEqual(Post.pluck("title"), ["bcd", "xyz", "Acd", "abc"],
     "original collection should be untouched");
 });
 
@@ -274,7 +274,7 @@ test("Custom `all` method", function() {
     results.push(this.id());
   });
 
-  same(results, [1,3], "`each` should iterate over `all`");
+  deepEqual(results, [1,3], "`each` should iterate over `all`");
 });
 
 test("Custom method with chaining, then more chaining", function() {
@@ -316,11 +316,11 @@ test("load", function() {
     this.persistence(TestPersistence)
   })
 
-  equals(Post.count(), 0)
+  equal(Post.count(), 0)
 
   Post.load(function(models) {
-    equals(Post.count(), 2, "should add models to collection")
-    equals(models.length, 2, "should pass loaded models to callback")
+    equal(Post.count(), 2, "should add models to collection")
+    equal(models.length, 2, "should pass loaded models to callback")
   })
 
   ok(Post.load() === Post, "shouldn't fail if there's no callback (and return self)")
@@ -349,7 +349,7 @@ test("map", function() {
     return [model.id(), i, this.attr("title").toUpperCase()].join("-")
   })
 
-  same(mapped, [
+  deepEqual(mapped, [
     "1-0-EGG",
     "2-1-HAM",
     "3-2-CHEESE"
