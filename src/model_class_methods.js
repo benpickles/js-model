@@ -166,5 +166,12 @@ Model.ClassMethods = {
         return 0
       }
     })
+  },
+
+  use: function(klass) {
+    var args = Array.prototype.slice.call(arguments, 1)
+    args.unshift(this)
+    klass.apply(this, args)
+    return this
   }
 };
