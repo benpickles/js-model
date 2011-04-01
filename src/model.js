@@ -17,8 +17,9 @@ var Model = function(name, func) {
   model
     .extend(Model.Callbacks)
     .extend(Model.ClassMethods)
-    .include(Model.Callbacks)
-    .include(Model.InstanceMethods)
+
+  model.prototype = new Model.Base
+  model.prototype.constructor = model
 
   if (jQuery.isFunction(func)) func.call(model, model, model.prototype)
 

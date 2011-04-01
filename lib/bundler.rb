@@ -39,6 +39,7 @@ class Bundler
           model_rest
           model_uid
           model_version
+          model_base
         )
       end
 
