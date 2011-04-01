@@ -190,7 +190,6 @@ test("create failure", function() {
 });
 
 test("create with AjaxSetup", function() {
-  
   jQuery.ajaxSetup({
     data: {
       socket_id: '111'
@@ -218,6 +217,8 @@ test("create with AjaxSetup", function() {
 
   var request = AjaxSpy.requests.shift();
   deepEqual(JSON.parse(request.data), { socket_id: '111', post: { title: "Foo", body: "..." } });
+
+  delete jQuery.ajaxSettings.data.socket_id
 });
 
 test("update", function() {
