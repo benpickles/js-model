@@ -168,10 +168,10 @@ Model.ClassMethods = {
     })
   },
 
-  use: function(klass) {
+  use: function(plugin) {
     var args = Array.prototype.slice.call(arguments, 1)
     args.unshift(this)
-    klass.apply(this, args)
+    plugin.apply(this, args)
     return this
   }
 };
