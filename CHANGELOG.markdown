@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.10.1
+
+ * Add a simple plugin interface. Call with `MyModel.use(MyPlugin, "some", "args")`.
+ * Switch to prototypal inheritance instead of copying functions into a new object.
+ * `Model.each()`, `.map()` and `.select()` now behave more like their ECMA-262 equivalents except they return the class and call their iterators with the `this` value as the model by default.
+ * `Model.add()` now only takes a single argument.
+
 ## 0.10.0
 
  * Add `extend()` and `include()` methods to add class and instance methods respectively.

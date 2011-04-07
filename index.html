@@ -17,16 +17,16 @@ _gaq.push(['_trackPageview']);
 </head>
 <body>
   <div id="content">
-    <h1>js-model (0.10.0)</h1>
+    <h1>js-model (0.10.1)</h1>
 
     <p>js-model is a library built on top of <a href="http://jquery.com/">jQuery</a> that allows you to work with models in your JavaScript.</p>
 
     <dl>
 <dt>Download</dt>
       <dd>
-<a href="dist/js-model-0.10.0.min.js">js-model-0.10.0.min.js</a> (7.9Kb)</dd>
+<a href="dist/js-model-0.10.1.min.js">js-model-0.10.1.min.js</a> (8.1Kb)</dd>
       <dd>
-<a href="dist/js-model-0.10.0.js">js-model-0.10.0.js</a> (15.9Kb)</dd>
+<a href="dist/js-model-0.10.1.js">js-model-0.10.1.js</a> (16.2Kb)</dd>
 
       <dt>Source</dt>
       <dd><a href="http://github.com/benpickles/js-model">github.com/benpickles/js-model</a></dd>
@@ -89,6 +89,7 @@ _gaq.push(['_trackPageview']);
 <li><a href="#select">select()</a></li>
 <li><a href="#sort">sort()</a></li>
 <li><a href="#sortby">sortBy()</a></li>
+<li><a href="#use">use()</a></li>
 </ol>
 </li>
 <li>
@@ -420,7 +421,7 @@ _gaq.push(['_trackPageview']);
 <span class="nx">Food</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
 <span class="c1">// =&gt; [egg]</span>
 
-<span class="nx">Food</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">ham</span><span class="p">,</span> <span class="nx">cheese</span><span class="p">)</span>
+<span class="nx">Food</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">ham</span><span class="p">).</span><span class="nx">add</span><span class="p">(</span><span class="nx">cheese</span><span class="p">)</span>
 <span class="nx">Food</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
 <span class="c1">// =&gt; [egg, ham, cheese]</span>
 
@@ -689,6 +690,18 @@ _gaq.push(['_trackPageview']);
   <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">).</span><span class="nx">length</span>
 <span class="p">}).</span><span class="nx">all</span><span class="p">()</span>
 <span class="c1">// =&gt; [egg, ham, cheese]</span></code></pre>
+
+<h4 id="use"><code>use(Plugin, ...)</code></h4>
+
+<p>Applies a plugin to the class.</p>
+
+<pre><code><span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">MyPlugin</span><span class="p">,</span> <span class="s2">"with"</span><span class="p">,</span> <span class="p">{</span> <span class="nx">extra</span><span class="o">:</span> <span class="s2">"arguments"</span> <span class="p">})</span>
+<span class="p">})</span></code></pre>
+
+<p><code>use</code> can also be called outside of a model&rsquo;s declaration as it&rsquo;s simply a class method.</p>
+
+<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">MyPlugin</span><span class="p">,</span> <span class="s2">"with"</span><span class="p">,</span> <span class="p">{</span> <span class="nx">extra</span><span class="o">:</span> <span class="s2">"arguments"</span> <span class="p">})</span></code></pre>
 <h3 id="api-instance-properties">Instance properties</h3>
 
 <h4 id="attr"><code>attr()</code></h4>
