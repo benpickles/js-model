@@ -282,3 +282,15 @@ Returns the collection sorted by either an attribute or a custom function.
       return this.attr("name").length
     }).all()
     // => [egg, ham, cheese]
+
+#### `use(Plugin, ...)`
+
+Applies a plugin to the class.
+
+    Project = Model("project", function() {
+      this.use(MyPlugin, "with", { extra: "arguments" })
+    })
+
+`use` can also be called outside of a model's declaration as it's simply a class method.
+
+    Project.use(MyPlugin, "with", { extra: "arguments" })
