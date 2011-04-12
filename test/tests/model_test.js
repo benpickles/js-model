@@ -243,7 +243,7 @@ test("persistence failure", function() {
     events.push(name);
   };
 
-  post = new Post();
+  var post = new Post();
   post.save();
 
   deepEqual(events, [], "should not trigger create event if persistence failed");
