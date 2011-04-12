@@ -283,6 +283,18 @@ Returns the collection sorted by either an attribute or a custom function.
     }).all()
     // => [egg, ham, cheese]
 
+#### `unique_id`
+
+`unique_id` refers to the attribute that holds the "primary key" and defaults to `"id"`. It's useful when using with something like MongoDB.
+
+    Project = Model("project", function() {
+      this.unique_id = "_id"
+    })
+
+    project = new Project({ _id: "qwerty" })
+    project.id()
+    // => "qwerty"
+
 #### `use(Plugin, ...)`
 
 Applies a plugin to the class.
