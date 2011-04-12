@@ -1,6 +1,6 @@
 # js-model
 
-Built on top of [jQuery](http://jquery.com/), js-model is a library that enables you to work with models in your JavaScript.
+js-model is a library that allows you to work with models in your JavaScript.
 
 ## In brief
 
