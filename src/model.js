@@ -5,7 +5,7 @@ var Model = function(name, func) {
     this.changes = {};
     this.errors = new Model.Errors(this);
     this.uid = [name, Model.UID.generate()].join("-")
-    if (jQuery.isFunction(this.initialize)) this.initialize()
+    if (Model.Utils.isFunction(this.initialize)) this.initialize()
   };
 
   // Use module functionality to extend itself onto the constructor. Meta!
@@ -21,7 +21,7 @@ var Model = function(name, func) {
   model.prototype = new Model.Base
   model.prototype.constructor = model
 
-  if (jQuery.isFunction(func)) func.call(model, model, model.prototype)
+  if (Model.Utils.isFunction(func)) func.call(model, model, model.prototype)
 
   return model;
 };

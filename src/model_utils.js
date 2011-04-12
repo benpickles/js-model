@@ -19,5 +19,9 @@ Model.Utils = {
     }
 
     return -1
+  },
+
+  isFunction: function(obj) {
+    return Object.prototype.toString.call(obj) === "[object Function]"
   }
 }
