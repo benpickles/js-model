@@ -1,11 +1,11 @@
 Model.Module = {
   extend: function(obj) {
-    jQuery.extend(this, obj)
+    Model.Utils.extend(this, obj)
     return this
   },
 
   include: function(obj) {
-    jQuery.extend(this.prototype, obj)
+    Model.Utils.extend(this.prototype, obj)
     return this
   }
 };

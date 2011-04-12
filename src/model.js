@@ -1,7 +1,7 @@
 var Model = function(name, func) {
   // The model constructor.
   var model = function(attributes) {
-    this.attributes = jQuery.extend({}, attributes)
+    this.attributes = Model.Utils.extend({}, attributes)
     this.changes = {};
     this.errors = new Model.Errors(this);
     this.uid = [name, Model.UID.generate()].join("-")

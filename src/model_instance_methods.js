@@ -6,7 +6,7 @@ Model.InstanceMethods = {
   attr: function(name, value) {
     if (arguments.length === 0) {
       // Combined attributes/changes object.
-      return jQuery.extend({}, this.attributes, this.changes);
+      return Model.Utils.extend({}, this.attributes, this.changes);
     } else if (arguments.length === 2) {
       // Don't write to attributes yet, store in changes for now.
       if (this.attributes[name] === value) {
@@ -86,7 +86,7 @@ Model.InstanceMethods = {
   },
 
   merge: function(attributes) {
-    jQuery.extend(this.attributes, attributes);
+    Model.Utils.extend(this.attributes, attributes);
     return this;
   },
 

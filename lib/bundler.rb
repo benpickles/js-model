@@ -38,6 +38,7 @@ class Bundler
           model_module
           model_rest
           model_uid
+          model_utils
           model_version
           model_base
         )

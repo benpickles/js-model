@@ -11,7 +11,7 @@ Model.REST = function(klass, resource, methods) {
     return resource_param_names
   })()
 
-  return jQuery.extend({
+  return Model.Utils.extend({
 		path: function(model) {
       var path = resource;
       jQuery.each(resource_param_names, function(i, param) {
@@ -47,7 +47,7 @@ Model.REST = function(klass, resource, methods) {
         params = null;
       }
       if(jQuery.ajaxSettings.data){
-        params = jQuery.extend({}, jQuery.ajaxSettings.data, params)
+        params = Model.Utils.extend({}, jQuery.ajaxSettings.data, params)
       }
       return JSON.stringify(params)
     },
