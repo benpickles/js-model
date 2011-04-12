@@ -30,14 +30,14 @@ Model.localStorage = function(klass) {
   var addToIndex = function(uid) {
     var uids = readIndex()
 
-    if (jQuery.inArray(uid, uids) === -1) {
+    if (Model.Utils.inArray(uids, uid) === -1) {
       uids.push(uid)
       writeIndex(uids)
     }
   }
   var removeFromIndex = function(uid) {
     var uids = readIndex()
-    var index = jQuery.inArray(uid, uids)
+    var index = Model.Utils.inArray(uids, uid)
 
     if (index > -1) {
       uids.splice(index, 1)
@@ -72,7 +72,7 @@ Model.localStorage = function(klass) {
       for (var i = 0, length = uids.length; i < length; i++) {
         uid = uids[i]
 
-        if (jQuery.inArray(uid, existing_uids) == -1) {
+        if (Model.Utils.inArray(existing_uids, uid) == -1) {
           attributes = JSON.parse(localStorage[uid])
           model = new klass(attributes)
           model.uid = uid

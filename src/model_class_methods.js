@@ -2,7 +2,7 @@ Model.ClassMethods = {
   add: function(model) {
     var id = model.id()
 
-    if (jQuery.inArray(model, this.collection) === -1 && !(id && this.find(id))) {
+    if (Model.Utils.inArray(this.collection, model) === -1 && !(id && this.find(id))) {
       this.collection.push(model)
       this.trigger("add", [model])
     }
