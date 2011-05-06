@@ -1,4 +1,8 @@
-Model.ClassMethods = {
+Model.Klass = function() {}
+
+Model.Klass.prototype = {
+  unique_key: "id",
+
   add: function(model) {
     var id = model.id()
 
@@ -16,7 +20,7 @@ Model.ClassMethods = {
 
   // Convenience method to allow a simple method of chaining class methods.
   chain: function(collection) {
-    return Model.Utils.extend({}, this, { collection: collection })
+    return new this.constructor(collection)
   },
 
   count: function() {
@@ -43,6 +47,11 @@ Model.ClassMethods = {
     return this;
   },
 
+  extend: function(obj) {
+    Model.Utils.extend(this.constructor.prototype, obj)
+    return this
+  },
+
   find: function(id) {
     return this.detect(function() {
       return this.id() == id;
@@ -51,6 +60,18 @@ Model.ClassMethods = {
 
   first: function() {
     return this.all()[0]
+  },
+
+  include: function(obj) {
+    Model.Utils.extend(this._instance.prototype, obj)
+    return this
+  },
+
+  instance: function(attributes) {
+    var instance = new this._instance(attributes)
+    instance._klass = this
+    if (Model.Utils.isFunction(instance.initialize)) instance.initialize()
+    return instance
   },
 
   load: function(callback) {
@@ -175,3 +196,5 @@ Model.ClassMethods = {
     return this
   }
 };
+
+Model.Utils.extend(Model.Klass.prototype, Model.Callbacks)

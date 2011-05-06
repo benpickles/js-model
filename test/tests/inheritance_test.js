@@ -1,18 +1,34 @@
 module("Model inheritance")
 
-test("methods added to Model.Base after an instance has been defined", function() {
+test("methods added to Klass after declaration can be called", function() {
   var Post = Model("post")
-  var post = new Post({ title: "upper" })
+
+  ok(Post.hello === undefined)
+
+  Model.Klass.prototype.hello = function() {
+    return "hello"
+  }
+
+  equal("hello", Post.hello())
+
+  delete Model.Klass.prototype.hello
+
+  ok(Post.hello === undefined)
+})
+
+test("methods added to Instance after an instance has been defined can be called", function() {
+  var Post = Model("post")
+  var post = Post.instance({ title: "upper" })
 
   ok(post.attrUpper === undefined)
 
-  Model.Base.prototype.attrUpper = function(attr) {
+  Model.Instance.prototype.attrUpper = function(attr) {
     return this.attr(attr).toUpperCase()
   }
 
   equal("UPPER", post.attrUpper("title"))
 
-  delete Model.Base.prototype.attrUpper
+  delete Model.Instance.prototype.attrUpper
 
   ok(post.attrUpper === undefined)
 })

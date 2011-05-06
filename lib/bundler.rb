@@ -29,18 +29,16 @@ class Bundler
       def files
         @files ||= %w(
           model
+          model_utils
           model_callbacks
-          model_class_methods
           model_errors
-          model_instance_methods
+          model_instance
+          model_klass
           model_local_storage
           model_log
-          model_module
           model_rest
           model_uid
-          model_utils
           model_version
-          model_base
         )
       end
 

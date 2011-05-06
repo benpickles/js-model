@@ -34,7 +34,7 @@ test("create with named params in resource path", function() {
   var Post = Model("post", function() {
     this.persistence(Model.REST, "/root/:root_id/nested/:nested_id/posts")
   });
-  var post = new Post({ title: "Nested", body: "...", root_id: 3, nested_id: 2 });
+  var post = Post.instance({ title: "Nested", body: "...", root_id: 3, nested_id: 2 });
 
   AjaxSpy.start();
   stop();
@@ -56,7 +56,7 @@ test("update with named params in resource path", function() {
   var Post = Model("post", function() {
     this.persistence(Model.REST, "/root/:root_id/nested/:nested_id/posts")
   });
-  var post = new Post({ id: 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
+  var post = Post.instance({ id: 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
   post.attr("title", "Nested amended");
 
   AjaxSpy.start();
@@ -80,7 +80,7 @@ test("update with custom unique_key field", function() {
     this.unique_key = '_id'
     this.persistence(Model.REST, "/root/:root_id/nested/:nested_id/posts")
   });
-  var post = new Post({ '_id': 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
+  var post = Post.instance({ '_id': 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
 
   AjaxSpy.start();
   stop();
@@ -100,7 +100,7 @@ test("destroy with named params in resource path", function() {
   var Post = Model("post", function() {
     this.persistence(Model.REST, "/root/:root_id/nested/:nested_id/posts")
   });
-  var post = new Post({ id: 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
+  var post = Post.instance({ id: 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
 
   AjaxSpy.start();
   stop();
@@ -123,7 +123,7 @@ test("create", function() {
   var Post = Model("post", function() {
     this.persistence(Model.REST, "/posts")
   });
-  var post = new Post({ title: "Foo", body: "..." });
+  var post = Post.instance({ title: "Foo", body: "..." });
 
   equal(Post.count(), 0);
 
@@ -153,7 +153,7 @@ test("create - 422 response (failed validations)", function() {
   var Post = Model("post", function() {
     this.persistence(Model.REST, "/posts-validations")
   });
-  var post = new Post();
+  var post = Post.instance();
   post.attr("title", "Foo");
 
   stop();
@@ -172,7 +172,7 @@ test("create failure", function() {
   var Post = Model("post", function() {
     this.persistence(Model.REST, "/posts-failure")
   });
-  var post = new Post();
+  var post = Post.instance();
   post.attr({ title: "Foo", body: "..." });
 
   equal(Post.count(), 0);
@@ -199,7 +199,7 @@ test("create with AjaxSetup", function() {
   var Post = Model("post", function() {
     this.persistence(Model.REST, "/posts")
   });
-  var post = new Post({ title: "Foo", body: "..." });
+  var post = Post.instance({ title: "Foo", body: "..." });
 
   equal(Post.count(), 0);
 
@@ -225,7 +225,7 @@ test("update", function() {
   var Post = Model("post", function() {
     this.persistence(Model.REST, "/posts")
   });
-  var post = new Post({ id: 1, title: "Foo", body: "..." });
+  var post = Post.instance({ id: 1, title: "Foo", body: "..." });
   post.attr("title", "Bar");
 
   AjaxSpy.start();
@@ -252,7 +252,7 @@ test("update - blank response (Rails' `head :ok`)", function() {
   var Post = Model("post", function() {
     this.persistence(Model.REST, "/posts-empty-response")
   });
-  var post = new Post({ id: 1, title: "Foo", body: "..." });
+  var post = Post.instance({ id: 1, title: "Foo", body: "..." });
   post.attr("title", "Bar");
 
   stop();
@@ -279,7 +279,7 @@ test("update - 422 response (failed validations)", function() {
   var Post = Model("post", function() {
     this.persistence(Model.REST, "/posts-validations")
   });
-  var post = new Post({ id: 1 });
+  var post = Post.instance({ id: 1 });
   post.attr("title", "Foo");
 
   stop();
@@ -298,7 +298,7 @@ test("update failure", function() {
   var Post = Model("post", function() {
     this.persistence(Model.REST, "/posts-failure")
   });
-  var post = new Post({ id: 1, title: "Foo" });
+  var post = Post.instance({ id: 1, title: "Foo" });
   post.attr("title", "Bar");
 
   stop();
@@ -316,7 +316,7 @@ test("destroy", function() {
   var Post = Model("post", function() {
     this.persistence(Model.REST, "/posts")
   });
-  var post = new Post({ id: 1, title: "Foo", body: "..." });
+  var post = Post.instance({ id: 1, title: "Foo", body: "..." });
 
   AjaxSpy.start();
 
@@ -340,7 +340,7 @@ test("destroy failure", function() {
   var Post = Model("post", function() {
     this.persistence(Model.REST, "/posts-failure")
   });
-  var post = new Post({ id: 1, title: "Foo" });
+  var post = Post.instance({ id: 1, title: "Foo" });
 
   Post.add(post);
 
@@ -360,7 +360,7 @@ test("destroy - 422 response (failed validations)", function() {
   var Post = Model("post", function() {
     this.persistence(Model.REST, "/posts-validations")
   });
-  var post = new Post({ id: 1, title: "Foo" });
+  var post = Post.instance({ id: 1, title: "Foo" });
 
   stop();
 
@@ -373,18 +373,17 @@ test("destroy - 422 response (failed validations)", function() {
 });
 
 test("events", function() {
-  var Post = Model("post", function() {
+  var Post = Model("post", function(klass, instance) {
     this.persistence(Model.REST, "/posts")
+
+    // Stub trigger and capture its argument.
+    instance.trigger = function(name) {
+      events.push(name);
+    }
   });
 
   var events = [];
-
-  // Stub trigger and capture its argument.
-  Post.prototype.trigger = function(name) {
-    events.push(name);
-  };
-
-  var post = new Post();
+  var post = Post.instance()
 
   stop();
 

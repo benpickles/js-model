@@ -1,4 +1,6 @@
-Model.InstanceMethods = {
+Model.Instance = function() {}
+
+Model.Instance.prototype = {
   asJSON: function() {
     return this.attr()
   },
@@ -32,13 +34,14 @@ Model.InstanceMethods = {
 
   callPersistMethod: function(method, callback) {
     var self = this;
+    var klass = this._klass
 
     // Automatically manage adding and removing from the model's Collection.
     var manageCollection = function() {
       if (method === "destroy") {
-        self.constructor.remove(self)
+        klass.remove(self)
       } else {
-        self.constructor.add(self)
+        klass.add(self)
       }
     };
 
@@ -69,8 +72,8 @@ Model.InstanceMethods = {
       return value;
     };
 
-    if (this.constructor._persistence) {
-      this.constructor._persistence[method](this, wrappedCallback);
+    if (klass._persistence) {
+      klass._persistence[method](this, wrappedCallback);
     } else {
       wrappedCallback.call(this, true);
     }
@@ -82,7 +85,7 @@ Model.InstanceMethods = {
   },
 
   id: function() {
-    return this.attributes[this.constructor.unique_key];
+    return this.attributes[this._klass.unique_key];
   },
 
   merge: function(attributes) {
@@ -121,3 +124,5 @@ Model.InstanceMethods = {
     return this;
   }
 };
+
+Model.Utils.extend(Model.Instance.prototype, Model.Callbacks)

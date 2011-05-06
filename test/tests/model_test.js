@@ -4,18 +4,18 @@ test("defining attributes when instanciating a model", function() {
   var Post = Model("post")
   var post
 
-  post = new Post(undefined)
+  post = Post.instance(undefined)
   deepEqual({}, post.attributes)
 
   var attributes = { a: "a", b: "b" }
-  post = new Post(attributes)
+  post = Post.instance(attributes)
   attributes.a = "b"
   deepEqual("a", post.attributes.a)
 })
 
 test("attr, attributes, changes, reset, save, destroy", function() {
   var Post = Model("post");
-  var post = new Post({ title: "Foo", body: "..." });
+  var post = Post.instance({ title: "Foo", body: "..." });
 
   deepEqual(post.attributes, { title: "Foo", body: "..." });
   deepEqual(post.changes, {});
@@ -83,25 +83,23 @@ test("attr, attributes, changes, reset, save, destroy", function() {
 });
 
 test("custom methods", function() {
-  var Post = Model("post", function(klass, proto) {
+  var Post = Model("post", function(klass, instance) {
     this.foo = function() { return "foo" }
     klass.bar = function() { return "bar" }
-    proto.foo = function() { return "foo" }
-    this.prototype.bar = function() { return "bar" }
+    instance.foo = function() { return "foo" }
   })
 
   equal(Post.foo(), "foo");
   equal(Post.bar(), "bar");
 
-  var post = new Post();
+  var post = Post.instance();
 
   equal(post.foo(), "foo");
-  equal(post.bar(), "bar");
 });
 
 test("valid, validate, errors", function() {
-  var Post = Model("post", function() {
-    this.prototype.validate = function() {
+  var Post = Model("post", function(klass, instance) {
+    instance.validate = function() {
       if (!/\S/.test(this.attr("body") || ""))
         this.errors.add("body", "can't be blank");
 
@@ -112,7 +110,7 @@ test("valid, validate, errors", function() {
     }
   });
 
-  var post = new Post();
+  var post = Post.instance();
 
   ok(!post.valid());
   equal(post.errors.size(), 2);
@@ -158,7 +156,7 @@ test('model collection "class" methods', function() {
 
   ok(Post.first() === undefined, "collection starts empty");
 
-  var post = new Post();
+  var post = Post.instance();
   ok(Post.first() === undefined, "collection is unaffected");
 
   post.save();
@@ -202,7 +200,7 @@ test("persistence", function() {
     return "callback";
   };
 
-  post = new Post();
+  post = Post.instance();
   post.save(callback);
   post.attributes.id = 1;
   post.save(callback);
@@ -239,11 +237,11 @@ test("persistence failure", function() {
   var events = [];
 
   // Stub trigger and capture its argument.
-  Post.prototype.trigger = function(name) {
+  Post.trigger = function(name) {
     events.push(name);
   };
 
-  var post = new Post();
+  var post = Post.instance();
   post.save();
 
   deepEqual(events, [], "should not trigger create event if persistence failed");
@@ -260,20 +258,20 @@ test("persistence failure", function() {
 });
 
 test("#initialize", function() {
-  var Post = Model("post", function() {
-    this.prototype.initialize = function() {
+  var Post = Model("post", function(klass, instance) {
+    instance.initialize = function() {
       this.initialized = true
     }
   })
 
-  var post = new Post()
+  var post = Post.instance()
 
   ok(post.initialized)
 })
 
 test("saving a model with an id should add it to the collection if it isn't already present", function() {
   var Post = Model("post")
-  var post = new Post({ id: 1 }).save()
+  var post = Post.instance({ id: 1 }).save()
 
   ok(Post.first() === post)
 })

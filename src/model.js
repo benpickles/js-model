@@ -1,27 +1,27 @@
 var Model = function(name, func) {
-  // The model constructor.
-  var model = function(attributes) {
+  var Instance = function(attributes) {
     this.attributes = Model.Utils.extend({}, attributes)
-    this.changes = {};
-    this.errors = new Model.Errors(this);
+    this.changes = {}
+    this.errors = new Model.Errors(this)
     this.uid = [name, Model.UID.generate()].join("-")
-    if (Model.Utils.isFunction(this.initialize)) this.initialize()
-  };
+  }
 
-  // Use module functionality to extend itself onto the constructor. Meta!
-  Model.Module.extend.call(model, Model.Module)
+  Instance.prototype = new Model.Instance
+  Instance.prototype.constructor = Instance
 
-  model._name = name
-  model.collection = []
-  model.unique_key = "id"
-  model
-    .extend(Model.Callbacks)
-    .extend(Model.ClassMethods)
+  var Klass = function(collection) {
+    this.collection = collection || []
+  }
 
-  model.prototype = new Model.Base
-  model.prototype.constructor = model
+  Klass.prototype = new Model.Klass
+  Klass.prototype.constructor = Klass
+  Klass.prototype._instance = Instance
+  Klass.prototype._name = name
 
-  if (Model.Utils.isFunction(func)) func.call(model, model, model.prototype)
+  var klass = new Klass()
 
-  return model;
+  if (Model.Utils.isFunction(func))
+    func.call(klass, Klass.prototype, Instance.prototype)
+
+  return klass
 };

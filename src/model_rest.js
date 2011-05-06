@@ -40,9 +40,9 @@ Model.REST = function(klass, resource, methods) {
       var params;
       if (model) {
         var attributes = model.asJSON()
-        delete attributes[model.constructor.unique_key];
+        delete attributes[model._klass.unique_key];
         params = {};
-        params[model.constructor._name.toLowerCase()] = attributes;
+        params[model._klass._name.toLowerCase()] = attributes;
       } else {
         params = null;
       }
@@ -58,7 +58,7 @@ Model.REST = function(klass, resource, methods) {
         var models = []
 
         for (var i = 0, length = data.length; i < length; i++) {
-          models.push(new klass(data[i]))
+          models.push(new klass._instance(data[i]))
         }
 
         callback(models)

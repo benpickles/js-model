@@ -4,28 +4,28 @@ test("class-level", function() {
   var Post = Model('post');
   var results = [];
 
-  var post1 = new Post({ id: 1 });
-  var post2 = new Post({ id: 2 });
-  var post3 = new Post({ id: 3 });
+  var post1 = Post.instance({ id: 1 });
+  var post2 = Post.instance({ id: 2 });
+  var post3 = Post.instance({ id: 3 });
 
   Post.bind("add", function(model) {
-    results.push(this);
+    ok(this === Post)
     results.push("add");
     results.push(model.id())
   });
 
   Post.bind("remove", function(model) {
-    results.push(this);
+    ok(this === Post)
     results.push("remove");
     results.push(model.id())
   })
 
   Post.bind("custom", function(model) {
-    results.push(this);
+    ok(this === Post)
     results.push("custom");
     results.push(model.id())
   }).bind("custom", function() {
-    results.push(this);
+    ok(this === Post)
     results.push("custom-2");
   })
 
@@ -43,12 +43,12 @@ test("class-level", function() {
   Post.trigger("custom",[post1]);
 
   deepEqual(results, [
-    Post, "add", 1,
-    Post, "add", 2,
-    Post, "add", 3,
-    Post, "remove", 1,
-    Post, "custom", 1,
-    Post, "custom-2"
+    "add", 1,
+    "add", 2,
+    "add", 3,
+    "remove", 1,
+    "custom", 1,
+    "custom-2"
   ]);
 });
 
@@ -57,7 +57,7 @@ test("instance-level", function() {
   var models = []
   var results = [];
 
-  var post = new Post({ title: "Foo", body: "..." });
+  var post = Post.instance({ title: "Foo", body: "..." });
 
   post.bind("create", function() {
     models.push(this);
@@ -105,8 +105,8 @@ test("instance-level", function() {
 test('instance events should only trigger on a specific instance', function () {
   var Post = Model('post')
 
-  var foo = new Post({title: 'foo'})
-  var bar = new Post({title: 'bar'})
+  var foo = Post.instance({title: 'foo'})
+  var bar = Post.instance({title: 'bar'})
 
   var triggered = false
 
@@ -125,7 +125,7 @@ test("unbind all callbacks for an event", function() {
   var Post = Model("post");
   var results = [];
 
-  var post = new Post({ title: "Foo", body: "..." });
+  var post = Post.instance({ title: "Foo", body: "..." });
 
   post.bind("create", function() {
     results.push("create");
@@ -160,7 +160,7 @@ test("unbind a specific event callback by function", function() {
     results.push("bad");
   };
 
-  var post = new Post();
+  var post = Post.instance();
 
   post.bind("custom", callback).bind("custom", function() {
     results.push("good");

@@ -1,11 +1,11 @@
-module("Model.ClassMethods");
+module("Model.Klass")
 
 test("all, count, find, first, add, remove", function() {
   var Post = Model('post');
 
-  var post1 = new Post({ id: 1 });
-  var post2 = new Post({ id: 2 });
-  var post3 = new Post({ id: 3 });
+  var post1 = Post.instance({ id: 1 });
+  var post2 = Post.instance({ id: 2 });
+  var post3 = Post.instance({ id: 3 });
 
   deepEqual(Post.all(), []);
   equal(Post.count(), 0);
@@ -38,9 +38,9 @@ test("all, count, find, first, add, remove", function() {
 test("detect, select, first, last, count (with chaining)", function() {
   var Post = Model('post');
 
-  var post1 = new Post({ id: 1, title: "Foo" });
-  var post2 = new Post({ id: 2, title: "Bar" });
-  var post3 = new Post({ id: 3, title: "Bar" });
+  var post1 = Post.instance({ id: 1, title: "Foo" });
+  var post2 = Post.instance({ id: 2, title: "Bar" });
+  var post3 = Post.instance({ id: 3, title: "Bar" });
 
   Post.add(post1).add(post2).add(post3)
 
@@ -130,9 +130,9 @@ test("detect, select, first, last, count (with chaining)", function() {
 test("each (and chaining)", function() {
   var Post = Model('post');
 
-  var post1 = new Post({ id: 1, title: "Foo" });
-  var post2 = new Post({ id: 2, title: "Bar" });
-  var post3 = new Post({ id: 3, title: "Baz" });
+  var post1 = Post.instance({ id: 1, title: "Foo" });
+  var post2 = Post.instance({ id: 2, title: "Bar" });
+  var post3 = Post.instance({ id: 3, title: "Baz" });
 
   Post.add(post1).add(post2).add(post3)
 
@@ -178,11 +178,11 @@ test("each (and chaining)", function() {
 test("collection should be protected from accidental modification", function() {
   var Post = Model('post')
 
-  var post1 = new Post({ category_id: 2 })
-  var post2 = new Post({ category_id: 1 })
-  var post3 = new Post({ category_id: 2 })
-  var post4 = new Post({ category_id: 1 })
-  var post5 = new Post({ category_id: 2 })
+  var post1 = Post.instance({ category_id: 2 })
+  var post2 = Post.instance({ category_id: 1 })
+  var post3 = Post.instance({ category_id: 2 })
+  var post4 = Post.instance({ category_id: 1 })
+  var post5 = Post.instance({ category_id: 2 })
 
   Post.collection = [post1, post2, post3, post4, post5]
 
@@ -211,10 +211,10 @@ test("collection should be protected from accidental modification", function() {
 test(".pluck", function() {
   var Post = Model('post')
 
-  var post1 = new Post({ id: 1, title: "a" })
-  var post2 = new Post({ id: 2, title: "b" })
-  var post3 = new Post({ id: 3, title: "c" })
-  var post4 = new Post({ id: 4, title: "d" })
+  var post1 = Post.instance({ id: 1, title: "a" })
+  var post2 = Post.instance({ id: 2, title: "b" })
+  var post3 = Post.instance({ id: 3, title: "c" })
+  var post4 = Post.instance({ id: 4, title: "d" })
 
   Post.add(post1).add(post2).add(post3).add(post4)
 
@@ -225,10 +225,10 @@ test(".pluck", function() {
 test("sort (and chaining)", function() {
   var Post = Model('post');
 
-  var post1 = new Post({ number: 4, title: "bcd" });
-  var post2 = new Post({ number: 3, title: "xyz" });
-  var post3 = new Post({ number: 2, title: "Acd" });
-  var post4 = new Post({ number: 1, title: "abc" });
+  var post1 = Post.instance({ number: 4, title: "bcd" });
+  var post2 = Post.instance({ number: 3, title: "xyz" });
+  var post3 = Post.instance({ number: 2, title: "Acd" });
+  var post4 = Post.instance({ number: 1, title: "abc" });
 
   Post.add(post1).add(post2).add(post3).add(post4)
 
@@ -262,9 +262,9 @@ test("Custom `all` method", function() {
       return not_deleted
     }
   });
-  var post1 = new Post({ id: 1, deleted: false })
-  var post2 = new Post({ id: 2, deleted: true })
-  var post3 = new Post({ id: 3, deleted: false })
+  var post1 = Post.instance({ id: 1, deleted: false })
+  var post2 = Post.instance({ id: 2, deleted: true })
+  var post3 = Post.instance({ id: 3, deleted: false })
 
   Post.add(post1).add(post2).add(post3)
 
@@ -278,19 +278,19 @@ test("Custom `all` method", function() {
 });
 
 test("Custom method with chaining, then more chaining", function() {
-  var Post = Model("post", function() {
-    this.not_first = function() {
+  var Post = Model("post", function(klass) {
+    klass.not_first = function() {
       return this.chain(this.all().slice(1));
     },
 
-    this.not_last = function() {
+    klass.not_last = function() {
       return this.chain(this.all().slice(0, this.collection.length - 1));
     }
   });
-  var post1 = new Post({ id: 1 });
-  var post2 = new Post({ id: 2 });
-  var post3 = new Post({ id: 3 });
-  var post4 = new Post({ id: 4 });
+  var post1 = Post.instance({ id: 1 });
+  var post2 = Post.instance({ id: 2 });
+  var post3 = Post.instance({ id: 3 });
+  var post4 = Post.instance({ id: 4 });
 
   Post.add(post1).add(post2).add(post3).add(post4)
 
@@ -305,8 +305,8 @@ test("load", function() {
     return {
       read: function(callback) {
         callback([
-          new Post({ a: 1 }),
-          new Post({ b: 2 })
+          Post.instance({ a: 1 }),
+          Post.instance({ b: 2 })
         ])
       }
     }
@@ -328,8 +328,8 @@ test("load", function() {
 
 test("reverse", function() {
   var Post = Model("post")
-  var post1 = new Post()
-  var post2 = new Post()
+  var post1 = Post.instance()
+  var post2 = Post.instance()
 
   Post.add(post1).add(post2)
 
@@ -338,9 +338,9 @@ test("reverse", function() {
 
 test("map", function() {
   var Post = Model("post")
-  var post1 = new Post({ id: 1, title: "egg" })
-  var post2 = new Post({ id: 2, title: "ham" })
-  var post3 = new Post({ id: 3, title: "cheese" })
+  var post1 = Post.instance({ id: 1, title: "egg" })
+  var post2 = Post.instance({ id: 2, title: "ham" })
+  var post3 = Post.instance({ id: 3, title: "cheese" })
 
   Post.add(post1).add(post2).add(post3)
 
@@ -360,4 +360,30 @@ test("map", function() {
   Post.map(function() {
     ok(this === obj)
   }, obj)
+})
+
+test("extend", function() {
+  var A = Model("A")
+  var B = Model("B")
+  var module = {
+    greet: function() { return "Hi " + this._name }
+  }
+  A.extend(module)
+  B.extend(module)
+
+  equal(A.greet(), "Hi A")
+  equal(B.greet(), "Hi B")
+})
+
+test("include", function() {
+  var A = Model("A")
+  var B = Model("B")
+  var module = {
+    greet: function() { return "Hi " + this.attr("name") }
+  }
+  A.include(module)
+  B.include(module)
+
+  equal(A.instance({ name: "a" }).greet(), "Hi a")
+  equal(B.instance({ name: "b" }).greet(), "Hi b")
 })

@@ -49,7 +49,7 @@ if (window.localStorage) {
     equal(Post.count(), 0)
     equal(localStorage.length, 0)
 
-    var post = new Post({ title: "foo", foo: "bar" })
+    var post = Post.instance({ title: "foo", foo: "bar" })
     post.save()
 
     equal(Post.count(), 1)
@@ -98,7 +98,7 @@ if (window.localStorage) {
 
     equal(Post.count(), 0)
 
-    var post = new Post({ title: "foo", foo: "bar" })
+    var post = Post.instance({ title: "foo", foo: "bar" })
     post.save()
 
     equal(Post.count(), 1)

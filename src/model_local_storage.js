@@ -74,7 +74,7 @@ Model.localStorage = function(klass) {
 
         if (Model.Utils.inArray(existing_uids, uid) == -1) {
           attributes = JSON.parse(localStorage[uid])
-          model = new klass(attributes)
+          model = new klass._instance(attributes)
           model.uid = uid
           models.push(model)
         }
