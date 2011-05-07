@@ -283,12 +283,12 @@ Returns the collection sorted by either an attribute or a custom function.
     }).all()
     // => [egg, ham, cheese]
 
-#### `unique_id`
+#### `unique_key`
 
-`unique_id` refers to the attribute that holds the "primary key" and defaults to `"id"`. It's useful when using with something like MongoDB.
+`unique_key` refers to the attribute that holds the "primary key" and defaults to `"id"`. It's useful when using with something like MongoDB.
 
     Project = Model("project", function() {
-      this.unique_id = "_id"
+      this.unique_key = "_id"
     })
 
     project = new Project({ _id: "qwerty" })

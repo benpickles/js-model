@@ -89,7 +89,7 @@ _gaq.push(['_trackPageview']);
 <li><a href="#select">select()</a></li>
 <li><a href="#sort">sort()</a></li>
 <li><a href="#sortby">sortBy()</a></li>
-<li><a href="#unique_id">unique_id</a></li>
+<li><a href="#unique_key">unique_key</a></li>
 <li><a href="#use">use()</a></li>
 </ol>
 </li>
@@ -692,12 +692,12 @@ _gaq.push(['_trackPageview']);
 <span class="p">}).</span><span class="nx">all</span><span class="p">()</span>
 <span class="c1">// =&gt; [egg, ham, cheese]</span></code></pre>
 
-<h4 id="unique_id"><code>unique_id</code></h4>
+<h4 id="unique_key"><code>unique_key</code></h4>
 
-<p><code>unique_id</code> refers to the attribute that holds the &ldquo;primary key&rdquo; and defaults to <code>"id"</code>. It&rsquo;s useful when using with something like MongoDB.</p>
+<p><code>unique_key</code> refers to the attribute that holds the &ldquo;primary key&rdquo; and defaults to <code>"id"</code>. It&rsquo;s useful when using with something like MongoDB.</p>
 
 <pre><code><span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">unique_id</span> <span class="o">=</span> <span class="s2">"_id"</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">unique_key</span> <span class="o">=</span> <span class="s2">"_id"</span>
 <span class="p">})</span>
 
 <span class="nx">project</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Project</span><span class="p">({</span> <span class="nx">_id</span><span class="o">:</span> <span class="s2">"qwerty"</span> <span class="p">})</span>
