@@ -236,11 +236,11 @@ _gaq.push(['_trackPageview']);
 
 <p>It is possible to bind to an event occurring when adding and removing an object to a collection.</p>
 
-<pre><code><span class="nx">Post</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s2">"add"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">new_object</span><span class="p">)</span> <span class="p">{</span>
+<pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s2">"add"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">new_object</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">add_object_to_ui</span><span class="p">(</span><span class="nx">new_object</span><span class="p">)</span>
 <span class="p">})</span>
 
-<span class="nx">Post</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s2">"remove"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">removed_object</span><span class="p">)</span> <span class="p">{</span>
+<span class="nx">Project</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s2">"remove"</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">removed_object</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">remove_object_from_ui</span><span class="p">(</span><span class="nx">removed_object</span><span class="p">)</span>
 <span class="p">})</span></code></pre>
 
@@ -248,13 +248,15 @@ _gaq.push(['_trackPageview']);
 
 <p>Parts of your application can be bound to changes which happen to a specific instance:</p>
 
-<pre><code><span class="nx">post</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s2">"update"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<pre><code><span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="nx">Project</span><span class="p">.</span><span class="nx">first</span><span class="p">()</span>
+
+<span class="nx">project</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s2">"update"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="nx">my_ui_elem</span><span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">))</span>
 <span class="p">})</span></code></pre>
 
 <p>Including when the instance is destroyed:</p>
 
-<pre><code><span class="nx">post</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s2">"remove"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<pre><code><span class="nx">project</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s2">"destroy"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="nx">my_ui_elem</span><span class="p">.</span><span class="nx">remove</span><span class="p">()</span>
 <span class="p">})</span></code></pre>
 
@@ -262,11 +264,11 @@ _gaq.push(['_trackPageview']);
 
 <p>You might also want to have custom events on objects which might be linked up to a UI element.</p>
 
-<pre><code><span class="nx">post</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s2">"turn_blue"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<pre><code><span class="nx">project</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s2">"turn_blue"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="nx">my_ui_elem</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s2">"background"</span><span class="p">,</span> <span class="s2">"blue"</span><span class="p">)</span>
 <span class="p">})</span>
 
-<span class="nx">post</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">"turn_blue"</span><span class="p">)</span></code></pre>
+<span class="nx">project</span><span class="p">.</span><span class="nx">trigger</span><span class="p">(</span><span class="s2">"turn_blue"</span><span class="p">)</span></code></pre>
 
 <h3 id="validations">Validations</h3>
 

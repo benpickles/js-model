@@ -103,11 +103,11 @@ js-model allows you to listen to the lifecycle of objects based on the events th
 
 It is possible to bind to an event occurring when adding and removing an object to a collection.
 
-    Post.bind("add", function(new_object) {
+    Project.bind("add", function(new_object) {
       add_object_to_ui(new_object)
     })
 
-    Post.bind("remove", function(removed_object) {
+    Project.bind("remove", function(removed_object) {
       remove_object_from_ui(removed_object)
     })
 
@@ -115,13 +115,15 @@ It is possible to bind to an event occurring when adding and removing an object 
 
 Parts of your application can be bound to changes which happen to a specific instance:
 
-    post.bind("update", function() {
+    var project = Project.first()
+
+    project.bind("update", function() {
       my_ui_elem.text(this.attr("name"))
     })
 
 Including when the instance is destroyed:
 
-    post.bind("remove", function() {
+    project.bind("destroy", function() {
       my_ui_elem.remove()
     })
 
@@ -129,11 +131,11 @@ Including when the instance is destroyed:
 
 You might also want to have custom events on objects which might be linked up to a UI element.
 
-    post.bind("turn_blue", function() {
+    project.bind("turn_blue", function() {
       my_ui_elem.css("background", "blue")
     })
 
-    post.trigger("turn_blue")
+    project.trigger("turn_blue")
 
 ### Validations
 
