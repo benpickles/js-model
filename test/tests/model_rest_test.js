@@ -36,20 +36,18 @@ test("create with named params in resource path", function() {
   });
   var post = new Post({ title: "Nested", body: "...", root_id: 3, nested_id: 2 });
 
-  AjaxSpy.start();
   stop();
+
+  this.spy(jQuery, "ajax")
 
   post.save(function(success) {
     ok(success);
     start();
   });
 
-  equal(AjaxSpy.requests.length, 1, "one request should have been made");
-
-  var request = AjaxSpy.requests.shift();
-  
-  equal(request.type, "POST");
-  equal(request.url, "/root/3/nested/2/posts");
+  ok(jQuery.ajax.calledOnce)
+  equal(jQuery.ajax.getCall(0).args[0].type, "POST")
+  equal(jQuery.ajax.getCall(0).args[0].url, "/root/3/nested/2/posts")
 });
 
 test("update with named params in resource path", function() {
@@ -59,20 +57,18 @@ test("update with named params in resource path", function() {
   var post = new Post({ id: 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
   post.attr("title", "Nested amended");
 
-  AjaxSpy.start();
   stop();
+
+  this.spy(jQuery, "ajax")
 
   post.save(function(success) {
     ok(success);
     start();
   });
 
-  equal(AjaxSpy.requests.length, 1, "one request should have been made");
-
-  var request = AjaxSpy.requests.shift();
-
-  equal(request.type, "PUT");
-  equal(request.url, "/root/3/nested/2/posts/1");
+  ok(jQuery.ajax.calledOnce)
+  equal(jQuery.ajax.getCall(0).args[0].type, "PUT")
+  equal(jQuery.ajax.getCall(0).args[0].url, "/root/3/nested/2/posts/1")
 });
 
 test("update with custom unique_key field", function() {
@@ -82,19 +78,20 @@ test("update with custom unique_key field", function() {
   });
   var post = new Post({ '_id': 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
 
-  AjaxSpy.start();
   stop();
+
+  this.spy(jQuery, "ajax")
 
   post.save(function(success) {
     ok(success);
     start();
   });
 
-  var request = AjaxSpy.requests.shift();
-
-  deepEqual(JSON.parse(request.data), {post: {title: 'Nested', body: "...", root_id: 3, nested_id: 2}});
+  ok(jQuery.ajax.calledOnce)
+  deepEqual(JSON.parse(jQuery.ajax.getCall(0).args[0].data), {
+    post: { title: 'Nested', body: "...", root_id: 3, nested_id: 2 }
+  })
 });
-
 
 test("destroy with named params in resource path", function() {
   var Post = Model("post", function() {
@@ -102,21 +99,21 @@ test("destroy with named params in resource path", function() {
   });
   var post = new Post({ id: 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
 
-  AjaxSpy.start();
   stop();
+
+  this.spy(jQuery, "ajax")
 
   post.destroy(function(success) {
     ok(success);
     start();
   });
 
-  equal(AjaxSpy.requests.length, 1, "one request should have been made");
-
-  var request = AjaxSpy.requests.shift();
-
-  equal(request.type, "DELETE");
-  equal(request.url, "/root/3/nested/2/posts/1");
-  deepEqual(JSON.parse(request.data), {post: {title: 'Nested', body: "...", root_id: 3, nested_id: 2}});
+  ok(jQuery.ajax.calledOnce)
+  equal(jQuery.ajax.getCall(0).args[0].type, "DELETE")
+  equal(jQuery.ajax.getCall(0).args[0].url, "/root/3/nested/2/posts/1")
+  deepEqual(JSON.parse(jQuery.ajax.getCall(0).args[0].data), {
+    post: { title: 'Nested', body: "...", root_id: 3, nested_id: 2 }
+  })
 });
 
 test("create", function() {
@@ -127,9 +124,9 @@ test("create", function() {
 
   equal(Post.count(), 0);
 
-  AjaxSpy.start();
-
   stop();
+
+  this.spy(jQuery, "ajax")
 
   post.save(function(success) {
     ok(success);
@@ -140,13 +137,12 @@ test("create", function() {
     start();
   });
 
-  equal(AjaxSpy.requests.length, 1, "one request should have been made");
-
-  var request = AjaxSpy.requests.shift();
-
-  equal(request.type, "POST");
-  equal(request.url, "/posts");
-  deepEqual(JSON.parse(request.data), { post: { title: "Foo", body: "..." } });
+  ok(jQuery.ajax.calledOnce)
+  equal(jQuery.ajax.getCall(0).args[0].type, "POST")
+  equal(jQuery.ajax.getCall(0).args[0].url, "/posts")
+  deepEqual(JSON.parse(jQuery.ajax.getCall(0).args[0].data), {
+    post: { title: "Foo", body: "..." }
+  })
 });
 
 test("create - 422 response (failed validations)", function() {
@@ -203,9 +199,9 @@ test("create with AjaxSetup", function() {
 
   equal(Post.count(), 0);
 
-  AjaxSpy.start();
-
   stop();
+
+  this.spy(jQuery, "ajax")
 
   post.save(function(success) {
     ok(success);
@@ -213,10 +209,10 @@ test("create with AjaxSetup", function() {
     start();
   });
 
-  equal(AjaxSpy.requests.length, 1, "one request should have been made");
-
-  var request = AjaxSpy.requests.shift();
-  deepEqual(JSON.parse(request.data), { socket_id: '111', post: { title: "Foo", body: "..." } });
+  ok(jQuery.ajax.calledOnce)
+  deepEqual(JSON.parse(jQuery.ajax.getCall(0).args[0].data), {
+    socket_id: "111", post: { title: "Foo", body: "..." }
+  })
 
   delete jQuery.ajaxSettings.data.socket_id
 });
@@ -228,9 +224,9 @@ test("update", function() {
   var post = new Post({ id: 1, title: "Foo", body: "..." });
   post.attr("title", "Bar");
 
-  AjaxSpy.start();
-
   stop();
+
+  this.spy(jQuery, "ajax")
 
   post.save(function(success) {
     ok(success);
@@ -239,13 +235,12 @@ test("update", function() {
     start();
   });
 
-  equal(AjaxSpy.requests.length, 1, "one request should have been made");
-
-  var request = AjaxSpy.requests.shift();
-
-  equal(request.type, "PUT");
-  equal(request.url, "/posts/1");
-  deepEqual(JSON.parse(request.data), { post: { title: "Bar", body: "..." } });
+  ok(jQuery.ajax.calledOnce)
+  equal(jQuery.ajax.getCall(0).args[0].type, "PUT")
+  equal(jQuery.ajax.getCall(0).args[0].url, "/posts/1")
+  deepEqual(JSON.parse(jQuery.ajax.getCall(0).args[0].data), {
+    post: { title: "Bar", body: "..." }
+  })
 });
 
 test("update - blank response (Rails' `head :ok`)", function() {
@@ -318,22 +313,21 @@ test("destroy", function() {
   });
   var post = new Post({ id: 1, title: "Foo", body: "..." });
 
-  AjaxSpy.start();
-
   stop();
+
+  this.spy(jQuery, "ajax")
 
   post.destroy(function(success) {
     ok(success);
     start();
   });
 
-  equal(AjaxSpy.requests.length, 1, "one request should have been made");
-
-  var request = AjaxSpy.requests.shift();
-
-  equal(request.type, "DELETE");
-  equal(request.url, "/posts/1");
-  deepEqual(JSON.parse(request.data), { post: { title: "Foo", body: "..." } });
+  ok(jQuery.ajax.calledOnce)
+  equal(jQuery.ajax.getCall(0).args[0].type, "DELETE")
+  equal(jQuery.ajax.getCall(0).args[0].url, "/posts/1")
+  deepEqual(JSON.parse(jQuery.ajax.getCall(0).args[0].data), {
+    post: { title: "Foo", body: "..." }
+  })
 });
 
 test("destroy failure", function() {
