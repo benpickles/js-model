@@ -1,9 +1,17 @@
 module("Model.REST");
 
-asyncTest("read", 3, function() {
+test("read()", 3, function() {
   var Post = Model("post", function() {
     this.persistence(Model.REST, "/posts")
   })
+
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("GET", "/posts", [200, {
+    "Content-Type": "application/json"
+  }, JSON.stringify([
+    { id: 1, title: "Bar" },
+    { id: 2, title: "Foo" }
+  ])])
 
   Post.persistence().read(function(models) {
     equal(models.length, 2)
@@ -13,21 +21,27 @@ asyncTest("read", 3, function() {
 
     deepEqual({ id: 1, title: "Bar" }, post1.attributes)
     deepEqual({ id: 2, title: "Foo" }, post2.attributes)
-
-    start()
   })
+
+  server.respond()
 })
 
-asyncTest("read", 2, function() {
+test("read() with a single instance", 2, function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts-single")
+    this.persistence(Model.REST, "/posts")
   })
+
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("GET", "/posts", [200, {
+    "Content-Type": "application/json"
+  }, JSON.stringify({ id: 1, title: "Bar" })])
 
   Post.persistence().read(function(models) {
     equal(models.length, 1)
     deepEqual({ id: 1, title: "Bar" }, models[0].attributes)
-    start()
   })
+
+  server.respond()
 })
 
 test("create with named params in resource path", function() {
@@ -36,18 +50,22 @@ test("create with named params in resource path", function() {
   });
   var post = new Post({ title: "Nested", body: "...", root_id: 3, nested_id: 2 });
 
-  stop();
-
   this.spy(jQuery, "ajax")
+
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("POST", "/root/3/nested/2/posts", [200, {
+    "Content-Type": "application/json"
+  }, JSON.stringify({ id: 1, title: "Foo" })])
 
   post.save(function(success) {
     ok(success);
-    start();
   });
 
   ok(jQuery.ajax.calledOnce)
   equal(jQuery.ajax.getCall(0).args[0].type, "POST")
   equal(jQuery.ajax.getCall(0).args[0].url, "/root/3/nested/2/posts")
+
+  server.respond()
 });
 
 test("update with named params in resource path", function() {
@@ -57,14 +75,20 @@ test("update with named params in resource path", function() {
   var post = new Post({ id: 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
   post.attr("title", "Nested amended");
 
-  stop();
-
   this.spy(jQuery, "ajax")
+
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("PUT", "/root/3/nested/2/posts/1", [200, {
+    "Content-Type": "application/json"
+  }, JSON.stringify({
+    id: 1, title: "Nested", body: "...", root_id: 3, nested_id: 2
+  })])
 
   post.save(function(success) {
     ok(success);
-    start();
   });
+
+  server.respond()
 
   ok(jQuery.ajax.calledOnce)
   equal(jQuery.ajax.getCall(0).args[0].type, "PUT")
@@ -74,23 +98,29 @@ test("update with named params in resource path", function() {
 test("update with custom unique_key field", function() {
   var Post = Model("post", function() {
     this.unique_key = '_id'
-    this.persistence(Model.REST, "/root/:root_id/nested/:nested_id/posts")
+    this.persistence(Model.REST, "/posts")
   });
-  var post = new Post({ '_id': 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
-
-  stop();
+  var post = new Post({ '_id': 1, title: "Foo" });
 
   this.spy(jQuery, "ajax")
 
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("PUT", "/posts/1", [200, {
+    "Content-Type": "application/json"
+  }, JSON.stringify({
+    _id: 1, title: "Foo"
+  })])
+
   post.save(function(success) {
     ok(success);
-    start();
   });
 
   ok(jQuery.ajax.calledOnce)
   deepEqual(JSON.parse(jQuery.ajax.getCall(0).args[0].data), {
-    post: { title: 'Nested', body: "...", root_id: 3, nested_id: 2 }
+    post: { title: "Foo" }
   })
+
+  server.respond()
 });
 
 test("destroy with named params in resource path", function() {
@@ -99,13 +129,15 @@ test("destroy with named params in resource path", function() {
   });
   var post = new Post({ id: 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
 
-  stop();
-
   this.spy(jQuery, "ajax")
+
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("DELETE", "/root/3/nested/2/posts/1", [200, {
+    "Content-Type": "application/json"
+  }, ' '])
 
   post.destroy(function(success) {
     ok(success);
-    start();
   });
 
   ok(jQuery.ajax.calledOnce)
@@ -114,6 +146,8 @@ test("destroy with named params in resource path", function() {
   deepEqual(JSON.parse(jQuery.ajax.getCall(0).args[0].data), {
     post: { title: 'Nested', body: "...", root_id: 3, nested_id: 2 }
   })
+
+  server.respond()
 });
 
 test("create", function() {
@@ -124,9 +158,14 @@ test("create", function() {
 
   equal(Post.count(), 0);
 
-  stop();
-
   this.spy(jQuery, "ajax")
+
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("POST", "/posts", [200, {
+    "Content-Type": "application/json"
+  }, JSON.stringify({
+    id: 1, title: "Foo amended", body: "...", foo: "bar"
+  })])
 
   post.save(function(success) {
     ok(success);
@@ -134,7 +173,6 @@ test("create", function() {
     deepEqual(post.attributes, { id: 1, title: "Foo amended", body: "...", foo: "bar" });
     equal(post.id(), 1);
     equal(Post.count(), 1);
-    start();
   });
 
   ok(jQuery.ajax.calledOnce)
@@ -143,16 +181,23 @@ test("create", function() {
   deepEqual(JSON.parse(jQuery.ajax.getCall(0).args[0].data), {
     post: { title: "Foo", body: "..." }
   })
+
+  server.respond()
 });
 
 test("create - 422 response (failed validations)", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts-validations")
+    this.persistence(Model.REST, "/posts")
   });
   var post = new Post();
   post.attr("title", "Foo");
 
-  stop();
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("POST", "/posts", [422, {
+    "Content-Type": "application/json"
+  }, JSON.stringify({
+    title: ['should not be "Foo"', 'should be "Bar"']
+  })])
 
   post.save(function(success) {
     ok(!success);
@@ -160,20 +205,24 @@ test("create - 422 response (failed validations)", function() {
     deepEqual(this.attributes, {}, "changes should not have been merged");
     deepEqual(this.attr(), { title: "Foo" });
     deepEqual(this.errors.on("title"), ['should not be "Foo"', 'should be "Bar"']);
-    start();
   });
+
+  server.respond()
 });
 
 test("create failure", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts-failure")
+    this.persistence(Model.REST, "/posts")
   });
   var post = new Post();
   post.attr({ title: "Foo", body: "..." });
 
   equal(Post.count(), 0);
 
-  stop();
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("POST", "/posts", [500, {
+    "Content-Type": "application/json"
+  }, 'bang'])
 
   post.save(function(success) {
     ok(!success);
@@ -181,8 +230,9 @@ test("create failure", function() {
     deepEqual(this.attributes, {}, "changes should not have been merged");
     deepEqual(this.attr(), { title: "Foo", body: "..." });
     equal(Post.count(), 0);
-    start();
   });
+
+  server.respond()
 });
 
 test("create with AjaxSetup", function() {
@@ -199,20 +249,24 @@ test("create with AjaxSetup", function() {
 
   equal(Post.count(), 0);
 
-  stop();
-
   this.spy(jQuery, "ajax")
+
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("POST", "/posts", [200, {
+    "Content-Type": "application/json"
+  }, JSON.stringify({ id: 1, title: "Foo", body: "..." })])
 
   post.save(function(success) {
     ok(success);
     ok(this === post);
-    start();
   });
 
   ok(jQuery.ajax.calledOnce)
   deepEqual(JSON.parse(jQuery.ajax.getCall(0).args[0].data), {
     socket_id: "111", post: { title: "Foo", body: "..." }
   })
+
+  server.respond()
 
   delete jQuery.ajaxSettings.data.socket_id
 });
@@ -224,15 +278,18 @@ test("update", function() {
   var post = new Post({ id: 1, title: "Foo", body: "..." });
   post.attr("title", "Bar");
 
-  stop();
-
   this.spy(jQuery, "ajax")
+
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("PUT", "/posts/1", [200, {
+    "Content-Type": "application/json"
+  }, JSON.stringify({ id: 1, title: "Bar amended", body: "..." })])
 
   post.save(function(success) {
     ok(success);
     ok(this === post);
-    deepEqual(post.attributes, { id: 1, title: "Bar amended", body: "..." });
-    start();
+    deepEqual(post.attributes, { id: 1, title: "Bar amended", body: "..." }, "changes should be applied")
+    deepEqual(post.changes, {})
   });
 
   ok(jQuery.ajax.calledOnce)
@@ -241,43 +298,60 @@ test("update", function() {
   deepEqual(JSON.parse(jQuery.ajax.getCall(0).args[0].data), {
     post: { title: "Bar", body: "..." }
   })
+
+  server.respond()
 });
 
 test("update - blank response (Rails' `head :ok`)", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts-empty-response")
+    this.persistence(Model.REST, "/posts")
   });
   var post = new Post({ id: 1, title: "Foo", body: "..." });
   post.attr("title", "Bar");
 
-  stop();
-
-  var old_log = Model.Log;
-  var logged = [];
-
-  Model.Log = function() {
-    logged.push(arguments);
-  };
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("PUT", "/posts/1", [200, {
+    "Content-Type": "application/json"
+  }, " "])
 
   post.save(function(success) {
-    deepEqual(logged, []);
-
-    post.destroy(function(success) {
-      deepEqual(logged, [])
-      start()
-      Model.Log = old_log
-    })
+    ok(success)
   });
+
+  server.respond()
+});
+
+test("destroy - blank response (Rails' `head :ok`)", function() {
+  var Post = Model("post", function() {
+    this.persistence(Model.REST, "/posts")
+  });
+  var post = new Post({ id: 1, title: "Foo", body: "..." });
+
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("DELETE", "/posts/1", [200, {
+    "Content-Type": "application/json"
+  }, " "])
+
+  post.destroy(function(success) {
+    ok(success)
+  })
+
+  server.respond()
 });
 
 test("update - 422 response (failed validations)", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts-validations")
+    this.persistence(Model.REST, "/posts")
   });
   var post = new Post({ id: 1 });
   post.attr("title", "Foo");
 
-  stop();
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("PUT", "/posts/1", [422, {
+    "Content-Type": "application/json"
+  }, JSON.stringify({
+    title: ['should not be "Foo"', 'should be "Bar"']
+  })])
 
   post.save(function(success) {
     ok(!success);
@@ -285,8 +359,9 @@ test("update - 422 response (failed validations)", function() {
     deepEqual(this.attributes, { id: 1 }, "changes should not have been merged");
     deepEqual(this.attr(), { id: 1, title: "Foo" });
     deepEqual(this.errors.on("title"), ['should not be "Foo"', 'should be "Bar"']);
-    start();
   });
+
+  server.respond()
 });
 
 test("update failure", function() {
@@ -296,15 +371,19 @@ test("update failure", function() {
   var post = new Post({ id: 1, title: "Foo" });
   post.attr("title", "Bar");
 
-  stop();
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("PUT", "/posts/1", [500, {
+    "Content-Type": "application/json"
+  }, "bang"])
 
   post.save(function(success) {
     ok(!success);
     ok(this === post);
     deepEqual(this.attributes, { id: 1, title: "Foo" }, "changes should not have been merged");
-    deepEqual(this.attr(), { id: 1, title: "Bar" });
-    start();
+    deepEqual(this.changes, { title: "Bar" });
   });
+
+  server.respond()
 });
 
 test("destroy", function() {
@@ -313,13 +392,15 @@ test("destroy", function() {
   });
   var post = new Post({ id: 1, title: "Foo", body: "..." });
 
-  stop();
-
   this.spy(jQuery, "ajax")
+
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("DELETE", "/posts/1", [200, {
+    "Content-Type": "application/json"
+  }, " "])
 
   post.destroy(function(success) {
     ok(success);
-    start();
   });
 
   ok(jQuery.ajax.calledOnce)
@@ -328,11 +409,13 @@ test("destroy", function() {
   deepEqual(JSON.parse(jQuery.ajax.getCall(0).args[0].data), {
     post: { title: "Foo", body: "..." }
   })
+
+  server.respond()
 });
 
 test("destroy failure", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts-failure")
+    this.persistence(Model.REST, "/posts")
   });
   var post = new Post({ id: 1, title: "Foo" });
 
@@ -340,54 +423,106 @@ test("destroy failure", function() {
 
   equal(Post.count(), 1);
 
-  stop();
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("DELETE", "/posts/1", [500, {
+    "Content-Type": "application/json"
+  }, " "])
 
   post.destroy(function(success) {
     ok(!success);
     ok(this === post);
     equal(Post.count(), 1);
-    start();
   });
+
+  server.respond()
 });
 
 test("destroy - 422 response (failed validations)", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts-validations")
+    this.persistence(Model.REST, "/posts")
   });
   var post = new Post({ id: 1, title: "Foo" });
 
-  stop();
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("DELETE", "/posts/1", [422, {
+    "Content-Type": "application/json"
+  }, JSON.stringify({
+    title: ["must do something else before deleting"]
+  })])
 
   post.destroy(function(success) {
     ok(!success);
     ok(this === post);
     deepEqual(this.errors.on("title"), ["must do something else before deleting"]);
-    start();
   });
+
+  server.respond()
 });
 
-test("events", function() {
+test("create event", 1, function() {
   var Post = Model("post", function() {
     this.persistence(Model.REST, "/posts")
   });
 
-  var events = [];
+  var events = []
 
   // Stub trigger and capture its argument.
   Post.prototype.trigger = function(name) {
-    events.push(name);
-  };
+    events.push(name)
+  }
 
-  var post = new Post();
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("POST", "/posts", [200, {
+    "Content-Type": "application/json"
+  }, JSON.stringify({ id: 1 })])
 
-  stop();
+  new Post().save()
 
-  post.save(function() {
-    deepEqual(events.join(", "), "create");
+  server.respond()
 
-    post.save(function() {
-      deepEqual(events.join(", "), "create, update");
-      start();
-    });
-  });
+  deepEqual(events, ["create"])
 });
+
+test("update event", 1, function() {
+  var Post = Model("post", function() {
+    this.use(Model.REST, "/posts")
+  })
+
+  var events = []
+
+  // Stub trigger and capture its argument.
+  Post.prototype.trigger = function(name) {
+    events.push(name)
+  }
+
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("PUT", "/posts/1", [200, {
+    "Content-Type": "application/json"
+  }, JSON.stringify({ id: 1 })])
+
+  new Post({ id: 1 }).save()
+
+  server.respond()
+
+  deepEqual(events, ["update"])
+})
+
+test("destroy event", 1, function() {
+  var Post = Model("post", function() {
+    this.use(Model.REST, "/posts")
+  })
+
+  // Stub trigger and capture its argument.
+  Post.prototype.trigger = function(name) {
+    equal(name, "destroy")
+  }
+
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("DELETE", "/posts/1", [200, {
+    "Content-Type": "application/json"
+  }, " "])
+
+  new Post({ id: 1 }).destroy()
+
+  server.respond()
+})
