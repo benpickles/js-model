@@ -1,4 +1,6 @@
-Model.InstanceMethods = {
+Model.Model = function() {}
+
+Model.Model.prototype = {
   asJSON: function() {
     return this.attr()
   },
@@ -121,3 +123,5 @@ Model.InstanceMethods = {
     return this;
   }
 };
+
+Model.Utils.extend(Model.Model.prototype, Model.Callbacks)

@@ -18,7 +18,7 @@ var Model = function(name, func) {
     .extend(Model.Callbacks)
     .extend(Model.ClassMethods)
 
-  model.prototype = new Model.Base
+  model.prototype = new Model.Model
   model.prototype.constructor = model
 
   if (Model.Utils.isFunction(func)) func.call(model, model, model.prototype)
