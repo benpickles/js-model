@@ -89,17 +89,19 @@ test("#sort, #sortBy", function() {
   var Post = Model("post")
   var collection = new Model.Collection()
 
-  var a = new Post({ title: "a" })
-  var b = new Post({ title: "b" })
-  var c = new Post({ title: "c" })
+  var a = new Post({ i: 0, title: "a" })
+  var b = new Post({ i: 1, title: "b" })
+  var c = new Post({ i: 2, title: "c" })
 
   collection.push(b, a, c)
 
-  var sorted = collection.sort()
+  var sorted = collection.sort(function(a, b) {
+    return a.attr("i") - b.attr("i")
+  })
 
   ok(sorted instanceof Model.Collection, "returns another Collection")
-  ok(sorted.at(0) === b)
-  ok(sorted.at(1) === a)
+  ok(sorted.at(0) === a)
+  ok(sorted.at(1) === b)
   ok(sorted.at(2) === c)
 
   sorted = collection.sortBy("title")
