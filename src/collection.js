@@ -9,25 +9,31 @@
     }
   }
 
-  var delegated = ["every", "forEach", "indexOf", "lastIndexOf", "map", "pop",
-    "push", "shift", "some", "unshift"]
+  var methods = [
+    // name      chainable?
+    "every",       false,
+    "filter",      true,
+    "forEach",     false,
+    "indexOf",     false,
+    "lastIndexOf", false,
+    "map",         false,
+    "pop",         false,
+    "push",        false,
+    "reverse",     true,
+    "shift",       false,
+    "some",        false,
+    "sort",        true,
+    "splice",      true,
+    "unshift",     false
+  ]
 
-  for (var i = 0, length = delegated.length; i < length; i++) {
-    (function(name) {
+  for (var i = 0; i < methods.length; i += 2) {
+    (function(name, clone) {
       Collection.prototype[name] = function() {
-        return this.models[name].apply(this.models, arguments)
+        var value = this.models[name].apply(this.models, arguments)
+        return clone ? this.clone(value) : value
       }
-    })(delegated[i])
-  }
-
-  var chainable = ["filter", "reverse", "sort", "splice"]
-
-  for (i = 0, length = chainable.length; i < length; i++) {
-    (function(name) {
-      Collection.prototype[name] = function() {
-        return this.clone(this.models[name].apply(this.models, arguments))
-      }
-    })(chainable[i])
+    })(methods[i], methods[i + 1])
   }
 
   Collection.prototype.add = function(model) {
