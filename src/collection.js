@@ -9,8 +9,26 @@
     }
   }
 
-  Collection.prototype = new Array
-  Collection.prototype.constructor = Collection
+  var delegated = ["every", "forEach", "indexOf", "lastIndexOf", "map", "pop",
+    "push", "shift", "some", "unshift"]
+
+  for (var i = 0, length = delegated.length; i < length; i++) {
+    (function(name) {
+      Collection.prototype[name] = function() {
+        return this.models[name].apply(this.models, arguments)
+      }
+    })(delegated[i])
+  }
+
+  var chainable = ["filter", "reverse", "sort", "splice"]
+
+  for (i = 0, length = chainable.length; i < length; i++) {
+    (function(name) {
+      Collection.prototype[name] = function() {
+        return this.clone(this.models[name].apply(this.models, arguments))
+      }
+    })(chainable[i])
+  }
 
   Collection.prototype.add = function(model) {
     if (!~this.indexOf(model)) {
@@ -18,30 +36,27 @@
     }
   }
 
-  Collection.prototype.chain = function(collection) {
+  Collection.prototype.clone = function(collection) {
     return new this.constructor(collection)
   }
 
-  // Make Collection#filter chainable by returning another Collection. Assumes
-  // presence of Array#filter.
-  Collection.prototype.filter = function() {
-    var filtered = Array.prototype.filter.apply(this, arguments)
-    return this.chain(filtered)
+  Collection.prototype.count = function() {
+    return this.models.length
   }
 
   Collection.prototype.first = function() {
-    return this[0]
+    return this.models[0]
   }
 
   Collection.prototype.last = function() {
-    return this[this.length - 1]
+    return this.models[this.count() - 1]
   }
 
   Collection.prototype.pluck = function(attribute) {
     var plucked = []
 
-    for (var i = 0, length = this.length; i < length; i++) {
-      plucked.push(this[i].attr(attribute))
+    for (var i = 0, length = this.models.length; i < length; i++) {
+      plucked.push(this.models[i].attr(attribute))
     }
 
     return plucked
@@ -50,8 +65,8 @@
   Collection.prototype.remove = function(model) {
     var index
 
-    for (var i = 0, length = this.length; i < length; i++) {
-      if (this[i] === model) {
+    for (var i = 0, length = this.models.length; i < length; i++) {
+      if (this.models[i] === model) {
         index = i
         break
       }
@@ -81,6 +96,10 @@
         return 0
       }
     })
+  }
+
+  Collection.prototype.toArray = function() {
+    return this.models.slice()
   }
 
   Collection.prototype.toJSON = function() {

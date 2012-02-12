@@ -1,6 +1,6 @@
 module("Collection")
 
-test("#push, #pop, #splice, #shift and #unshift work and maintain the #length", function() {
+test("#push, #pop, #count, #splice, #shift, #unshift", function() {
   var Post = Model("post")
   var collection = new Model.Collection()
 
@@ -12,29 +12,29 @@ test("#push, #pop, #splice, #shift and #unshift work and maintain the #length", 
   equal(collection.push(b), 2)
   equal(collection.push(c), 3)
 
-  equal(collection.length, 3)
-  ok(collection[0] === a)
-  ok(collection[1] === b)
-  ok(collection[2] === c)
+  equal(collection.count(), 3)
+  ok(collection.toArray()[0] === a)
+  ok(collection.toArray()[1] === b)
+  ok(collection.toArray()[2] === c)
 
   var spliced = collection.splice(2, 1)
-  equal(spliced.length, 1)
-  ok(spliced[0] === c)
-  equal(collection.length, 2)
+  equal(spliced.count(), 1)
+  ok(spliced.toArray()[0] === c)
+  equal(collection.count(), 2)
 
   ok(collection.pop() === b)
-  equal(collection.length, 1)
+  equal(collection.count(), 1)
   ok(collection.pop() === a)
-  equal(collection.length, 0)
+  equal(collection.count(), 0)
 
   equal(collection.push(a, b, c), 3)
-  equal(collection.length, 3)
+  equal(collection.count(), 3)
 
   ok(collection.shift() === a)
-  equal(collection.length, 2)
+  equal(collection.count(), 2)
 
   equal(collection.unshift(a), 3)
-  equal(collection.length, 3)
+  equal(collection.count(), 3)
 })
 
 test("#indexOf", function() {
@@ -79,10 +79,10 @@ test("#reverse", function() {
 
   var reversed = collection.reverse()
 
-  ok(reversed[0] === c)
-  ok(reversed[1] === b)
-  ok(reversed[2] === a)
   ok(reversed instanceof Model.Collection, "returns another Collection")
+  ok(reversed.toArray()[0] === c)
+  ok(reversed.toArray()[1] === b)
+  ok(reversed.toArray()[2] === a)
 })
 
 test("#sort, #sortBy", function() {
@@ -97,17 +97,17 @@ test("#sort, #sortBy", function() {
 
   var sorted = collection.sort()
 
-  ok(sorted[0] === b)
-  ok(sorted[1] === a)
-  ok(sorted[2] === c)
   ok(sorted instanceof Model.Collection, "returns another Collection")
+  ok(sorted.toArray()[0] === b)
+  ok(sorted.toArray()[1] === a)
+  ok(sorted.toArray()[2] === c)
 
   sorted = collection.sortBy("title")
 
-  ok(sorted[0] === a)
-  ok(sorted[1] === b)
-  ok(sorted[2] === c)
   ok(sorted instanceof Model.Collection, "returns another Collection")
+  ok(sorted.toArray()[0] === a)
+  ok(sorted.toArray()[1] === b)
+  ok(sorted.toArray()[2] === c)
 })
 
 test("#every", function() {
@@ -172,8 +172,8 @@ test("#filter", function() {
 
   ok(filtered instanceof Model.Collection, "returns another Collection")
 
-  equal(filtered.length, 1)
-  ok(filtered[0] === c)
+  equal(filtered.count(), 1)
+  ok(filtered.toArray()[0] === c)
 })
 
 test("#forEach", function() {
@@ -268,16 +268,16 @@ test("#add, #remove", function() {
   collection.push(a, b)
 
   ok(!collection.add(a))
-  equal(collection.length, 2)
+  equal(collection.count(), 2)
 
   equal(collection.add(c), 3)
-  equal(collection.length, 3)
+  equal(collection.count(), 3)
 
   ok(collection.remove(b) === b)
-  equal(collection.length, 2)
+  equal(collection.count(), 2)
 
   collection.remove(b)
-  equal(collection.length, 2)
+  equal(collection.count(), 2)
 })
 
 test("#first, #last", function() {
