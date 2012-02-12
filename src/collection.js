@@ -10,30 +10,45 @@
   }
 
   var methods = [
-    // name      chainable?
-    "every",       false,
-    "filter",      true,
-    "forEach",     false,
-    "indexOf",     false,
-    "lastIndexOf", false,
-    "map",         false,
-    "pop",         false,
-    "push",        false,
-    "reverse",     true,
-    "shift",       false,
-    "some",        false,
-    "sort",        true,
-    "splice",      true,
-    "unshift",     false
+    // name      chainable?   enumerable?
+    "every",       false,       true,
+    "filter",      true,        true,
+    "forEach",     false,       true,
+    "indexOf",     false,       false,
+    "lastIndexOf", false,       false,
+    "map",         false,       true,
+    "pop",         false,       false,
+    "push",        false,       false,
+    "reverse",     true,        false,
+    "shift",       false,       false,
+    "some",        false,       true,
+    "sort",        true,        false,
+    "splice",      true,        false,
+    "unshift",     false,       false
   ]
 
-  for (var i = 0; i < methods.length; i += 2) {
-    (function(name, clone) {
-      Collection.prototype[name] = function() {
-        var value = this.models[name].apply(this.models, arguments)
+  for (var i = 0; i < methods.length; i += 3) {
+    (function(name, clone, enumerable) {
+      Collection.prototype[name] = function(callback, context) {
+        var self = this
+          , models = this.models
+          , value
+
+        if (enumerable) {
+          // Ensure enumerable method callbacks are passed this collection as
+          // as the third argument instead of the `this.models` array.
+          value = models[name](function() {
+            arguments[2] = self
+            return callback.apply(this, arguments)
+          }, context)
+        } else {
+          value = models[name].apply(models, arguments)
+        }
+
+        // Ensure appropriate methods return another collection instance.
         return clone ? this.clone(value) : value
       }
-    })(methods[i], methods[i + 1])
+    })(methods[i], methods[i + 1], methods[i + 2])
   }
 
   Collection.prototype.add = function(model) {
