@@ -13,13 +13,13 @@ test("#push, #pop, #count, #splice, #shift, #unshift", function() {
   equal(collection.push(c), 3)
 
   equal(collection.count(), 3)
-  ok(collection.toArray()[0] === a)
-  ok(collection.toArray()[1] === b)
-  ok(collection.toArray()[2] === c)
+  ok(collection.at(0) === a)
+  ok(collection.at(1) === b)
+  ok(collection.at(2) === c)
 
   var spliced = collection.splice(2, 1)
   equal(spliced.count(), 1)
-  ok(spliced.toArray()[0] === c)
+  ok(spliced.at(0) === c)
   equal(collection.count(), 2)
 
   ok(collection.pop() === b)
@@ -80,9 +80,9 @@ test("#reverse", function() {
   var reversed = collection.reverse()
 
   ok(reversed instanceof Model.Collection, "returns another Collection")
-  ok(reversed.toArray()[0] === c)
-  ok(reversed.toArray()[1] === b)
-  ok(reversed.toArray()[2] === a)
+  ok(reversed.at(0) === c)
+  ok(reversed.at(1) === b)
+  ok(reversed.at(2) === a)
 })
 
 test("#sort, #sortBy", function() {
@@ -98,16 +98,16 @@ test("#sort, #sortBy", function() {
   var sorted = collection.sort()
 
   ok(sorted instanceof Model.Collection, "returns another Collection")
-  ok(sorted.toArray()[0] === b)
-  ok(sorted.toArray()[1] === a)
-  ok(sorted.toArray()[2] === c)
+  ok(sorted.at(0) === b)
+  ok(sorted.at(1) === a)
+  ok(sorted.at(2) === c)
 
   sorted = collection.sortBy("title")
 
   ok(sorted instanceof Model.Collection, "returns another Collection")
-  ok(sorted.toArray()[0] === a)
-  ok(sorted.toArray()[1] === b)
-  ok(sorted.toArray()[2] === c)
+  ok(sorted.at(0) === a)
+  ok(sorted.at(1) === b)
+  ok(sorted.at(2) === c)
 })
 
 test("#every", function() {
@@ -173,7 +173,7 @@ test("#filter", function() {
   ok(filtered instanceof Model.Collection, "returns another Collection")
 
   equal(filtered.count(), 1)
-  ok(filtered.toArray()[0] === c)
+  ok(filtered.at(0) === c)
 })
 
 test("#forEach", function() {
@@ -305,4 +305,26 @@ test("#pluck", function() {
   collection.push(a, b, c)
 
   same(collection.pluck("title"), ["a", "b", "c"])
+})
+
+test("#toArray", function() {
+  var Post = Model("post")
+  var collection = new Model.Collection()
+
+  var a = new Post({ title: "a" })
+  var b = new Post({ title: "b" })
+  var c = new Post({ title: "c" })
+
+  collection.push(a, b, c)
+
+  var array = collection.toArray()
+
+  ok(Object.prototype.toString.call(array) == "[object Array]")
+  ok(array[0] == a)
+  ok(array[1] == b)
+  ok(array[2] == c)
+
+  array[0] = "a"
+
+  ok(collection.at(0) == a, "array modification doesn't touch collection")
 })

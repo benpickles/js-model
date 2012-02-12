@@ -57,6 +57,10 @@
     }
   }
 
+  Collection.prototype.at = function(index) {
+    return this.models[index]
+  }
+
   Collection.prototype.clone = function(collection) {
     return new this.constructor(collection)
   }
