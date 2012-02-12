@@ -69,36 +69,25 @@
   }
 
   Collection.prototype.first = function() {
-    return this.models[0]
+    return this.at(0)
   }
 
   Collection.prototype.last = function() {
-    return this.models[this.length - 1]
+    return this.at(this.length - 1)
   }
 
   Collection.prototype.pluck = function(attribute) {
-    var plucked = []
-
-    for (var i = 0, length = this.models.length; i < length; i++) {
-      plucked.push(this.models[i].attr(attribute))
-    }
-
-    return plucked
+    return this.map(function(model) {
+      return model.attr(attribute)
+    })
   }
 
   Collection.prototype.remove = function(model) {
-    var index
+    var index = this.indexOf(model)
 
-    for (var i = 0, length = this.models.length; i < length; i++) {
-      if (this.models[i] === model) {
-        index = i
-        break
-      }
-    }
-
-    if (index !== undefined) {
+    if (~index) {
       this.splice(index, 1)
-      return model
+      return this.length
     }
   }
 

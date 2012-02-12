@@ -276,7 +276,7 @@ test("#add, #remove", function() {
   equal(collection.add(c), 3)
   equal(collection.length, 3)
 
-  ok(collection.remove(b) === b)
+  equal(collection.remove(b), 2, "returns new length")
   equal(collection.length, 2)
 
   collection.remove(b)
