@@ -1,6 +1,6 @@
 module("Collection")
 
-test("#push, #pop, #count, #splice, #shift, #unshift", function() {
+test("#push, #pop, #splice, #shift, #unshift", function() {
   var Post = Model("post")
   var collection = new Model.Collection()
 
@@ -12,29 +12,30 @@ test("#push, #pop, #count, #splice, #shift, #unshift", function() {
   equal(collection.push(b), 2)
   equal(collection.push(c), 3)
 
-  equal(collection.count(), 3)
+  equal(collection.length, 3)
   ok(collection.at(0) === a)
   ok(collection.at(1) === b)
   ok(collection.at(2) === c)
 
   var spliced = collection.splice(2, 1)
-  equal(spliced.count(), 1)
+  ok(spliced instanceof Model.Collection, "returns a new Collection")
+  equal(spliced.length, 1)
   ok(spliced.at(0) === c)
-  equal(collection.count(), 2)
+  equal(collection.length, 2)
 
   ok(collection.pop() === b)
-  equal(collection.count(), 1)
+  equal(collection.length, 1)
   ok(collection.pop() === a)
-  equal(collection.count(), 0)
+  equal(collection.length, 0)
 
   equal(collection.push(a, b, c), 3)
-  equal(collection.count(), 3)
+  equal(collection.length, 3)
 
   ok(collection.shift() === a)
-  equal(collection.count(), 2)
+  equal(collection.length, 2)
 
   equal(collection.unshift(a), 3)
-  equal(collection.count(), 3)
+  equal(collection.length, 3)
 })
 
 test("#indexOf", function() {
@@ -174,7 +175,7 @@ test("#filter", function() {
 
   ok(filtered instanceof Model.Collection, "returns another Collection")
 
-  equal(filtered.count(), 1)
+  equal(filtered.length, 1)
   ok(filtered.at(0) === c)
 })
 
@@ -270,16 +271,16 @@ test("#add, #remove", function() {
   collection.push(a, b)
 
   ok(!collection.add(a))
-  equal(collection.count(), 2)
+  equal(collection.length, 2)
 
   equal(collection.add(c), 3)
-  equal(collection.count(), 3)
+  equal(collection.length, 3)
 
   ok(collection.remove(b) === b)
-  equal(collection.count(), 2)
+  equal(collection.length, 2)
 
   collection.remove(b)
-  equal(collection.count(), 2)
+  equal(collection.length, 2)
 })
 
 test("#first, #last", function() {

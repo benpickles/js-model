@@ -2,6 +2,7 @@
   var Collection = Model.Collection = function(array) {
     array = array || []
 
+    this.length = 0
     this.models = []
 
     for (var i = 0, length = array.length; i < length; i++) {
@@ -10,25 +11,25 @@
   }
 
   var methods = [
-    // name      chainable?   enumerable?
-    "every",       false,       true,
-    "filter",      true,        true,
-    "forEach",     false,       true,
-    "indexOf",     false,       false,
-    "lastIndexOf", false,       false,
-    "map",         false,       true,
-    "pop",         false,       false,
-    "push",        false,       false,
-    "reverse",     true,        false,
-    "shift",       false,       false,
-    "some",        false,       true,
-    "sort",        true,        false,
-    "splice",      true,        false,
-    "unshift",     false,       false
+    // name      chainable?   enumerable?  updateLength?
+    "every",       false,       true,         false,
+    "filter",      true,        true,         false,
+    "forEach",     false,       true,         false,
+    "indexOf",     false,       false,        false,
+    "lastIndexOf", false,       false,        false,
+    "map",         false,       true,         false,
+    "pop",         false,       false,        true,
+    "push",        false,       false,        true,
+    "reverse",     true,        false,        false,
+    "shift",       false,       false,        true,
+    "some",        false,       true,         false,
+    "sort",        true,        false,        false,
+    "splice",      true,        false,        true,
+    "unshift",     false,       false,        true
   ]
 
-  for (var i = 0; i < methods.length; i += 3) {
-    (function(name, clone, enumerable) {
+  for (var i = 0; i < methods.length; i += 4) {
+    (function(name, clone, enumerable, updateLength) {
       Collection.prototype[name] = function(callback, context) {
         var self = this
           , models = this.models
@@ -45,10 +46,12 @@
           value = models[name].apply(models, arguments)
         }
 
+        if (updateLength) this.length = this.models.length
+
         // Ensure appropriate methods return another collection instance.
         return clone ? this.clone(value) : value
       }
-    })(methods[i], methods[i + 1], methods[i + 2])
+    })(methods[i], methods[i + 1], methods[i + 2], methods[i + 3])
   }
 
   Collection.prototype.add = function(model) {
@@ -65,16 +68,12 @@
     return new this.constructor(collection)
   }
 
-  Collection.prototype.count = function() {
-    return this.models.length
-  }
-
   Collection.prototype.first = function() {
     return this.models[0]
   }
 
   Collection.prototype.last = function() {
-    return this.models[this.count() - 1]
+    return this.models[this.length - 1]
   }
 
   Collection.prototype.pluck = function(attribute) {
