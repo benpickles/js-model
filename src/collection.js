@@ -68,6 +68,18 @@
     return new this.constructor(collection)
   }
 
+  Collection.prototype.detect = function(callback, context) {
+    var i = 0
+      , length = this.length
+      , collection = this
+      , model
+
+    for (; i < length; i++) {
+      model = this.at(i)
+      if (callback.call(context, model, i, collection)) return model
+    }
+  }
+
   Collection.prototype.first = function() {
     return this.at(0)
   }

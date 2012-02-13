@@ -113,6 +113,31 @@ test("#sort, #sortBy", function() {
   ok(sorted.at(2) === c)
 })
 
+test("#detect", function() {
+  var Post = Model("post")
+  var collection = new Model.Collection()
+
+  var a = new Post({ title: "a" })
+  var b = new Post({ title: "b" })
+  var c = new Post({ title: "c" })
+
+  collection.push(a, b, c)
+
+  var indexes = []
+  var obj = {}
+
+  var detected = collection.detect(function(post, i, coll) {
+    indexes.push(i)
+    ok(coll === collection)
+    ok(this === obj)
+    return post.attr("title") === "c"
+  }, obj)
+
+  same(indexes, [0, 1, 2])
+
+  ok(detected === c)
+})
+
 test("#every", function() {
   var Post = Model("post")
   var collection = new Model.Collection()
