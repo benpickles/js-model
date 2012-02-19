@@ -32,54 +32,18 @@ Model.Model.prototype = {
     }
   },
 
-  callPersistMethod: function(method, callback) {
-    var self = this;
-
-    // Automatically manage adding and removing from the model's Collection.
-    var manageCollection = function() {
-      if (method === "destroy") {
-        self.constructor.remove(self)
-      } else {
-        self.constructor.add(self)
-      }
-    };
-
-    // Wrap the existing callback in this function so we always manage the
-    // collection and trigger events from here rather than relying on the
-    // persistence adapter to do it for us. The persistence adapter is
-    // only required to execute the callback with a single argument - a
-    // boolean to indicate whether the call was a success - though any
-    // other arguments will also be forwarded to the original callback.
-    var wrappedCallback = function(success) {
-      if (success) {
-        // Merge any changes into attributes and clear changes.
-        self.merge(self.changes).reset();
-
-        // Add/remove from collection if persist was successful.
-        manageCollection();
-
-        // Trigger the event before executing the callback.
-        self.trigger(method);
-      }
-
-      // Store the return value of the callback.
-      var value;
-
-      // Run the supplied callback.
-      if (callback) value = callback.apply(self, arguments);
-
-      return value;
-    };
-
-    if (this.constructor._persistence) {
-      this.constructor._persistence[method](this, wrappedCallback);
-    } else {
-      wrappedCallback.call(this, true);
-    }
-  },
-
   destroy: function(callback) {
-    this.callPersistMethod("destroy", callback);
+    var self = this
+
+    this.constructor.persistence().destroy(this, function(success) {
+      if (success) {
+        self.constructor.remove(self)
+        self.trigger("destroy")
+      }
+
+      if (callback) callback.apply(this, arguments)
+    })
+
     return this;
   },
 
@@ -104,7 +68,17 @@ Model.Model.prototype = {
 
   save: function(callback) {
     if (this.valid()) {
-      this.callPersistMethod("save", callback);
+      var self = this
+
+      this.constructor.persistence().save(this, function(success) {
+        if (success) {
+          self.merge(self.changes).reset()
+          self.constructor.add(self)
+          self.trigger("save")
+        }
+
+        if (callback) callback.apply(self, arguments)
+      })
     } else if (callback) {
       callback(false);
     }
