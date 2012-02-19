@@ -93,7 +93,7 @@ Model.Model.prototype = {
   },
 
   newRecord: function() {
-    return this.id() === undefined
+    return this.constructor.persistence().newRecord(this)
   },
 
   reset: function() {

@@ -4,6 +4,10 @@ Model.NullPersistence = function() {
       callback(true)
     },
 
+    newRecord: function(model) {
+      return false
+    },
+
     read: function(callback) {
       callback([])
     },

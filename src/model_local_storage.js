@@ -42,6 +42,11 @@ Model.localStorage = function(klass) {
     if (callback) callback(true)
   }
 
+  persistence.prototype.newRecord = function(model) {
+    var uids = get(this.collection_id) || []
+    return ~uids.indexOf(model.uid)
+  }
+
   persistence.prototype.read = function(callback) {
     if (!callback) return
 

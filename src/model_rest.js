@@ -36,6 +36,10 @@ Model.REST = function(klass, resource, methods) {
       return this.update_path(model);
     },
 
+    newRecord: function(model) {
+      return !model.id()
+    },
+
     params: function(model) {
       var params;
       if (model) {
@@ -70,7 +74,7 @@ Model.REST = function(klass, resource, methods) {
     },
 
     save: function(model, callback) {
-      var method = model.newRecord() ? "create" : "update"
+      var method = this.newRecord(model) ? "create" : "update"
       return this[method](model, callback)
     },
 
