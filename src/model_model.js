@@ -47,11 +47,6 @@ Model.Model.prototype = {
     return this.attributes[this.constructor.unique_key];
   },
 
-  merge: function(attributes) {
-    Model.Utils.extend(this.attributes, attributes);
-    return this;
-  },
-
   newRecord: function() {
     return this.constructor.persistence().newRecord(this)
   },
@@ -68,7 +63,8 @@ Model.Model.prototype = {
 
       this.constructor.persistence().save(this, function(success) {
         if (success) {
-          self.merge(self.changes).reset()
+          Model.Utils.extend(self.attributes, self.changes)
+          self.reset()
           self.constructor.add(self)
           self.trigger("save")
         }
