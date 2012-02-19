@@ -113,6 +113,10 @@ Model.Model.prototype = {
     return this;
   },
 
+  toJSON: function() {
+    return this.attr()
+  },
+
   valid: function() {
     this.errors.clear();
     this.validate();
