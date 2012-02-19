@@ -1,10 +1,6 @@
 Model.Model = function() {}
 
 Model.Model.prototype = {
-  asJSON: function() {
-    return this.attr()
-  },
-
   attr: function(name, value) {
     if (arguments.length === 0) {
       // Combined attributes/changes object.
