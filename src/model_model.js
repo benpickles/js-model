@@ -104,8 +104,7 @@ Model.Model.prototype = {
 
   save: function(callback) {
     if (this.valid()) {
-      var method = this.newRecord() ? "create" : "update";
-      this.callPersistMethod(method, callback);
+      this.callPersistMethod("save", callback);
     } else if (callback) {
       callback(false);
     }

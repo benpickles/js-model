@@ -18,6 +18,8 @@ var Model = function(name, func) {
     .extend(Model.Callbacks)
     .extend(Model.ClassMethods)
 
+  model.persistence(Model.NullPersistence)
+
   model.prototype = new Model.Model
   model.prototype.constructor = model
 

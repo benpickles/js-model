@@ -69,6 +69,11 @@ Model.REST = function(klass, resource, methods) {
       return resource
     },
 
+    save: function(model, callback) {
+      var method = model.newRecord() ? "create" : "update"
+      return this[method](model, callback)
+    },
+
     update: function(model, callback) {
       return this.xhr('PUT', this.update_path(model), model, callback);
     },

@@ -70,7 +70,5 @@ Model.localStorage = function(klass) {
     callback(true)
   }
 
-  persistence.prototype.create = persistence.prototype.update = persistence.prototype.save
-
   return new persistence(klass)
 }
