@@ -480,7 +480,7 @@ test("create event", 1, function() {
 
   server.respond()
 
-  deepEqual(events, ["create"])
+  deepEqual(events, ["save"])
 });
 
 test("update event", 1, function() {
@@ -504,7 +504,7 @@ test("update event", 1, function() {
 
   server.respond()
 
-  deepEqual(events, ["update"])
+  deepEqual(events, ["save"])
 })
 
 test("destroy event", 1, function() {
