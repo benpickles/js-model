@@ -12,7 +12,7 @@ var Model = function(name, func) {
   Model.Module.extend.call(model, Model.Module)
 
   model._name = name
-  model.collection = []
+  model.collection = new Model.Collection()
   model.persistence = Model.NullPersistence
   model.unique_key = "id"
   model

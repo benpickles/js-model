@@ -46,13 +46,13 @@ if (window.localStorage) {
       this.use(Model.localStorage)
     })
 
-    equal(Post.count(), 0)
+    equal(Post.collection.length, 0)
     equal(localStorage.length, 0)
 
     var post = new Post({ title: "foo", foo: "bar" })
     post.save()
 
-    equal(Post.count(), 1)
+    equal(Post.collection.length, 1)
     equal(localStorage.length, 2)
     deepEqual({ title: "foo", foo: "bar" }, JSON.parse(localStorage[post.uid]))
     equal(localStorage["post-collection"], '["' + post.uid + '"]',
@@ -61,7 +61,7 @@ if (window.localStorage) {
     post.attr({ title: ".", foo: null, bar: "baz" })
     post.save()
 
-    equal(Post.count(), 1)
+    equal(Post.collection.length, 1)
     equal(localStorage.length, 2)
     deepEqual({ title: ".", foo: null, bar: "baz" }, JSON.parse(localStorage[post.uid]))
     equal(localStorage["post-collection"], '["' + post.uid + '"]',
@@ -69,7 +69,7 @@ if (window.localStorage) {
 
     post.destroy()
 
-    equal(Post.count(), 0)
+    equal(Post.collection.length, 0)
     equal(localStorage.length, 1)
     ok(!localStorage[post.uid])
     equal(localStorage["post-collection"], "[]",
@@ -96,12 +96,12 @@ if (window.localStorage) {
       this.use(Model.localStorage)
     })
 
-    equal(Post.count(), 0)
+    equal(Post.collection.length, 0)
 
     var post = new Post({ title: "foo", foo: "bar" })
     post.save()
 
-    equal(Post.count(), 1)
+    equal(Post.collection.length, 1)
 
     Post.persistence.read(function(models) {
       equal(models.length, 0)
@@ -110,7 +110,7 @@ if (window.localStorage) {
     post.attr({ title: ".", foo: null, bar: "baz" })
     post.save()
 
-    equal(Post.count(), 1)
+    equal(Post.collection.length, 1)
 
     Post.persistence.read(function(models) {
       equal(models.length, 0)
@@ -118,7 +118,7 @@ if (window.localStorage) {
 
     post.destroy()
 
-    equal(Post.count(), 0)
+    equal(Post.collection.length, 0)
 
     Post.persistence.read(function(models) {
       equal(models.length, 0)

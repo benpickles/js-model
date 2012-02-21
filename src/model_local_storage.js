@@ -55,7 +55,9 @@
     read: function(callback) {
       if (!callback) return
 
-      var existing_uids = this.klass.map(function(model) { return model.uid })
+      var existing_uids = this.klass.collection.map(function(model) {
+        return model.uid
+      })
       var uids = get(this.collection_id) || []
       var models = []
       var attributes, model, uid
