@@ -59,12 +59,9 @@ test("instance-level", function() {
 
   var post = new Post({ title: "Foo", body: "..." });
 
-  post.bind("create", function() {
+  post.bind("save", function() {
     models.push(this);
-    results.push("create");
-  }).bind("update", function() {
-    models.push(this);
-    results.push("update");
+    results.push("save");
   }).bind("custom", function(data1, data2, data3) {
     models.push(this);
     results.push("custom");
@@ -94,8 +91,8 @@ test("instance-level", function() {
 
   assertSameModels(models, [post, post, post, post, post])
   deepEqual(results, [
-    "create",
-    "update",
+    "save",
+    "save",
     "custom", 1, 2, undefined,
     "custom-2", 1, 2, undefined,
     "destroy"

@@ -1,80 +1,71 @@
-Model.localStorage = function(klass) {
-  if (!window.localStorage) {
-    return {
-      create: function(model, callback) {
-        callback(true)
-      },
+;(function(Model) {
+  Model.localStorage = function(klass) {
+    klass.persistence = new Model.localStorage.Persistence(klass)
+  }
 
-      destroy: function(model, callback) {
-        callback(true)
-      },
+  var persistence = Model.localStorage.Persistence = function(klass) {
+    this.klass = klass
+    this.collection_id = [klass._name, "collection"].join("-")
+  }
 
-      read: function(callback) {
-        callback([])
-      },
+  var del = function(key) {
+    localStorage.removeItem(key)
+  }
 
-      update: function(model, callback) {
-        callback(true)
-      }
+  var get = function(key) {
+    var data = localStorage.getItem(key)
+    return data && JSON.parse(data)
+  }
+
+  var set = function(key, value) {
+    localStorage.setItem(key, JSON.stringify(value))
+  }
+
+  var sadd = function(key, member) {
+    var members = get(key) || []
+
+    if (!~members.indexOf(member)) {
+      members.push(member)
+      set(key, members)
     }
   }
 
-  var collection_uid = [klass._name, "collection"].join("-")
-  var readIndex = function() {
-    var data = localStorage[collection_uid]
-    return data ? JSON.parse(data) : []
-  }
-  var writeIndex = function(uids) {
-    localStorage.setItem(collection_uid, JSON.stringify(uids))
-  }
-  var addToIndex = function(uid) {
-    var uids = readIndex()
+  var srem = function(key, member) {
+    var members = get(key) || []
+    var index = members.indexOf(member)
 
-    if (Model.Utils.inArray(uids, uid) === -1) {
-      uids.push(uid)
-      writeIndex(uids)
+    if (~index) {
+      members.splice(index, 1)
+      set(key, members)
     }
   }
-  var removeFromIndex = function(uid) {
-    var uids = readIndex()
-    var index = Model.Utils.inArray(uids, uid)
 
-    if (index > -1) {
-      uids.splice(index, 1)
-      writeIndex(uids)
-    }
-  }
-  var store = function(model) {
-    localStorage.setItem(model.uid, JSON.stringify(model.asJSON()))
-    addToIndex(model.uid)
-  }
-
-  return {
-    create: function(model, callback) {
-      store(model)
-      callback(true)
+  Model.Utils.extend(persistence.prototype, {
+    destroy: function(model, callback) {
+      del(model.uid)
+      srem(this.collection_id, model.uid)
+      if (callback) callback(true)
     },
 
-    destroy: function(model, callback) {
-      localStorage.removeItem(model.uid)
-      removeFromIndex(model.uid)
-      callback(true)
+    newRecord: function(model) {
+      var uids = get(this.collection_id) || []
+      return ~uids.indexOf(model.uid)
     },
 
     read: function(callback) {
-      if (!callback) return false
+      if (!callback) return
 
-      var existing_uids = klass.map(function() { return this.uid })
-      var uids = readIndex()
+      var existing_uids = this.klass.map(function(model) { return model.uid })
+      var uids = get(this.collection_id) || []
       var models = []
       var attributes, model, uid
 
       for (var i = 0, length = uids.length; i < length; i++) {
         uid = uids[i]
 
-        if (Model.Utils.inArray(existing_uids, uid) == -1) {
-          attributes = JSON.parse(localStorage[uid])
-          model = new klass(attributes)
+        if (!~existing_uids.indexOf(uid)) {
+          attributes = get(uid)
+          model = new this.klass(attributes)
           model.uid = uid
           models.push(model)
         }
@@ -83,9 +74,10 @@ Model.localStorage = function(klass) {
       callback(models)
     },
 
-    update: function(model, callback) {
-      store(model)
+    save: function(model, callback) {
+      set(model.uid, model)
+      sadd(this.collection_id, model.uid)
       callback(true)
     }
-  }
-};
+  })
+})(Model);

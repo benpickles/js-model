@@ -168,72 +168,19 @@ test('model collection "class" methods', function() {
   ok(Post.first() === undefined, "post removed from collection automatically");
 });
 
-test("persistence", function() {
-  var results = [];
-  var post;
-
-  var TestPersistence = function() {
-    return {
-      create: function(model, callback) {
-        ok(model === post)
-        results.push("create");
-        results.push(callback());
-      },
-
-      destroy: function(model, callback) {
-        ok(model === post)
-        results.push("destroy");
-        results.push(callback());
-      },
-
-      update: function(model, callback) {
-        ok(model === post)
-        results.push("update");
-        results.push(callback());
-      }
-    }
-  };
-
-  var Post = Model("post", function() {
-    this.persistence(TestPersistence)
-  });
-
-  var callback = function() {
-    return "callback";
-  };
-
-  post = new Post();
-  post.save(callback);
-  post.attributes.id = 1;
-  post.save(callback);
-  post.destroy(callback);
-
-  deepEqual(results, [
-    "create", "callback",
-    "update", "callback",
-    "destroy", "callback"
-  ]);
-});
-
 test("persistence failure", function() {
-  var TestPersistence = function() {
-    return {
-      create: function(model, callback) {
-        callback(false);
-      },
+  var TestPersistence = {
+    destroy: function(model, callback) {
+      callback(false);
+    },
 
-      destroy: function(model, callback) {
-        callback(false);
-      },
-
-      update: function(model, callback) {
-        callback(false);
-      }
+    save: function(model, callback) {
+      callback(false);
     }
   };
 
   var Post = Model("post", function() {
-    this.persistence(TestPersistence)
+    this.persistence = TestPersistence
   });
 
   var events = [];
