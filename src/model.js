@@ -13,6 +13,7 @@ var Model = function(name, func) {
 
   model._name = name
   model.collection = []
+  model.persistence = Model.NullPersistence
   model.unique_key = "id"
   model
     .extend(Model.Callbacks)
