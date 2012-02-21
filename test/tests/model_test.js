@@ -169,20 +169,18 @@ test('model collection "class" methods', function() {
 });
 
 test("persistence failure", function() {
-  var TestPersistence = function() {
-    return {
-      destroy: function(model, callback) {
-        callback(false);
-      },
+  var TestPersistence = {
+    destroy: function(model, callback) {
+      callback(false);
+    },
 
-      save: function(model, callback) {
-        callback(false);
-      }
+    save: function(model, callback) {
+      callback(false);
     }
   };
 
   var Post = Model("post", function() {
-    this.persistence(TestPersistence)
+    this.persistence = TestPersistence
   });
 
   var events = [];

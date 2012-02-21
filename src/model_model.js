@@ -31,7 +31,7 @@ Model.Model.prototype = {
   destroy: function(callback) {
     var self = this
 
-    this.constructor.persistence().destroy(this, function(success) {
+    this.constructor.persistence.destroy(this, function(success) {
       if (success) {
         self.constructor.remove(self)
         self.trigger("destroy")
@@ -48,7 +48,7 @@ Model.Model.prototype = {
   },
 
   newRecord: function() {
-    return this.constructor.persistence().newRecord(this)
+    return this.constructor.persistence.newRecord(this)
   },
 
   reset: function() {
@@ -61,7 +61,7 @@ Model.Model.prototype = {
     if (this.valid()) {
       var self = this
 
-      this.constructor.persistence().save(this, function(success) {
+      this.constructor.persistence.save(this, function(success) {
         if (success) {
           Model.Utils.extend(self.attributes, self.changes)
           self.reset()

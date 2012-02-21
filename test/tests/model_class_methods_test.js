@@ -301,19 +301,17 @@ test("Custom method with chaining, then more chaining", function() {
 });
 
 test("load", function() {
-  var TestPersistence = function() {
-    return {
-      read: function(callback) {
-        callback([
-          new Post({ a: 1 }),
-          new Post({ b: 2 })
-        ])
-      }
+  var TestPersistence = {
+    read: function(callback) {
+      callback([
+        new Post({ a: 1 }),
+        new Post({ b: 2 })
+      ])
     }
   }
 
   var Post = Model("post", function() {
-    this.persistence(TestPersistence)
+    this.persistence = TestPersistence
   })
 
   equal(Post.count(), 0)

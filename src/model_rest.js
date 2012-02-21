@@ -1,25 +1,23 @@
-Model.REST = function(klass, resource, methods) {
-	var PARAM_NAME_MATCHER = /:([\w\d]+)/g;
-  var resource_param_names = (function() {
-    var resource_param_names = []
+;(function(Model) {
+  Model.REST = function(klass, resource) {
+    klass.persistence = new Model.REST.Persistence(klass, resource)
+  }
+
+  var PARAM_NAME_MATCHER = /:([\w\d]+)/g
+
+  var persistence = Model.REST.Persistence = function(klass, resource) {
+    this.klass = klass
+    this.resource = resource
+    this.resource_param_names = []
+
     var param_name
 
     while ((param_name = PARAM_NAME_MATCHER.exec(resource)) !== null) {
-      resource_param_names.push(param_name[1])
+      this.resource_param_names.push(param_name[1])
     }
+  }
 
-    return resource_param_names
-  })()
-
-  return Model.Utils.extend({
-		path: function(model) {
-      var path = resource;
-      jQuery.each(resource_param_names, function(i, param) {
-				path = path.replace(":" + param, model.attributes[param]);
-			});
-			return path;
-		},
-
+  Model.Utils.extend(persistence.prototype, {
     create: function(model, callback) {
       return this.xhr('POST', this.create_path(model), model, callback);
     },
@@ -56,7 +54,17 @@ Model.REST = function(klass, resource, methods) {
       return JSON.stringify(params)
     },
 
+    path: function(model) {
+      var path = this.resource
+      jQuery.each(this.resource_param_names, function(i, param) {
+        path = path.replace(":" + param, model.attributes[param]);
+      });
+      return path;
+    },
+
     read: function(callback) {
+      var klass = this.klass
+
       return this.xhr("GET", this.read_path(), null, function(success, xhr, data) {
         data = jQuery.makeArray(data)
         var models = []
@@ -70,7 +78,7 @@ Model.REST = function(klass, resource, methods) {
     },
 
     read_path: function() {
-      return resource
+      return this.resource
     },
 
     save: function(model, callback) {
@@ -118,34 +126,31 @@ Model.REST = function(klass, resource, methods) {
 
       if (callback) callback.call(model, success, xhr, data)
     }
-  }, methods)
-};
+  })
 
-// TODO: Remove in v1 if it ever gets there.
-Model.RestPersistence = Model.REST;
+  // Rails' preferred failed validation response code, assume the response
+  // contains errors and replace current model errors with them.
+  Model.REST.handle422 = function(xhr, textStatus, model) {
+    var data = Model.REST.parseResponseData(xhr);
 
-// Rails' preferred failed validation response code, assume the response
-// contains errors and replace current model errors with them.
-Model.REST.handle422 = function(xhr, textStatus, model) {
-  var data = Model.REST.parseResponseData(xhr);
+    if (data) {
+      model.errors.clear()
 
-  if (data) {
-    model.errors.clear()
-
-    for (var attribute in data) {
-      for (var i = 0; i < data[attribute].length; i++) {
-        model.errors.add(attribute, data[attribute][i])
+      for (var attribute in data) {
+        for (var i = 0; i < data[attribute].length; i++) {
+          model.errors.add(attribute, data[attribute][i])
+        }
       }
     }
-  }
-};
+  };
 
-Model.REST.parseResponseData = function(xhr) {
-  try {
-    return /\S/.test(xhr.responseText) ?
-      jQuery.parseJSON(xhr.responseText) :
-      undefined;
-  } catch(e) {
-    Model.Log(e);
-  }
-};
+  Model.REST.parseResponseData = function(xhr) {
+    try {
+      return /\S/.test(xhr.responseText) ?
+        jQuery.parseJSON(xhr.responseText) :
+        undefined;
+    } catch(e) {
+      Model.Log(e);
+    }
+  };
+})(Model);

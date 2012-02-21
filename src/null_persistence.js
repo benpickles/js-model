@@ -1,19 +1,17 @@
-Model.NullPersistence = function() {
-  return {
-    destroy: function(model, callback) {
-      callback(true)
-    },
+Model.NullPersistence = {
+  destroy: function(model, callback) {
+    callback(true)
+  },
 
-    newRecord: function(model) {
-      return false
-    },
+  newRecord: function(model) {
+    return false
+  },
 
-    read: function(callback) {
-      callback([])
-    },
+  read: function(callback) {
+    callback([])
+  },
 
-    save: function(model, callback) {
-      callback(true)
-    }
+  save: function(model, callback) {
+    callback(true)
   }
 }

@@ -1,5 +1,9 @@
-Model.localStorage = function(klass) {
-  var persistence = function(klass) {
+;(function(Model) {
+  Model.localStorage = function(klass) {
+    klass.persistence = new Model.localStorage.Persistence(klass)
+  }
+
+  var persistence = Model.localStorage.Persistence = function(klass) {
     this.klass = klass
     this.collection_id = [klass._name, "collection"].join("-")
   }
@@ -36,44 +40,44 @@ Model.localStorage = function(klass) {
     }
   }
 
-  persistence.prototype.destroy = function(model, callback) {
-    del(model.uid)
-    srem(this.collection_id, model.uid)
-    if (callback) callback(true)
-  }
+  Model.Utils.extend(persistence.prototype, {
+    destroy: function(model, callback) {
+      del(model.uid)
+      srem(this.collection_id, model.uid)
+      if (callback) callback(true)
+    },
 
-  persistence.prototype.newRecord = function(model) {
-    var uids = get(this.collection_id) || []
-    return ~uids.indexOf(model.uid)
-  }
+    newRecord: function(model) {
+      var uids = get(this.collection_id) || []
+      return ~uids.indexOf(model.uid)
+    },
 
-  persistence.prototype.read = function(callback) {
-    if (!callback) return
+    read: function(callback) {
+      if (!callback) return
 
-    var existing_uids = this.klass.map(function(model) { return model.uid })
-    var uids = get(this.collection_id) || []
-    var models = []
-    var attributes, model, uid
+      var existing_uids = this.klass.map(function(model) { return model.uid })
+      var uids = get(this.collection_id) || []
+      var models = []
+      var attributes, model, uid
 
-    for (var i = 0, length = uids.length; i < length; i++) {
-      uid = uids[i]
+      for (var i = 0, length = uids.length; i < length; i++) {
+        uid = uids[i]
 
-      if (!~existing_uids.indexOf(uid)) {
-        attributes = get(uid)
-        model = new this.klass(attributes)
-        model.uid = uid
-        models.push(model)
+        if (!~existing_uids.indexOf(uid)) {
+          attributes = get(uid)
+          model = new this.klass(attributes)
+          model.uid = uid
+          models.push(model)
+        }
       }
+
+      callback(models)
+    },
+
+    save: function(model, callback) {
+      set(model.uid, model)
+      sadd(this.collection_id, model.uid)
+      callback(true)
     }
-
-    callback(models)
-  }
-
-  persistence.prototype.save = function(model, callback) {
-    set(model.uid, model)
-    sadd(this.collection_id, model.uid)
-    callback(true)
-  }
-
-  return new persistence(klass)
-}
+  })
+})(Model);

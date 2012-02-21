@@ -11,10 +11,10 @@ if (window.localStorage) {
 
   localStorageTest("read", function() {
     var Post = Model("post", function() {
-      this.persistence(Model.localStorage)
+      this.use(Model.localStorage)
     })
 
-    Post.persistence().read(function(models) {
+    Post.persistence.read(function(models) {
       equal(models.length, 0)
     })
 
@@ -22,7 +22,7 @@ if (window.localStorage) {
     localStorage.setItem("post-b", JSON.stringify({ b: "b" }))
     localStorage.setItem("post-collection", '["post-a","post-b"]')
 
-    Post.persistence().read(function(models) {
+    Post.persistence.read(function(models) {
       equal(models.length, 2)
 
       var post1 = models[0]
@@ -36,14 +36,14 @@ if (window.localStorage) {
       Post.collection = [post1, post2]
     })
 
-    Post.persistence().read(function(models) {
+    Post.persistence.read(function(models) {
       equal(models.length, 0, "filters models already in the collection")
     })
   })
 
   localStorageTest("create, update, destroy", function() {
     var Post = Model("post", function() {
-      this.persistence(Model.localStorage)
+      this.use(Model.localStorage)
     })
 
     equal(Post.count(), 0)
@@ -75,7 +75,7 @@ if (window.localStorage) {
     equal(localStorage["post-collection"], "[]",
       "should be removed from localStorage list")
 
-    Post.persistence().read(function(models) {
+    Post.persistence.read(function(models) {
       equal(models.length, 0)
     })
   })
@@ -83,17 +83,17 @@ if (window.localStorage) {
   // localStorage not supported tests
   test("read", function() {
     var Post = Model("post", function() {
-      this.persistence(Model.localStorage)
+      this.use(Model.localStorage)
     })
 
-    Post.persistence().read(function(models) {
+    Post.persistence.read(function(models) {
       equal(models.length, 0)
     })
   })
 
   test("create, update, destroy", function() {
     var Post = Model("post", function() {
-      this.persistence(Model.localStorage)
+      this.use(Model.localStorage)
     })
 
     equal(Post.count(), 0)
@@ -103,7 +103,7 @@ if (window.localStorage) {
 
     equal(Post.count(), 1)
 
-    Post.persistence().read(function(models) {
+    Post.persistence.read(function(models) {
       equal(models.length, 0)
     })
 
@@ -112,7 +112,7 @@ if (window.localStorage) {
 
     equal(Post.count(), 1)
 
-    Post.persistence().read(function(models) {
+    Post.persistence.read(function(models) {
       equal(models.length, 0)
     })
 
@@ -120,7 +120,7 @@ if (window.localStorage) {
 
     equal(Post.count(), 0)
 
-    Post.persistence().read(function(models) {
+    Post.persistence.read(function(models) {
       equal(models.length, 0)
     })
   })
