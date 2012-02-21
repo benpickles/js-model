@@ -56,7 +56,9 @@
 
   Collection.prototype.add = function(model) {
     if (!~this.indexOf(model)) {
-      return this.push(model)
+      var length = this.push(model)
+      this.trigger("add", [model])
+      return length
     }
   }
 
@@ -99,6 +101,7 @@
 
     if (~index) {
       this.splice(index, 1)
+      this.trigger("remove", [model])
       return this.length
     }
   }
@@ -132,4 +135,6 @@
       return model.toJSON()
     })
   }
+
+  Model.Utils.extend(Model.Collection.prototype, Model.Callbacks)
 })(Model);

@@ -8,29 +8,24 @@ test("class-level", function() {
   var post2 = new Post({ id: 2 });
   var post3 = new Post({ id: 3 });
 
-  Post.bind("add", function(model) {
-    results.push(this);
-    results.push("add");
-    results.push(model.id())
+  Post.collection.bind("add", function(model) {
+    results.push("add", model.id())
   });
 
-  Post.bind("remove", function(model) {
-    results.push(this);
-    results.push("remove");
-    results.push(model.id())
+  Post.collection.bind("remove", function(model) {
+    results.push("remove", model.id())
   })
 
-  Post.bind("custom", function(model) {
-    results.push(this);
-    results.push("custom");
-    results.push(model.id())
-  }).bind("custom", function() {
-    results.push(this);
-    results.push("custom-2");
+  Post.collection.bind("custom", function(model) {
+    results.push("custom", model.id())
   })
 
-  Post.bind("not-called", function() {
-    results.push("not-called");
+  Post.collection.bind("custom", function(model) {
+    results.push("custom-2", model.id())
+  })
+
+  Post.collection.bind("not-called", function() {
+    ok(false)
   });
 
   Post.collection.add(post1)
@@ -39,15 +34,15 @@ test("class-level", function() {
   Post.collection.add(post3)
   Post.collection.remove(post1);
   Post.collection.remove(666);
-  Post.trigger("custom",[post1]);
+  Post.collection.trigger("custom",[post1]);
 
   deepEqual(results, [
-    Post, "add", 1,
-    Post, "add", 2,
-    Post, "add", 3,
-    Post, "remove", 1,
-    Post, "custom", 1,
-    Post, "custom-2"
+    "add", 1,
+    "add", 2,
+    "add", 3,
+    "remove", 1,
+    "custom", 1,
+    "custom-2", 1
   ]);
 });
 
