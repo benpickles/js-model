@@ -33,13 +33,12 @@ test("class-level", function() {
     results.push("not-called");
   });
 
-  Post
-    .add(post1)
-    .add(post2)
-    .add(post1)
-    .add(post3)
-  Post.remove(post1);
-  Post.remove(666);
+  Post.collection.add(post1)
+  Post.collection.add(post2)
+  Post.collection.add(post1)
+  Post.collection.add(post3)
+  Post.collection.remove(post1);
+  Post.collection.remove(666);
   Post.trigger("custom",[post1]);
 
   deepEqual(results, [

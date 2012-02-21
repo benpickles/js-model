@@ -156,16 +156,16 @@ test("valid, validate, errors", function() {
 test('model collection "class" methods', function() {
   var Post = Model("post");
 
-  ok(Post.first() === undefined, "collection starts empty");
+  ok(Post.collection.first() === undefined, "collection starts empty");
 
   var post = new Post();
-  ok(Post.first() === undefined, "collection is unaffected");
+  ok(Post.collection.first() === undefined, "collection is unaffected");
 
   post.save();
-  ok(Post.first() === post, "post added to collection automatically");
+  ok(Post.collection.first() === post, "post added to collection automatically");
 
   post.destroy();
-  ok(Post.first() === undefined, "post removed from collection automatically");
+  ok(Post.collection.first() === undefined, "post removed from collection automatically");
 });
 
 test("persistence failure", function() {
@@ -194,7 +194,7 @@ test("persistence failure", function() {
   post.save();
 
   deepEqual(events, [], "should not trigger create event if persistence failed");
-  deepEqual(Post.all(), [], "post should not be added to collection");
+  deepEqual(Post.collection.length, 0, "post should not be added to collection");
 
   post.attributes.id = 1;
   post.save();
@@ -222,5 +222,5 @@ test("saving a model with an id should add it to the collection if it isn't alre
   var Post = Model("post")
   var post = new Post({ id: 1 }).save()
 
-  ok(Post.first() === post)
+  ok(Post.collection.first() === post)
 })

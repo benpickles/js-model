@@ -156,7 +156,7 @@ test("create", function() {
   });
   var post = new Post({ title: "Foo", body: "..." });
 
-  equal(Post.count(), 0);
+  equal(Post.collection.length, 0);
 
   this.spy(jQuery, "ajax")
 
@@ -172,7 +172,7 @@ test("create", function() {
     ok(this === post);
     deepEqual(post.attributes, { id: 1, title: "Foo amended", body: "...", foo: "bar" });
     equal(post.id(), 1);
-    equal(Post.count(), 1);
+    equal(Post.collection.length, 1);
   });
 
   ok(jQuery.ajax.calledOnce)
@@ -217,7 +217,7 @@ test("create failure", function() {
   var post = new Post();
   post.attr({ title: "Foo", body: "..." });
 
-  equal(Post.count(), 0);
+  equal(Post.collection.length, 0);
 
   var server = this.sandbox.useFakeServer()
   server.respondWith("POST", "/posts", [500, {
@@ -229,7 +229,7 @@ test("create failure", function() {
     ok(this === post);
     deepEqual(this.attributes, {}, "changes should not have been merged");
     deepEqual(this.attr(), { title: "Foo", body: "..." });
-    equal(Post.count(), 0);
+    equal(Post.collection.length, 0);
   });
 
   server.respond()
@@ -247,7 +247,7 @@ test("create with AjaxSetup", function() {
   });
   var post = new Post({ title: "Foo", body: "..." });
 
-  equal(Post.count(), 0);
+  equal(Post.collection.length, 0);
 
   this.spy(jQuery, "ajax")
 
@@ -419,9 +419,9 @@ test("destroy failure", function() {
   });
   var post = new Post({ id: 1, title: "Foo" });
 
-  Post.add(post);
+  Post.collection.add(post);
 
-  equal(Post.count(), 1);
+  equal(Post.collection.length, 1);
 
   var server = this.sandbox.useFakeServer()
   server.respondWith("DELETE", "/posts/1", [500, {
@@ -431,7 +431,7 @@ test("destroy failure", function() {
   post.destroy(function(success) {
     ok(!success);
     ok(this === post);
-    equal(Post.count(), 1);
+    equal(Post.collection.length, 1);
   });
 
   server.respond()
