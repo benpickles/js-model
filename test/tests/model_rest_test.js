@@ -526,3 +526,15 @@ test("destroy event", 1, function() {
 
   server.respond()
 })
+
+test("custom methods", function() {
+  var Post = Model("post", function() {
+    this.use(Model.REST, "/posts", {
+      newRecord: function() {
+        return "blah"
+      }
+    })
+  })
+
+  equal(new Post().newRecord(), "blah")
+})

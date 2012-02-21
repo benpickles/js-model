@@ -1,11 +1,11 @@
 ;(function(Model) {
-  Model.REST = function(klass, resource) {
-    klass.persistence = new Model.REST.Persistence(klass, resource)
+  Model.REST = function(klass, resource, methods) {
+    klass.persistence = new Model.REST.Persistence(klass, resource, methods)
   }
 
   var PARAM_NAME_MATCHER = /:([\w\d]+)/g
 
-  var persistence = Model.REST.Persistence = function(klass, resource) {
+  var persistence = Model.REST.Persistence = function(klass, resource, methods) {
     this.klass = klass
     this.resource = resource
     this.resource_param_names = []
@@ -14,6 +14,10 @@
 
     while ((param_name = PARAM_NAME_MATCHER.exec(resource)) !== null) {
       this.resource_param_names.push(param_name[1])
+    }
+
+    for (var name in methods) {
+      this[name] = methods[name]
     }
   }
 
