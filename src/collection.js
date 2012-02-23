@@ -57,7 +57,7 @@
   Collection.prototype.add = function(model) {
     if (!~this.indexOf(model)) {
       var length = this.push(model)
-      this.trigger("add", [model])
+      this.emit("add", model)
       return length
     }
   }
@@ -101,7 +101,7 @@
 
     if (~index) {
       this.splice(index, 1)
-      this.trigger("remove", [model])
+      this.emit("remove", model)
       return this.length
     }
   }
@@ -136,5 +136,7 @@
     })
   }
 
-  Model.Utils.extend(Model.Collection.prototype, Model.Callbacks)
+  Collection.prototype.on   = Model.EventEmitter.prototype.on
+  Collection.prototype.off  = Model.EventEmitter.prototype.off
+  Collection.prototype.emit = Model.EventEmitter.prototype.emit
 })(Model);

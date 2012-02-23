@@ -34,7 +34,7 @@ Model.Model.prototype = {
     this.constructor.persistence.destroy(this, function(success) {
       if (success) {
         self.constructor.collection.remove(self)
-        self.trigger("destroy")
+        self.emit("destroy")
       }
 
       if (callback) callback.apply(this, arguments)
@@ -43,6 +43,8 @@ Model.Model.prototype = {
     return this;
   },
 
+  emit: Model.EventEmitter.prototype.emit,
+
   id: function() {
     return this.attributes[this.constructor.unique_key];
   },
@@ -50,6 +52,9 @@ Model.Model.prototype = {
   newRecord: function() {
     return this.constructor.persistence.newRecord(this)
   },
+
+  off: Model.EventEmitter.prototype.off,
+  on: Model.EventEmitter.prototype.on,
 
   reset: function() {
     this.errors.clear();
@@ -66,7 +71,7 @@ Model.Model.prototype = {
           Model.Utils.extend(self.attributes, self.changes)
           self.reset()
           self.constructor.collection.add(self)
-          self.trigger("save")
+          self.emit("save")
         }
 
         if (callback) callback.apply(self, arguments)
@@ -92,5 +97,3 @@ Model.Model.prototype = {
     return this;
   }
 };
-
-Model.Utils.extend(Model.Model.prototype, Model.Callbacks)

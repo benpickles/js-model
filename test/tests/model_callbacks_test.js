@@ -8,23 +8,23 @@ test("class-level", function() {
   var post2 = new Post({ id: 2 });
   var post3 = new Post({ id: 3 });
 
-  Post.collection.bind("add", function(model) {
+  Post.collection.on("add", function(model) {
     results.push("add", model.id())
   });
 
-  Post.collection.bind("remove", function(model) {
+  Post.collection.on("remove", function(model) {
     results.push("remove", model.id())
   })
 
-  Post.collection.bind("custom", function(model) {
+  Post.collection.on("custom", function(model) {
     results.push("custom", model.id())
   })
 
-  Post.collection.bind("custom", function(model) {
+  Post.collection.on("custom", function(model) {
     results.push("custom-2", model.id())
   })
 
-  Post.collection.bind("not-called", function() {
+  Post.collection.on("not-called", function() {
     ok(false)
   });
 
@@ -34,7 +34,7 @@ test("class-level", function() {
   Post.collection.add(post3)
   Post.collection.remove(post1);
   Post.collection.remove(666);
-  Post.collection.trigger("custom",[post1]);
+  Post.collection.emit("custom", post1)
 
   deepEqual(results, [
     "add", 1,
@@ -53,34 +53,34 @@ test("instance-level", function() {
 
   var post = new Post({ title: "Foo", body: "..." });
 
-  post.bind("save", function() {
+  post.on("save", function() {
     models.push(this);
     results.push("save");
-  }).bind("custom", function(data1, data2, data3) {
+  }).on("custom", function(data1, data2, data3) {
     models.push(this);
     results.push("custom");
     results.push(data1);
     results.push(data2);
     results.push(data3);
-  }).bind("custom", function(data1, data2, data3) {
+  }).on("custom", function(data1, data2, data3) {
     models.push(this);
     results.push("custom-2");
     results.push(data1);
     results.push(data2);
     results.push(data3);
-  }).bind("destroy", function() {
+  }).on("destroy", function() {
     models.push(this);
     results.push("destroy");
   });
 
-  post.bind("not-called", function() {
+  post.on("not-called", function() {
     results.push("not-called");
   });
 
   post.save();
   post.attributes.id = 1;
   post.save();
-  post.trigger("custom", [1, 2]);
+  post.emit("custom", 1, 2)
   post.destroy();
 
   assertSameModels(models, [post, post, post, post, post])
@@ -101,14 +101,14 @@ test('instance events should only trigger on a specific instance', function () {
 
   var triggered = false
 
-  bar.bind('some-event', function () {
+  bar.on('some-event', function () {
     triggered = true
   })
 
-  foo.trigger('some-event')
+  foo.emit('some-event')
   ok(!triggered, "event was triggered when it shouldn't have been")
 
-  bar.trigger('some-event')
+  bar.emit('some-event')
   ok(triggered, "event wasn't triggered when it should have been")
 })
 
@@ -118,27 +118,27 @@ test("unbind all callbacks for an event", function() {
 
   var post = new Post({ title: "Foo", body: "..." });
 
-  post.bind("create", function() {
+  post.on("create", function() {
     results.push("create");
-  }).bind("update", function() {
+  }).on("update", function() {
     results.push("update");
-  }).bind("custom", function() {
+  }).on("custom", function() {
     results.push("custom");
-  }).bind("custom", function() {
+  }).on("custom", function() {
     results.push("custom-2");
-  }).bind("destroy", function() {
+  }).on("destroy", function() {
     results.push("destroy");
   });
 
-  post.unbind("create");
-  post.unbind("update");
-  post.unbind("custom");
-  post.unbind("destroy");
+  post.off("create")
+  post.off("update")
+  post.off("custom")
+  post.off("destroy")
 
   post.save();
   post.attributes.id = 1;
   post.save();
-  post.trigger("custom");
+  post.emit("custom")
   post.destroy();
 
   deepEqual(results, []);
@@ -153,11 +153,11 @@ test("unbind a specific event callback by function", function() {
 
   var post = new Post();
 
-  post.bind("custom", callback).bind("custom", function() {
+  post.on("custom", callback).on("custom", function() {
     results.push("good");
   });
-  post.unbind("custom", callback);
-  post.trigger("custom");
+  post.off("custom", callback)
+  post.emit("custom")
 
   deepEqual(results, ["good"]);
 });
