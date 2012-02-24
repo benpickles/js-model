@@ -90,6 +90,14 @@
     return this.at(this.length - 1)
   }
 
+  Collection.prototype.listenTo = function(emitter) {
+    var self = this
+
+    emitter
+      .on("save", function(model) { self.add(model) })
+      .on("destroy", function(model) { self.remove(model) })
+  }
+
   Collection.prototype.pluck = function(attribute) {
     return this.map(function(model) {
       return model.attr(attribute)

@@ -33,7 +33,6 @@ Model.Model.prototype = {
 
     this.constructor.persistence.destroy(this, function(success) {
       if (success) {
-        self.constructor.collection.remove(self)
         self.emit("destroy", self)
       }
 
@@ -74,7 +73,6 @@ Model.Model.prototype = {
         if (success) {
           Model.Utils.extend(self.attributes, self.changes)
           self.reset()
-          self.constructor.collection.add(self)
           self.emit("save", self)
         }
 

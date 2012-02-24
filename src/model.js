@@ -21,6 +21,8 @@ var Model = function(name, func) {
     .extend(Model.Callbacks)
     .extend(Model.ClassMethods)
 
+  model.collection.listenTo(model.anyInstance)
+
   model.prototype = new Model.Model
   model.prototype.constructor = model
 
