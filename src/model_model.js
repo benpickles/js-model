@@ -34,7 +34,7 @@ Model.Model.prototype = {
     this.constructor.persistence.destroy(this, function(success) {
       if (success) {
         self.constructor.collection.remove(self)
-        self.emit("destroy")
+        self.emit("destroy", self)
       }
 
       if (callback) callback.apply(this, arguments)
@@ -43,7 +43,11 @@ Model.Model.prototype = {
     return this;
   },
 
-  emit: Model.EventEmitter.prototype.emit,
+  emit: function() {
+    var anyInstance = this.constructor.anyInstance
+    anyInstance.emit.apply(anyInstance, arguments)
+    Model.EventEmitter.prototype.emit.apply(this, arguments)
+  },
 
   id: function() {
     return this.attributes[this.constructor.unique_key];
@@ -71,7 +75,7 @@ Model.Model.prototype = {
           Model.Utils.extend(self.attributes, self.changes)
           self.reset()
           self.constructor.collection.add(self)
-          self.emit("save")
+          self.emit("save", self)
         }
 
         if (callback) callback.apply(self, arguments)

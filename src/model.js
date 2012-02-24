@@ -6,12 +6,14 @@ var Model = function(name, func) {
     this.errors = new Model.Errors(this);
     this.uid = [name, Model.UID.generate()].join("-")
     if (Model.Utils.isFunction(this.initialize)) this.initialize()
+    this.emit("initialize", this)
   };
 
   // Use module functionality to extend itself onto the constructor. Meta!
   Model.Module.extend.call(model, Model.Module)
 
   model._name = name
+  model.anyInstance = new Model.EventEmitter()
   model.collection = new Model.Collection()
   model.persistence = Model.NullPersistence
   model.unique_key = "id"

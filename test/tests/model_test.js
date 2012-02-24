@@ -224,3 +224,36 @@ test("saving a model with an id should add it to the collection if it isn't alre
 
   ok(Post.collection.first() === post)
 })
+
+test("anyInstance events", 14, function() {
+  var Post = Model("post")
+
+  var results = []
+
+  Post.anyInstance.on("initialize", function(post) { results.push("initialize", post) })
+  Post.anyInstance.on("save", function(post) { results.push("save", post) })
+  Post.anyInstance.on("destroy", function(post) { results.push("destroy", post) })
+
+  var post1 = new Post()
+  var post2 = new Post()
+  var post3 = new Post()
+
+  post1.save()
+  post3.save()
+  post1.destroy()
+  post2.save()
+
+  var expected = [
+    "initialize", post1,
+    "initialize", post2,
+    "initialize", post3,
+    "save", post1,
+    "save", post3,
+    "destroy", post1,
+    "save", post2
+  ]
+
+  for (var i = 0; i < expected.length; i++) {
+    ok(results[i] === expected[i])
+  }
+})
