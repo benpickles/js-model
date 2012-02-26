@@ -11,16 +11,6 @@ Model.Utils = {
     return receiver
   },
 
-  inArray: function(array, obj) {
-    if (array.indexOf) return array.indexOf(obj)
-
-    for (var i = 0, length = array.length; i < length; i++) {
-      if (array[i] === obj) return i
-    }
-
-    return -1
-  },
-
   inherits: function(parent) {
     var ctor = function() {}
     ctor.prototype = parent.prototype
