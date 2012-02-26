@@ -10,6 +10,10 @@
     }
   }
 
+  Collection.extend = function() {
+    return Model.Utils.inherits(this)
+  }
+
   var methods = [
     // name      chainable?   enumerable?  updateLength?
     "every",       false,       true,         false,

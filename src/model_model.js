@@ -1,4 +1,20 @@
-Model.Model = function() {}
+Model.Model = function(attributes) {
+  this.attributes = Model.Utils.extend({}, attributes)
+  this.changes = {}
+  this.errors = new Model.Errors(this)
+  this.uid = [name, Model.UID.generate()].join("-")
+  if (Model.Utils.isFunction(this.initialize)) this.initialize()
+  this.emit("initialize", this)
+}
+
+Model.Model.extend = function() {
+  var child = Model.Utils.inherits(this)
+  child.anyInstance = new Model.EventEmitter()
+  child.persistence = Model.NullPersistence
+  child.unique_key = "id"
+  Model.Utils.extend(child, Model.ClassMethods)
+  return child
+}
 
 Model.Model.prototype = {
   attr: function(name, value) {
