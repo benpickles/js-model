@@ -7,13 +7,16 @@
     return this._events[name]
   }
 
-  EventEmitter.prototype.off = function(name, callback) {
-    var callbacks = prepareEvent.call(this, name)
+  EventEmitter.prototype.off = function(name, callback, scope) {
+    var events = prepareEvent.call(this, name)
 
     if (callback) {
-      for (var i = 0, length = callbacks.length; i < length; i++) {
-        if (callbacks[i] === callback) {
-          this._events[name].splice(i, 1)
+      for (var i = events.length - 1; i >= 0; i--) {
+        var cb = events[i].callback
+        var scp = events[i].scope
+
+        if (cb === callback && scp === scope) {
+          events.splice(i, 1)
         }
       }
     } else {
@@ -23,17 +26,19 @@
     return this
   }
 
-  EventEmitter.prototype.on = function(name, callback) {
-    prepareEvent.call(this, name).push(callback)
+  EventEmitter.prototype.on = function(name, callback, scope) {
+    prepareEvent.call(this, name).push({ callback: callback, scope: scope })
     return this
   }
 
   EventEmitter.prototype.emit = function(name) {
     var args = Array.prototype.slice.call(arguments, 1)
-    var callbacks = prepareEvent.call(this, name)
+    var events = prepareEvent.call(this, name)
 
-    for (var i = 0, length = callbacks.length; i < length; i++) {
-      callbacks[i].apply(this, args)
+    for (var i = 0, length = events.length; i < length; i++) {
+      var callback = events[i].callback
+      var scope = events[i].scope || this
+      callback.apply(scope, args)
     }
 
     return this

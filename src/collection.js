@@ -91,11 +91,9 @@
   }
 
   Collection.prototype.listenTo = function(emitter) {
-    var self = this
-
     emitter
-      .on("save", function(model) { self.add(model) })
-      .on("destroy", function(model) { self.remove(model) })
+      .on("save",    this.add,    this)
+      .on("destroy", this.remove, this)
   }
 
   Collection.prototype.pluck = function(attribute) {
