@@ -464,23 +464,16 @@ test("create event", 1, function() {
     this.use(Model.REST, "/posts")
   });
 
-  var events = []
-
-  // Stub trigger and capture its argument.
-  Post.prototype.trigger = function(name) {
-    events.push(name)
-  }
-
   var server = this.sandbox.useFakeServer()
   server.respondWith("POST", "/posts", [200, {
     "Content-Type": "application/json"
   }, JSON.stringify({ id: 1 })])
 
-  new Post().save()
+  var post = new Post()
+  post.on("save", function() { ok(true) })
+  post.save()
 
   server.respond()
-
-  deepEqual(events, ["save"])
 });
 
 test("update event", 1, function() {
@@ -488,23 +481,16 @@ test("update event", 1, function() {
     this.use(Model.REST, "/posts")
   })
 
-  var events = []
-
-  // Stub trigger and capture its argument.
-  Post.prototype.trigger = function(name) {
-    events.push(name)
-  }
-
   var server = this.sandbox.useFakeServer()
   server.respondWith("PUT", "/posts/1", [200, {
     "Content-Type": "application/json"
   }, JSON.stringify({ id: 1 })])
 
-  new Post({ id: 1 }).save()
+  var post = new Post({ id: 1 })
+  post.on("save", function() { ok(true) })
+  post.save()
 
   server.respond()
-
-  deepEqual(events, ["save"])
 })
 
 test("destroy event", 1, function() {
@@ -512,17 +498,14 @@ test("destroy event", 1, function() {
     this.use(Model.REST, "/posts")
   })
 
-  // Stub trigger and capture its argument.
-  Post.prototype.trigger = function(name) {
-    equal(name, "destroy")
-  }
-
   var server = this.sandbox.useFakeServer()
   server.respondWith("DELETE", "/posts/1", [200, {
     "Content-Type": "application/json"
   }, " "])
 
-  new Post({ id: 1 }).destroy()
+  var post = new Post({ id: 1 })
+  post.on("destroy", function() { ok(true) })
+  post.destroy()
 
   server.respond()
 })

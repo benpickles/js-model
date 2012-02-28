@@ -57,7 +57,7 @@
   Collection.prototype.add = function(model) {
     if (!~this.indexOf(model)) {
       var length = this.push(model)
-      this.trigger("add", [model])
+      this.emit("add", model)
       return length
     }
   }
@@ -90,6 +90,12 @@
     return this.at(this.length - 1)
   }
 
+  Collection.prototype.listenTo = function(emitter) {
+    emitter
+      .on("save",    this.add,    this)
+      .on("destroy", this.remove, this)
+  }
+
   Collection.prototype.pluck = function(attribute) {
     return this.map(function(model) {
       return model.attr(attribute)
@@ -101,7 +107,7 @@
 
     if (~index) {
       this.splice(index, 1)
-      this.trigger("remove", [model])
+      this.emit("remove", model)
       return this.length
     }
   }
@@ -136,5 +142,7 @@
     })
   }
 
-  Model.Utils.extend(Model.Collection.prototype, Model.Callbacks)
+  Collection.prototype.on   = Model.EventEmitter.prototype.on
+  Collection.prototype.off  = Model.EventEmitter.prototype.off
+  Collection.prototype.emit = Model.EventEmitter.prototype.emit
 })(Model);
