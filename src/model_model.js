@@ -29,12 +29,14 @@ Model.Model.prototype = {
       } else {
         this.changes[name] = value;
       }
+      this.emit("change:" + name, this)
       return this;
     } else if (typeof name === "object") {
       // Mass-assign attributes.
       for (var key in name) {
         this.attr(key, name[key]);
       }
+      this.emit("change", this)
       return this;
     } else {
       // Changes take precedent over attributes.

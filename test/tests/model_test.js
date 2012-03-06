@@ -257,3 +257,34 @@ test("anyInstance events", 14, function() {
     ok(results[i] === expected[i])
   }
 })
+
+test("change event", 5, function() {
+  var Post = Model.Model.extend()
+  var post = new Post({ foo: "bar", abc: 123, xyz: 789 })
+
+  var events = []
+
+  post.on("change", function(p) {
+    ok(p === post)
+    events.push("change")
+  })
+
+  post.on("change:foo", function(p) {
+    ok(p === post)
+    events.push("change:foo")
+  })
+
+  post.on("change:xyz", function(p) {
+    ok(p === post)
+    events.push("change:xyz")
+  })
+
+  post.on("change:abc", function() {
+    ok(false)
+  })
+
+  post.attr("foo", "baz")
+  post.attr({ foo: "bob", xyz: 123 })
+
+  same(events, ["change:foo", "change:foo", "change:xyz", "change"])
+})
