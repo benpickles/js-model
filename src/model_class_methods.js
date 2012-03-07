@@ -16,7 +16,7 @@ Model.ClassMethods = {
 
   // Convenience method to allow a simple method of chaining class methods.
   chain: function(collection) {
-    return Model.Utils.extend({}, this, { collection: collection })
+    return Model.Utils.extend({}, this, { collection: collection || [] })
   },
 
   count: function() {
