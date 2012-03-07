@@ -277,3 +277,34 @@ test("saving a model with an id should add it to the collection if it isn't alre
 
   ok(Post.first() === post)
 })
+
+test("change event", 5, function() {
+  var Post = Model("post")
+  var post = new Post({ foo: "bar", abc: 123, xyz: 789 })
+
+  var events = []
+
+  post.bind("change", function(p) {
+    ok(p === post)
+    events.push("change")
+  })
+
+  post.bind("change:foo", function(p) {
+    ok(p === post)
+    events.push("change:foo")
+  })
+
+  post.bind("change:xyz", function(p) {
+    ok(p === post)
+    events.push("change:xyz")
+  })
+
+  post.bind("change:abc", function() {
+    ok(false)
+  })
+
+  post.attr("foo", "baz")
+  post.attr({ foo: "bob", xyz: 123 })
+
+  same(events, ["change:foo", "change:foo", "change:xyz", "change"])
+})

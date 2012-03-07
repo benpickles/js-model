@@ -15,12 +15,14 @@ Model.InstanceMethods = {
       } else {
         this.changes[name] = value;
       }
+      this.trigger("change:" + name, [this])
       return this;
     } else if (typeof name === "object") {
       // Mass-assign attributes.
       for (var key in name) {
         this.attr(key, name[key]);
       }
+      this.trigger("change", [this])
       return this;
     } else {
       // Changes take precedent over attributes.

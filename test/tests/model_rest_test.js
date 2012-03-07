@@ -464,23 +464,16 @@ test("create event", 1, function() {
     this.persistence(Model.REST, "/posts")
   });
 
-  var events = []
-
-  // Stub trigger and capture its argument.
-  Post.prototype.trigger = function(name) {
-    events.push(name)
-  }
-
   var server = this.sandbox.useFakeServer()
   server.respondWith("POST", "/posts", [200, {
     "Content-Type": "application/json"
   }, JSON.stringify({ id: 1 })])
 
-  new Post().save()
+  var post = new Post()
+  post.bind("create", function() { ok(true) })
+  post.save()
 
   server.respond()
-
-  deepEqual(events, ["create"])
 });
 
 test("update event", 1, function() {
