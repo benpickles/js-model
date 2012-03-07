@@ -1,41 +1,46 @@
 # Changelog
 
-## 0.10.1
+## 0.11.0 - 7/3/12
+
+ * Emit a "change" or "change:ATTRIBUTE_NAME" event when modifying attributes on an instance.
+ * Remove jQuery dependency (REST persistence still requires jQuery).
+
+## 0.10.1 - 7/4/11
 
  * Add a simple plugin interface. Call with `MyModel.use(MyPlugin, "some", "args")`.
  * Switch to prototypal inheritance instead of copying functions into a new object.
  * `Model.each()`, `.map()` and `.select()` now behave more like their ECMA-262 equivalents except they return the class and call their iterators with the `this` value as the model by default.
  * `Model.add()` now only takes a single argument.
 
-## 0.10.0
+## 0.10.0 - 1/3/11
 
  * Add `extend()` and `include()` methods to add class and instance methods respectively.
  * New declaration syntax - pass a function giving you access to the newly created class instead of two separate objects.
  * A model with an id will be added to the collection when saved (like the docs said originally).
  * `count()` now follows suit with the rest of js-model and returns the number of models in `all()` allowing you to overwrite `all()` with your own custom implementation - or "Eggs Fish Ham" as he put it ;) [Mark Evans]
 
-## 0.9.4
+## 0.9.4 - 6/12/10
 
  * Add `Model.map()` method.
  * Protect the collection from accidental modification allowing you to safely `remove()` a model from within an `each` loop.
  * Added configurable Model.unique_key, exposed as instance.id() and used in finders. Defaults to 'id'. [Ismael Celis and Oliver Nightingale]
  * Protect an instance's initial attributes from accidental modification.
 
-## 0.9.3
+## 0.9.3 - 28/9/10
 
 * Add the ability to define a custom `initialize()` instance method that is called at the end of the initialization process. Thanks to Ismael Celis for the idea.
 
-## 0.9.2
+## 0.9.2 - 23/9/10
 
 * Ajax DELETE sends JSON body, including AjaxSetup data if available. [Ismael Celis]
 * `Model.remove()` should include removed instance in event data. [Ismael Celis]
 * Call the `Model.load()` callback with the scope of the class.
 
-## 0.9.1
+## 0.9.1 - 21/9/10
 
 * If defined, include jQuery.ajaxSetup data in REST parameters. [Ismael Celis]
 
-## 0.9.0
+## 0.9.0 - 16/9/10
 
 * Finder methods now return `undefined` for a missing model.
 * Remove #update method which you might guess acts like ActiveRecord's #update_attributes which is not the case - no calls are triggered on the persistence adapter.
@@ -51,37 +56,37 @@
 * Add `pluck` method that takes an attribute name and returns an array of values.
 * Fix for callbacks being wrongly called on multiple instances - they were being stored on the prototype and thus being shared across instances. Thanks to Oliver Nightingale for identifying the bug and writing a test case.
 
-## 0.8.4
+## 0.8.4 - 2/7/10
 
 * Add named parameters to `Model.RestPersistence` so "/categories/:category_id/posts" will pick up the corresponding `category_id` attribute from your model and be converted to "/categories/2/posts". [Russell Jones]
 
-## 0.8.3
+## 0.8.3 - 15/4/10
 
 * Fix that `find`, `first`, `last` and `detect` return `null` when nothing is found.
 * Add `unbind` method to unbind all callbacks for a particular event or a specific callback by passing a reference to the original function.
 * Move callback functionality into a separate module and mix-in to class and instance.
 
-## 0.8.2
+## 0.8.2 - 7/4/10
 
 * Don't log an error when Rails returns a response of " " for a `head :ok` response.
 * `jQuery.ajax` should use `dataType` "json" removing the need to set a global `beforeSend`. [Jason Lee]
 
-## 0.8.1
+## 0.8.1 - 29/3/10
 
 * Fix that custom class methods should be available after chaining.
 
-## 0.8.0
+## 0.8.0 - 21/3/10
 
 * Move model collection methods into a separate object allowing you to customise the defaults in a single place.
 * Move model instance methods into a separate object. This allows you to redefine the defaults once rather than having to pass the same custom method to multiple models at declaration time.
 * Defining a model now takes three arguments: name, class methods, instance methods.
 
-## 0.7.3
+## 0.7.3 - 10/3/10
 
 * Fix callbacks in IE.
 * Fix broken Ajax tests in IE6 and IE7.
 
-## 0.7.1
+## 0.7.1 - 5/3/10
 
 * `Model.RestPersistence` now recognises a 422 response as validation failure and populates the model's errors object with the response data.
 * `Model.errors` is now an object and has a similar interface to ActiveModel.
@@ -91,26 +96,26 @@
 * Add `count` method to `Model.Collection`.
 * Collection methods now access the collection through the `all` method so that `select`, `each`, etc work as expected if it's overwritten.
 
-## 0.7.0
+## 0.7.0 - 18/2/10
 
 * Events are now bound directly to a model rather than using jQuery `bind`. Collections also now have the concept of events with "add" and "remove" built-in.
 
-## 0.6.1
+## 0.6.1 - 12/2/10
 
 * `update` should trigger "update" event, add separate `merge` method.
 * Fix that persistence failure should not trigger corresponding event.
 
-## 0.6.0
+## 0.6.0 - 11/2/10
 
 * Pass only a single callback to save/destroy which is called with a boolean to indicate success/failure.
 * Bundle release into a single, versioned Javascript file plus minified version.
 * Change behaviour of `Model.Collection` and don't let duplicates (scoped by id) of the same model to be stored. [Laurie Young]
 
-## 0.5.1
+## 0.5.1 - 3/2/10
 
 * Fix that setting a null value with `attr` should be read back correctly from `changes`.
 * `errors` array shouldn't have to be manually `reset` when implementing `validate`.
 
-## 0.5.0
+## 0.5.0 - 3/2/10
 
 * First tagged release.

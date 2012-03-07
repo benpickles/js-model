@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>js-model &bull; models in your JavaScript</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>js-model • models in your JavaScript</title>
 <link href="docs/style.css" rel="stylesheet">
 <script type="text/javascript">
 var _gaq = _gaq || [];
@@ -17,23 +18,21 @@ _gaq.push(['_trackPageview']);
 </head>
 <body>
   <div id="content">
-    <h1>js-model (0.10.1)</h1>
+    <h1>js-model (0.11.0)</h1>
 
-    <p>js-model is a library built on top of <a href="http://jquery.com/">jQuery</a> that allows you to work with models in your JavaScript.</p>
+    <p>js-model is a library that allows you to work with models in your JavaScript.</p>
 
     <dl>
 <dt>Download</dt>
       <dd>
-<a href="dist/js-model-0.10.1.min.js">js-model-0.10.1.min.js</a> (8.1Kb)</dd>
+<a href="dist/js-model-0.11.0.min.js">js-model-0.11.0.min.js</a> (8.6Kb)</dd>
       <dd>
-<a href="dist/js-model-0.10.1.js">js-model-0.10.1.js</a> (16.2Kb)</dd>
+<a href="dist/js-model-0.11.0.js">js-model-0.11.0.js</a> (16.9Kb)</dd>
 
       <dt>Source</dt>
       <dd><a href="http://github.com/benpickles/js-model">github.com/benpickles/js-model</a></dd>
     </dl>
-<div class="archive"><a href="docs/v0.9.4.html">Version 0.9.4 docs</a></div>
-
-    <nav><ol>
+<nav><ol>
 <li>
 <a href="#getting-started">Getting started</a><ol>
 <li><a href="#manipulating-objects">Manipulating objects</a></li>
@@ -62,7 +61,7 @@ _gaq.push(['_trackPageview']);
 <li><a href="#loading-data">Loading data</a></li>
 </ol>
 </li>
-<li><a href="#js-model-hearts-sammy">js-model &hearts; Sammy</a></li>
+<li><a href="#js-model-9829-sammy">js-model ♥ Sammy</a></li>
 <li>
 <a href="#api">API</a><ol>
 <li><a href="#model">Model()</a></li>
@@ -137,7 +136,7 @@ _gaq.push(['_trackPageview']);
 
 <pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">)</span></code></pre>
 
-<p>This allows you to create instances of &ldquo;project&rdquo; models and also contains an internal collection of all &ldquo;projects&rdquo; which can be used for querying.</p>
+<p>This allows you to create instances of “project” models and also contains an internal collection of all “projects” which can be used for querying.</p>
 
 <h3 id="manipulating-objects">Manipulating objects</h3>
 
@@ -149,7 +148,7 @@ _gaq.push(['_trackPageview']);
 
 <h3 id="finding-objects">Finding objects</h3>
 
-<p>After calling <a href="#save"><code>save()</code></a> on a model it is added to the class&rsquo;s &ldquo;collection&rdquo; and can be retrieved again by calling <a href="#find"><code>find()</code></a> (or <a href="#first"><code>first()</code></a> as it is the first model in the collection).</p>
+<p>After calling <a href="#save"><code>save()</code></a> on a model it is added to the class’s “collection” and can be retrieved again by calling <a href="#find"><code>find()</code></a> (or <a href="#first"><code>first()</code></a> as it is the first model in the collection).</p>
 
 <pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="c1">// =&gt; project</span>
@@ -170,7 +169,7 @@ _gaq.push(['_trackPageview']);
 
 <h4 id="class-properties">Class properties</h4>
 
-<p>When <a href="#model">creating a model</a> you can pass a function as the optional second argument and &ldquo;<a href="#extend">extend</a>&rdquo; the class by adding methods to it.</p>
+<p>When <a href="#model">creating a model</a> you can pass a function as the optional second argument and “<a href="#extend">extend</a>” the class by adding methods to it.</p>
 
 <pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
@@ -187,7 +186,7 @@ _gaq.push(['_trackPageview']);
 
 <h4 id="instance-properties">Instance properties</h4>
 
-<p>You can also &ldquo;<a href="#include">include</a>&rdquo; instance methods on the model&rsquo;s prototype. These are often used to link objects together in a way that mimics the relationships the data might have in the remote database (&ldquo;has many&rdquo; etc). However, they can be pretty much anything and can overwrite the defaults.</p>
+<p>You can also “<a href="#include">include</a>” instance methods on the model’s prototype. These are often used to link objects together in a way that mimics the relationships the data might have in the remote database (“has many” etc). However, they can be pretty much anything and can overwrite the defaults.</p>
 
 <pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">include</span><span class="p">({</span>
@@ -202,7 +201,7 @@ _gaq.push(['_trackPageview']);
 
 <h3 id="associations">Associations</h3>
 
-<p>Simple associations can be mimicked by adding a couple of instance methods. Here a <code>Cat</code> &ldquo;belongs to&rdquo; a <code>Mat</code> and a <code>Mat</code> &ldquo;has many&rdquo; <code>Cat</code>s.</p>
+<p>Simple associations can be mimicked by adding a couple of instance methods. Here a <code>Cat</code> “belongs to” a <code>Mat</code> and a <code>Mat</code> “has many” <code>Cat</code>s.</p>
 
 <pre><code><span class="kd">var</span> <span class="nx">Cat</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"cat"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">include</span><span class="p">({</span>
@@ -230,7 +229,7 @@ _gaq.push(['_trackPageview']);
 
 <h3 id="events">Events</h3>
 
-<p>js-model allows you to listen to the lifecycle of objects based on the events they trigger at different points. Typically you&rsquo;ll use this to link your data objects to UI elements.</p>
+<p>js-model allows you to listen to the lifecycle of objects based on the events they trigger at different points. Typically you’ll use this to link your data objects to UI elements.</p>
 
 <h4 id="class-events">Class events</h4>
 
@@ -272,16 +271,16 @@ _gaq.push(['_trackPageview']);
 
 <h3 id="validations">Validations</h3>
 
-<p>To add your own validations you should define a custom <a href="#validate"><code>validate()</code></a> method on your model that adds error messages to the <a href="#errors"><code>errors</code></a> object. <a href="#valid"><code>valid()</code></a> is called on <a href="#save"><code>save()</code></a> and checks that there are no errors. Validations are useful when using <a href="#localstorage">localStorage persistence</a> but can also help you avoid hitting your server unnecessarily if you&rsquo;re using <a href="#rest">REST persistence</a>.</p>
+<p>To add your own validations you should define a custom <a href="#validate"><code>validate()</code></a> method on your model that adds error messages to the <a href="#errors"><code>errors</code></a> object. <a href="#valid"><code>valid()</code></a> is called on <a href="#save"><code>save()</code></a> and checks that there are no errors. Validations are useful when using <a href="#localstorage">localStorage persistence</a> but can also help you avoid hitting your server unnecessarily if you’re using <a href="#rest">REST persistence</a>.</p>
 </section><section><h2 id="persistence">Persistence</h2>
 
-<p>js-model is different to several other solutions, it&rsquo;s not a REST-based proxy for the objects on your server and doesn&rsquo;t rely on constant HTTP requests to gather information. Instead, it looks up objects in its own cache which can be populated via a persistence adapter &mdash; think of it as <a href="http://blog.new-bamboo.co.uk/2010/2/4/let-them-eat-state">maintaining the state of your objects in the browser</a>.</p>
+<p>js-model is different to several other solutions, it’s not a REST-based proxy for the objects on your server and doesn’t rely on constant HTTP requests to gather information. Instead, it looks up objects in its own cache which can be populated via a persistence adapter — think of it as <a href="http://blog.new-bamboo.co.uk/2010/2/4/let-them-eat-state">maintaining the state of your objects in the browser</a>.</p>
 
 <p>Persistence is defined as a <a href="#class-properties">class property</a> and comes in two flavours: <a href="#rest">REST</a> and <a href="#localstorage">localStorage</a>. Both adapters encode/decode your attributes with JSON and so require the browser to be JSON-aware (or to include the <a href="http://www.json.org/js.html">JSON JavaScript library</a>). Persistence is defined using the <a href="#api-class-properties-persistence"><code>persistence()</code></a> method.</p>
 
 <h3 id="rest">REST</h3>
 
-<p>Uses jQuery&rsquo;s <a href="http://api.jquery.com/jQuery.ajax/"><code>ajax()</code></a> method to GET, POST, PUT and DELETE model data to the server as JSON and expects JSON back.</p>
+<p>Uses jQuery’s <a href="http://api.jquery.com/jQuery.ajax/"><code>ajax()</code></a> method to GET, POST, PUT and DELETE model data to the server as JSON and expects JSON back.</p>
 
 <pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">persistence</span><span class="p">(</span><span class="nx">Model</span><span class="p">.</span><span class="nx">REST</span><span class="p">,</span> <span class="s2">"/projects"</span><span class="p">)</span>
@@ -294,15 +293,15 @@ _gaq.push(['_trackPageview']);
 <span class="nx">project</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"name"</span><span class="p">,</span> <span class="s2">"nonsense"</span><span class="p">).</span><span class="nx">save</span><span class="p">()</span>   <span class="c1">//    PUT /projects/1</span>
 <span class="nx">project</span><span class="p">.</span><span class="nx">destroy</span><span class="p">()</span>                         <span class="c1">// DELETE /projects/1</span></code></pre>
 
-<p>When responding to POST or PUT requests any JSON returned will be <a href="#merge">merged</a> into the model&rsquo;s <a href="#attributes"><code>attributes</code></a> &mdash; you should also make sure to include the id in the POST response so it can be assigned to the model. 422 responses from the server will be interpreted as having failed validations, any returned JSON will be assumed to be errors and replace client-side <a href="#api-errors"><code>errors</code></a>.</p>
+<p>When responding to POST or PUT requests any JSON returned will be <a href="#merge">merged</a> into the model’s <a href="#attributes"><code>attributes</code></a> — you should also make sure to include the id in the POST response so it can be assigned to the model. 422 responses from the server will be interpreted as having failed validations, any returned JSON will be assumed to be errors and replace client-side <a href="#api-errors"><code>errors</code></a>.</p>
 
-<p><strong>Note:</strong> If you&rsquo;re using Rails you should make sure to add the following setting in an initializer as js-model expects non-namespaced JSON:</p>
+<p><strong>Note:</strong> If you’re using Rails you should make sure to add the following setting in an initializer as js-model expects non-namespaced JSON:</p>
 
 <pre><code><span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">include_root_in_json</span> <span class="o">=</span> <span class="kp">false</span></code></pre>
 
 <h3 id="localstorage">localStorage</h3>
 
-<p>localStorage is a client-side key/value store that persists between page views and browser sessions, it&rsquo;s supported by Safari, Chrome, Firefox, Opera, IE8 and Safari Mobile (iPhone) &mdash; WebKit-based browsers have an excellent localStorage GUI in the Web Inspector.</p>
+<p>localStorage is a client-side key/value store that persists between page views and browser sessions, it’s supported by Safari, Chrome, Firefox, Opera, IE8 and Safari Mobile (iPhone) — WebKit-based browsers have an excellent localStorage GUI in the Web Inspector.</p>
 
 <pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">persistence</span><span class="p">(</span><span class="nx">Model</span><span class="p">.</span><span class="nx">localStorage</span><span class="p">)</span>
@@ -310,7 +309,7 @@ _gaq.push(['_trackPageview']);
 
 <h3 id="loading-data">Loading data</h3>
 
-<p>If you have existing data stored in your persistence layer you&rsquo;ll want to be able to have it available when you next open your app. You&rsquo;ll typically call <a href="#load"><code>load()</code></a> when your document loads and perform an action when it has completed.</p>
+<p>If you have existing data stored in your persistence layer you’ll want to be able to have it available when you next open your app. You’ll typically call <a href="#load"><code>load()</code></a> when your document loads and perform an action when it has completed.</p>
 
 <pre><code><span class="c1">// wait for the document to load</span>
 <span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -318,9 +317,9 @@ _gaq.push(['_trackPageview']);
     <span class="c1">// do something with the UI</span>
   <span class="p">})</span>
 <span class="p">})</span></code></pre>
-</section><section><h2 id="js-model-hearts-sammy">js-model &hearts; Sammy</h2>
+</section><section><h2 id="js-model-9829-sammy">js-model ♥ Sammy</h2>
 
-<p>js-model works really well with Sammy &mdash; you <em>are</em> using <a href="http://code.quirkey.com/sammy/">Sammy</a> right? Your routes might look something like this:</p>
+<p>js-model works really well with Sammy — you <em>are</em> using <a href="http://code.quirkey.com/sammy/">Sammy</a> right? Your routes might look something like this:</p>
 
 <pre><code><span class="nx">$</span><span class="p">.</span><span class="nx">sammy</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">"#/projects"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -411,7 +410,7 @@ _gaq.push(['_trackPageview']);
 
 <h4 id="add"><code>add(model)</code></h4>
 
-<p>Adds a model to a collection and is what <a href="#save"><code>save()</code></a> calls internally if it is successful. <code>add()</code> won&rsquo;t allow you to add a model to the collection if one already exists with the same <a href="#id"><code>id</code></a> or <a href="#uid"><code>uid</code></a>.</p>
+<p>Adds a model to a collection and is what <a href="#save"><code>save()</code></a> calls internally if it is successful. <code>add()</code> won’t allow you to add a model to the collection if one already exists with the same <a href="#id"><code>id</code></a> or <a href="#uid"><code>uid</code></a>.</p>
 
 <pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
 <span class="c1">// =&gt; []</span>
@@ -448,7 +447,7 @@ _gaq.push(['_trackPageview']);
 
 <h4 id="chain"><code>chain(arrayOfModels)</code></h4>
 
-<p>A utility method to enable chaining methods on a collection &mdash; used internally by <a href="#select"><code>select()</code></a> for instance.</p>
+<p>A utility method to enable chaining methods on a collection — used internally by <a href="#select"><code>select()</code></a> for instance.</p>
 
 <h4 id="count"><code>count()</code></h4>
 
@@ -526,7 +525,7 @@ _gaq.push(['_trackPageview']);
 
 <h4 id="include"><code>include(object)</code></h4>
 
-<p>Add methods to the class&rsquo;s <code>prototype</code>.</p>
+<p>Add methods to the class’s <code>prototype</code>.</p>
 
 <pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">include</span><span class="p">({</span>
   <span class="nx">reverseName</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -538,7 +537,7 @@ _gaq.push(['_trackPageview']);
 <span class="nx">carrot</span><span class="p">.</span><span class="nx">reverseName</span><span class="p">()</span>
 <span class="c1">// =&gt; "torraC"</span></code></pre>
 
-<p><strong>Note:</strong> Be careful when adding properties that aren&rsquo;t primitives to an object&rsquo;s <code>prototype</code>, this can result in unexpected behaviour as the <code>prototype</code> is shared across all instances, for example:</p>
+<p><strong>Note:</strong> Be careful when adding properties that aren’t primitives to an object’s <code>prototype</code>, this can result in unexpected behaviour as the <code>prototype</code> is shared across all instances, for example:</p>
 
 <pre><code><span class="kd">var</span> <span class="nx">Post</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"post"</span><span class="p">)</span>
 <span class="nx">Post</span><span class="p">.</span><span class="nx">include</span><span class="p">({</span>
@@ -618,7 +617,7 @@ _gaq.push(['_trackPageview']);
 
 <h4 id="new"><code>new(attributes)</code></h4>
 
-<p>Instantiates a model, the supplied attributes get assigned directly to the model&rsquo;s <a href="#attributes"><code>attributes</code></a>. Custom initialization behaviour can be added by defining an <a href="#initialize"><code>initialize()</code></a> instance method.</p>
+<p>Instantiates a model, the supplied attributes get assigned directly to the model’s <a href="#attributes"><code>attributes</code></a>. Custom initialization behaviour can be added by defining an <a href="#initialize"><code>initialize()</code></a> instance method.</p>
 
 <pre><code><span class="kd">var</span> <span class="nx">fish</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Food</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"fish"</span> <span class="p">})</span>
 
@@ -678,7 +677,7 @@ _gaq.push(['_trackPageview']);
 
 <h4 id="sort"><code>sort(func)</code></h4>
 
-<p>Acts like <code>Array#sort()</code> on the collection. It&rsquo;s more likely you&rsquo;ll want to use <a href="#sortby"><code>sortBy()</code></a> which is a far more convenient wrapper to <code>sort()</code>.</p>
+<p>Acts like <code>Array#sort()</code> on the collection. It’s more likely you’ll want to use <a href="#sortby"><code>sortBy()</code></a> which is a far more convenient wrapper to <code>sort()</code>.</p>
 
 <h4 id="sortby">
 <code>sortBy(attributeName</code> or <code>func)</code>
@@ -696,7 +695,7 @@ _gaq.push(['_trackPageview']);
 
 <h4 id="unique_key"><code>unique_key</code></h4>
 
-<p><code>unique_key</code> refers to the attribute that holds the &ldquo;primary key&rdquo; and defaults to <code>"id"</code>. It&rsquo;s useful when using with something like MongoDB.</p>
+<p><code>unique_key</code> refers to the attribute that holds the “primary key” and defaults to <code>"id"</code>. It’s useful when using with something like MongoDB.</p>
 
 <pre><code><span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">unique_key</span> <span class="o">=</span> <span class="s2">"_id"</span>
@@ -714,26 +713,26 @@ _gaq.push(['_trackPageview']);
   <span class="k">this</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">MyPlugin</span><span class="p">,</span> <span class="s2">"with"</span><span class="p">,</span> <span class="p">{</span> <span class="nx">extra</span><span class="o">:</span> <span class="s2">"arguments"</span> <span class="p">})</span>
 <span class="p">})</span></code></pre>
 
-<p><code>use</code> can also be called outside of a model&rsquo;s declaration as it&rsquo;s simply a class method.</p>
+<p><code>use</code> can also be called outside of a model’s declaration as it’s simply a class method.</p>
 
 <pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">MyPlugin</span><span class="p">,</span> <span class="s2">"with"</span><span class="p">,</span> <span class="p">{</span> <span class="nx">extra</span><span class="o">:</span> <span class="s2">"arguments"</span> <span class="p">})</span></code></pre>
 <h3 id="api-instance-properties">Instance properties</h3>
 
 <h4 id="attr"><code>attr()</code></h4>
 
-<p>Get and set a model&rsquo;s attribute(s). <code>attr()</code> can be used in a few ways:</p>
+<p>Get and set a model’s attribute(s). <code>attr()</code> can be used in a few ways:</p>
 
 <ul>
 <li>
-<code>attr(name)</code> &mdash; Get the value of the named attribute.</li>
+<code>attr(name)</code> — Get the value of the named attribute.</li>
 <li>
-<code>attr(name, value)</code> &mdash; Set the value of the named attribute.</li>
+<code>attr(name, value)</code> — Set the value of the named attribute.</li>
 <li>
-<code>attr()</code> &mdash; Get an object containing all name/value attribute pairs.</li>
+<code>attr()</code> — Get an object containing all name/value attribute pairs.</li>
 <li>
-<code>attr(object)</code> &mdash; Set multiple name/value attribute pairs.</li>
+<code>attr(object)</code> — Set multiple name/value attribute pairs.</li>
 </ul>
-<p>Attributes modified using <code>attr()</code> can be reverted &mdash; see <a href="#changes"><code>changes</code></a> for more information.</p>
+<p>Attributes modified using <code>attr()</code> can be reverted — see <a href="#changes"><code>changes</code></a> for more information.</p>
 
 <pre><code><span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Project</span><span class="p">({</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">"Foo"</span><span class="p">,</span> <span class="nx">category</span><span class="o">:</span> <span class="s2">"Stuff"</span> <span class="p">})</span>
 
@@ -763,7 +762,7 @@ _gaq.push(['_trackPageview']);
 
 <h4 id="attributes"><code>attributes</code></h4>
 
-<p>Direct access to a model&rsquo;s attributes object. Most of the time you won&rsquo;t need to use this and should use <a href="#attr"><code>attr()</code></a> instead.</p>
+<p>Direct access to a model’s attributes object. Most of the time you won’t need to use this and should use <a href="#attr"><code>attr()</code></a> instead.</p>
 
 <pre><code><span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Project</span><span class="p">({</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">"Foo"</span> <span class="p">})</span>
 <span class="nx">project</span><span class="p">.</span><span class="nx">attributes</span>
@@ -771,7 +770,7 @@ _gaq.push(['_trackPageview']);
 
 <h4 id="changes"><code>changes</code></h4>
 
-<p>Attributes set with the <a href="#attr"><code>attr()</code></a> method are written to the <code>changes</code> intermediary object rather than directly to the <a href="#attributes"><code>attributes</code></a> object. This allows you to see any previous attribute values and enables validations &mdash; see <a href="#validate"><code>validate()</code></a> for more on validations. <code>changes</code> are committed to <a href="#attributes"><code>attributes</code></a> on successful <a href="#save"><code>save()</code></a>.</p>
+<p>Attributes set with the <a href="#attr"><code>attr()</code></a> method are written to the <code>changes</code> intermediary object rather than directly to the <a href="#attributes"><code>attributes</code></a> object. This allows you to see any previous attribute values and enables validations — see <a href="#validate"><code>validate()</code></a> for more on validations. <code>changes</code> are committed to <a href="#attributes"><code>attributes</code></a> on successful <a href="#save"><code>save()</code></a>.</p>
 
 <pre><code><span class="kd">var</span> <span class="nx">project</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Project</span><span class="p">({</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">"Foo"</span> <span class="p">})</span>
 <span class="nx">project</span><span class="p">.</span><span class="nx">attributes</span>             <span class="c1">// =&gt; { title: "Foo" }</span>
@@ -809,7 +808,7 @@ _gaq.push(['_trackPageview']);
 
 <h4 id="errors"><code>errors</code></h4>
 
-<p>Returns an <a href="#api-errors"><code>Errors</code></a> object containing information about any failed validations &mdash; similar to ActiveRecord&rsquo;s Errors object. See <a href="#api-errors"><code>Errors</code></a> for more information.</p>
+<p>Returns an <a href="#api-errors"><code>Errors</code></a> object containing information about any failed validations — similar to ActiveRecord’s Errors object. See <a href="#api-errors"><code>Errors</code></a> for more information.</p>
 
 <h4 id="id"><code>id()</code></h4>
 
@@ -847,7 +846,7 @@ _gaq.push(['_trackPageview']);
 
 <h4 id="newrecord"><code>newRecord()</code></h4>
 
-<p>If the model doesn&rsquo;t have an id then it&rsquo;s new. This is what js-model checks when saving to decide whether it should call <a href="#create"><code>create()</code></a> or <a href="#update"><code>update()</code></a> on the persistence adapter.</p>
+<p>If the model doesn’t have an id then it’s new. This is what js-model checks when saving to decide whether it should call <a href="#create"><code>create()</code></a> or <a href="#update"><code>update()</code></a> on the persistence adapter.</p>
 
 <pre><code><span class="nx">egg</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Food</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"egg"</span> <span class="p">})</span>
 <span class="nx">ham</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Food</span><span class="p">({</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">"ham"</span> <span class="p">})</span>
@@ -866,12 +865,12 @@ _gaq.push(['_trackPageview']);
 <ul>
 <li>Check whether the model is <a href="#valid"><code>valid()</code></a>, if not then halt here passing the callback <code>false</code>.</li>
 <li>If the model is <a href="#newrecord">new</a> then call <a href="#create"><code>create()</code></a> on the persistence adapter otherwise call <a href="#update"><code>update()</code></a>.</li>
-<li>If the persistence call is successful then <a href="#merge"><code>merge()</code></a> any <a href="#changes"><code>changes</code></a> into <a href="#attributes"><code>attributes</code></a> and <a href="#add"><code>add()</code></a> the model to the collection if it&rsquo;s new.</li>
+<li>If the persistence call is successful then <a href="#merge"><code>merge()</code></a> any <a href="#changes"><code>changes</code></a> into <a href="#attributes"><code>attributes</code></a> and <a href="#add"><code>add()</code></a> the model to the collection if it’s new.</li>
 <li>Finally the supplied callback is called with a boolean to indicate success/failure and any further arguments the persistence adapter supplies.</li>
 </ul>
-<p>If your persistence layer returns any data this will also be <a href="#merge">merged</a> into the attributes &mdash; this is how your server-assigned id gets assigned to the model when you use <a href="#rest">REST persistence</a>.</p>
+<p>If your persistence layer returns any data this will also be <a href="#merge">merged</a> into the attributes — this is how your server-assigned id gets assigned to the model when you use <a href="#rest">REST persistence</a>.</p>
 
-<p><strong>Note:</strong> It&rsquo;s important to understand that the callback passed to <code>save()</code> may take some time to be called as it may depend on a response from your server.</p>
+<p><strong>Note:</strong> It’s important to understand that the callback passed to <code>save()</code> may take some time to be called as it may depend on a response from your server.</p>
 
 <pre><code><span class="nx">Food</span><span class="p">.</span><span class="nx">all</span><span class="p">()</span>
 <span class="c1">// =&gt; [egg, ham, cheese]</span>
@@ -892,15 +891,15 @@ _gaq.push(['_trackPageview']);
 
 <h4 id="uid"><code>uid</code></h4>
 
-<p>Automatically assigned on instantiation, this is a per-page-load-unique id &mdash; used by the <a href="#localstorage">localStorage persistence adapter</a>.</p>
+<p>Automatically assigned on instantiation, this is a per-page-load-unique id — used by the <a href="#localstorage">localStorage persistence adapter</a>.</p>
 
 <h4 id="valid"><code>valid()</code></h4>
 
-<p>Calls <a href="#validate"><code>validate()</code></a> and checks for the existence of any errors returning <code>true</code> or <code>false</code>. Used by <a href="#save"><code>save()</code></a> which won&rsquo;t continue if <code>valid()</code> returns <code>false</code>.</p>
+<p>Calls <a href="#validate"><code>validate()</code></a> and checks for the existence of any errors returning <code>true</code> or <code>false</code>. Used by <a href="#save"><code>save()</code></a> which won’t continue if <code>valid()</code> returns <code>false</code>.</p>
 
 <h4 id="validate"><code>validate()</code></h4>
 
-<p>Overwrite this method to add client-side validations to your model. This method is called on <a href="#save"><code>save()</code></a> which won&rsquo;t continue if the <a href="#errors"><code>errors</code></a> object is not empty.</p>
+<p>Overwrite this method to add client-side validations to your model. This method is called on <a href="#save"><code>save()</code></a> which won’t continue if the <a href="#errors"><code>errors</code></a> object is not empty.</p>
 
 <pre><code><span class="kd">var</span> <span class="nx">Project</span> <span class="o">=</span> <span class="nx">Model</span><span class="p">(</span><span class="s2">"project"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">this</span><span class="p">.</span><span class="nx">include</span><span class="p">({</span>
@@ -921,9 +920,9 @@ _gaq.push(['_trackPageview']);
 <span class="c1">// =&gt; true</span></code></pre>
 <h3 id="api-errors">Errors</h3>
 
-<p>Errors are used in conjunction with <a href="#validate"><code>validate()</code></a> and are modelled after ActiveModel&rsquo;s errors.</p>
+<p>Errors are used in conjunction with <a href="#validate"><code>validate()</code></a> and are modelled after ActiveModel’s errors.</p>
 
-<p><strong>Note:</strong> If you&rsquo;re using Rails 2.x you can get Rails 3-style <code>errors.to_json</code> by dropping this simple monkey patch into an initializer (<a href="http://gist.github.com/350520">Gist</a>).</p>
+<p><strong>Note:</strong> If you’re using Rails 2.x you can get Rails 3-style <code>errors.to_json</code> by dropping this simple monkey patch into an initializer (<a href="http://gist.github.com/350520">Gist</a>).</p>
 
 <pre><code><span class="k">module</span> <span class="nn">ActiveRecord</span>
   <span class="k">class</span> <span class="nc">Errors</span>
@@ -998,7 +997,7 @@ _gaq.push(['_trackPageview']);
 <span class="c1">// =&gt; 2</span></code></pre>
 <h3 id="persistence-interface">Persistence interface</h3>
 
-<p>Persistence adapters implement CRUD and return an object with the following interface. You probably don&rsquo;t need to know this but is documented here in case you want to implement your own.</p>
+<p>Persistence adapters implement CRUD and return an object with the following interface. You probably don’t need to know this but is documented here in case you want to implement your own.</p>
 
 <h4 id="create"><code>create(model, callback)</code></h4>
 
@@ -1018,7 +1017,7 @@ _gaq.push(['_trackPageview']);
 
 <h4 id="read"><code>read(callback)</code></h4>
 
-<p>Calls the supplied callback with an array of models &mdash; models are <strong>not</strong> automatically added to the collection when calling <code>read()</code>. You probably won&rsquo;t need to use this much as this functionality is taken care of by <a href="#load"><code>load()</code></a>.</p>
+<p>Calls the supplied callback with an array of models — models are <strong>not</strong> automatically added to the collection when calling <code>read()</code>. You probably won’t need to use this much as this functionality is taken care of by <a href="#load"><code>load()</code></a>.</p>
 
 <pre><code><span class="nx">Project</span><span class="p">.</span><span class="nx">persistence</span><span class="p">().</span><span class="nx">read</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">models</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// do something with the models...</span>
@@ -1034,7 +1033,7 @@ _gaq.push(['_trackPageview']);
 </section>
 </div>
 
-  <footer><p>&copy; 2010-2011 <a href="http://benpickles.com/">Ben Pickles</a>. See <a href="http://github.com/benpickles/js-model/blob/master/LICENSE">LICENSE</a> for details.</p>
+  <footer><p>© 2010-2012 <a href="http://benpickles.com/">Ben Pickles</a>. See <a href="http://github.com/benpickles/js-model/blob/master/LICENSE">LICENSE</a> for details.</p>
   </footer>
 </body>
 </html>
