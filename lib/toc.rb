@@ -68,7 +68,7 @@ module Toc
 
     def text
       node.
-        inner_html.
+        inner_html({ :encoding => 'US-ASCII' }).
         gsub(/<[^>]+>/, '').
         sub(/\([^\)]+\)/, '()')
     end
