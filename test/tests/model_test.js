@@ -286,5 +286,5 @@ test("change event", function() {
   post.set("foo", "baz")
   post.set({ foo: "bob", xyz: 123 })
 
-  same(events, ["change:foo", "change:foo", "change:xyz", "change"])
+  same(events, ["change:foo", "change", "change:foo", "change:xyz", "change"])
 })

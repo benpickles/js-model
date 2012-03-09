@@ -17,6 +17,18 @@
     return child
   }
 
+  function set(name, value) {
+    // Don't write to attributes yet, store in changes for now.
+    if (this.attributes[name] === value) {
+      // Clean up any stale changes.
+      delete this.changes[name]
+    } else {
+      this.changes[name] = value
+    }
+
+    this.emit("change:" + name, this)
+  }
+
   Model.Model.prototype = {
     destroy: function(callback) {
       var self = this
@@ -89,23 +101,15 @@
 
     set: function(name, value) {
       if (arguments.length == 2) {
-        // Don't write to attributes yet, store in changes for now.
-        if (this.attributes[name] === value) {
-          // Clean up any stale changes.
-          delete this.changes[name]
-        } else {
-          this.changes[name] = value
-        }
-
-        this.emit("change:" + name, this)
+        set.call(this, name, value)
       } else if (typeof name == "object") {
         // Mass-assign attributes.
         for (var key in name) {
-          this.set(key, name[key])
+          set.call(this, key, name[key])
         }
-
-        this.emit("change", this)
       }
+
+      this.emit("change", this)
 
       return this
     },
