@@ -27,9 +27,9 @@ test("read", function() {
     var post2 = models[1]
 
     equal("post-a", post1.uid)
-    deepEqual({ a: "a" }, post1.attr())
+    deepEqual({ a: "a" }, post1.get())
     equal("post-b", post2.uid)
-    deepEqual({ b: "b" }, post2.attr())
+    deepEqual({ b: "b" }, post2.get())
 
     Post.collection = [post1, post2]
   })
@@ -59,7 +59,7 @@ test("create, update, destroy", function() {
   equal(localStorage["post-collection"], '["' + post.uid + '"]',
     "should be stored in localStorage")
 
-  post.attr({ title: ".", foo: null, bar: "baz" })
+  post.set({ title: ".", foo: null, bar: "baz" })
   post.save()
 
   equal(Post.collection.length, 1)

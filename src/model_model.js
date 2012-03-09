@@ -17,35 +17,6 @@ Model.Model.extend = function() {
 }
 
 Model.Model.prototype = {
-  attr: function(name, value) {
-    if (arguments.length === 0) {
-      // Combined attributes/changes object.
-      return Model.Utils.extend({}, this.attributes, this.changes);
-    } else if (arguments.length === 2) {
-      // Don't write to attributes yet, store in changes for now.
-      if (this.attributes[name] === value) {
-        // Clean up any stale changes.
-        delete this.changes[name];
-      } else {
-        this.changes[name] = value;
-      }
-      this.emit("change:" + name, this)
-      return this;
-    } else if (typeof name === "object") {
-      // Mass-assign attributes.
-      for (var key in name) {
-        this.attr(key, name[key]);
-      }
-      this.emit("change", this)
-      return this;
-    } else {
-      // Changes take precedent over attributes.
-      return (name in this.changes) ?
-        this.changes[name] :
-        this.attributes[name];
-    }
-  },
-
   destroy: function(callback) {
     var self = this
 
@@ -64,6 +35,18 @@ Model.Model.prototype = {
     var anyInstance = this.constructor.anyInstance
     anyInstance.emit.apply(anyInstance, arguments)
     Model.EventEmitter.prototype.emit.apply(this, arguments)
+  },
+
+  get: function(name) {
+    if (arguments.length) {
+      // Changes take precedent over attributes.
+      return (name in this.changes) ?
+        this.changes[name] :
+        this.attributes[name]
+    } else {
+      // Combined attributes/changes object.
+      return Model.Utils.extend({}, this.attributes, this.changes)
+    }
   },
 
   id: function() {
@@ -103,8 +86,31 @@ Model.Model.prototype = {
     return this;
   },
 
+  set: function(name, value) {
+    if (arguments.length == 2) {
+      // Don't write to attributes yet, store in changes for now.
+      if (this.attributes[name] === value) {
+        // Clean up any stale changes.
+        delete this.changes[name];
+      } else {
+        this.changes[name] = value;
+      }
+
+      this.emit("change:" + name, this)
+    } else if (typeof name == "object") {
+      // Mass-assign attributes.
+      for (var key in name) {
+        this.set(key, name[key]);
+      }
+
+      this.emit("change", this)
+    }
+
+    return this
+  },
+
   toJSON: function() {
-    return this.attr()
+    return this.get()
   },
 
   valid: function() {

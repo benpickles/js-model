@@ -102,7 +102,7 @@
 
   Collection.prototype.pluck = function(attribute) {
     return this.map(function(model) {
-      return model.attr(attribute)
+      return model.get(attribute)
     })
   }
 
@@ -123,8 +123,8 @@
     }
 
     return this.sort(function(a, b) {
-      var a_attr = is_func ? extract(a) : a.attr(attribute_or_func)
-      var b_attr = is_func ? extract(b) : b.attr(attribute_or_func)
+      var a_attr = is_func ? extract(a) : a.get(attribute_or_func)
+      var b_attr = is_func ? extract(b) : b.get(attribute_or_func)
 
       if (a_attr < b_attr) {
         return -1

@@ -126,7 +126,7 @@
       var data = Model.REST.parseResponseData(xhr)
 
       // Remote data is the definitive source, update model.
-      if (success && model && data) model.attr(data)
+      if (success && model && data) model.set(data)
 
       if (callback) callback.call(model, success, xhr, data)
     }

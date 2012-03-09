@@ -97,7 +97,7 @@ test("#sort, #sortBy", function() {
   collection.push(b, a, c)
 
   var sorted = collection.sort(function(a, b) {
-    return a.attr("i") - b.attr("i")
+    return a.get("i") - b.get("i")
   })
 
   ok(sorted instanceof Model.Collection, "returns another Collection")
@@ -130,7 +130,7 @@ test("#detect", function() {
     indexes.push(i)
     ok(coll === collection)
     ok(this === obj)
-    return post.attr("title") === "c"
+    return post.get("title") === "c"
   }, obj)
 
   same(indexes, [0, 1, 2])
@@ -157,18 +157,18 @@ test("#every", function() {
     indexes.push(i)
     ok(coll === collection)
     ok(this === obj)
-    return post.attr("title") === "a"
+    return post.get("title") === "a"
   }, obj)
 
   same(indexes, [0, 1])
 
   ok(!every)
 
-  b.attr("title", "a")
-  c.attr("title", "a")
+  b.set("title", "a")
+  c.set("title", "a")
 
   every = collection.every(function(post) {
-    return post.attr("title") === "a"
+    return post.get("title") === "a"
   })
 
   ok(every)
@@ -248,7 +248,7 @@ test("#map", function() {
     indexes.push(i)
     ok(coll === collection)
     ok(this === obj)
-    return post.attr("title")
+    return post.get("title")
   }, obj)
 
   same(mapped, ["a", "b", "c"])
@@ -273,13 +273,13 @@ test("#some", function() {
     indexes.push(i)
     ok(coll === collection)
     ok(this === obj)
-    return post.attr("title") === "a"
+    return post.get("title") === "a"
   }, obj)
 
   ok(some)
 
   some = collection.some(function(post) {
-    return post.attr("title") === "z"
+    return post.get("title") === "z"
   })
 
   ok(!some)

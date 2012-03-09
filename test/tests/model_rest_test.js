@@ -73,7 +73,7 @@ test("update with named params in resource path", function() {
     this.use(Model.REST, "/root/:root_id/nested/:nested_id/posts")
   });
   var post = new Post({ id: 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
-  post.attr("title", "Nested amended");
+  post.set("title", "Nested amended")
 
   this.spy(jQuery, "ajax")
 
@@ -190,7 +190,7 @@ test("create - 422 response (failed validations)", function() {
     this.use(Model.REST, "/posts")
   });
   var post = new Post();
-  post.attr("title", "Foo");
+  post.set("title", "Foo")
 
   var server = this.sandbox.useFakeServer()
   server.respondWith("POST", "/posts", [422, {
@@ -203,7 +203,7 @@ test("create - 422 response (failed validations)", function() {
     ok(!success);
     ok(this === post);
     deepEqual(this.attributes, {}, "changes should not have been merged");
-    deepEqual(this.attr(), { title: "Foo" });
+    deepEqual(this.get(), { title: "Foo" })
     deepEqual(this.errors.on("title"), ['should not be "Foo"', 'should be "Bar"']);
   });
 
@@ -215,7 +215,7 @@ test("create failure", function() {
     this.use(Model.REST, "/posts")
   });
   var post = new Post();
-  post.attr({ title: "Foo", body: "..." });
+  post.set({ title: "Foo", body: "..." })
 
   equal(Post.collection.length, 0);
 
@@ -228,7 +228,7 @@ test("create failure", function() {
     ok(!success);
     ok(this === post);
     deepEqual(this.attributes, {}, "changes should not have been merged");
-    deepEqual(this.attr(), { title: "Foo", body: "..." });
+    deepEqual(this.get(), { title: "Foo", body: "..." })
     equal(Post.collection.length, 0);
   });
 
@@ -276,7 +276,7 @@ test("update", function() {
     this.use(Model.REST, "/posts")
   });
   var post = new Post({ id: 1, title: "Foo", body: "..." });
-  post.attr("title", "Bar");
+  post.set("title", "Bar")
 
   this.spy(jQuery, "ajax")
 
@@ -307,7 +307,7 @@ test("update - blank response (Rails' `head :ok`)", function() {
     this.use(Model.REST, "/posts")
   });
   var post = new Post({ id: 1, title: "Foo", body: "..." });
-  post.attr("title", "Bar");
+  post.set("title", "Bar")
 
   var server = this.sandbox.useFakeServer()
   server.respondWith("PUT", "/posts/1", [200, {
@@ -344,7 +344,7 @@ test("update - 422 response (failed validations)", function() {
     this.use(Model.REST, "/posts")
   });
   var post = new Post({ id: 1 });
-  post.attr("title", "Foo");
+  post.set("title", "Foo")
 
   var server = this.sandbox.useFakeServer()
   server.respondWith("PUT", "/posts/1", [422, {
@@ -357,7 +357,7 @@ test("update - 422 response (failed validations)", function() {
     ok(!success);
     ok(this === post);
     deepEqual(this.attributes, { id: 1 }, "changes should not have been merged");
-    deepEqual(this.attr(), { id: 1, title: "Foo" });
+    deepEqual(this.get(), { id: 1, title: "Foo" })
     deepEqual(this.errors.on("title"), ['should not be "Foo"', 'should be "Bar"']);
   });
 
@@ -369,7 +369,7 @@ test("update failure", function() {
     this.use(Model.REST, "/posts-failure")
   });
   var post = new Post({ id: 1, title: "Foo" });
-  post.attr("title", "Bar");
+  post.set("title", "Bar")
 
   var server = this.sandbox.useFakeServer()
   server.respondWith("PUT", "/posts/1", [500, {

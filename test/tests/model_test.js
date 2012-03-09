@@ -13,49 +13,49 @@ test("defining attributes when instanciating a model", function() {
   deepEqual("a", post.attributes.a)
 })
 
-test("attr, attributes, changes, reset, save, destroy", function() {
+test("get, set, attributes, changes, reset, save, destroy", function() {
   var Post = Model("post");
   var post = new Post({ title: "Foo", body: "..." });
 
   deepEqual(post.attributes, { title: "Foo", body: "..." });
   deepEqual(post.changes, {});
 
-  var attr = post.attr();
+  var attr = post.get()
   deepEqual(attr, { title: "Foo", body: "..." });
   attr.title = "Bar";
   equal(post.attributes.title, "Foo", "`attr` should return a copy of attributes not the real thing");
 
-  post.attr("title", null);
+  post.set("title", null)
   equal(post.attributes.title, "Foo", "attributes should be unchanged");
   equal(post.changes.title, null);
-  equal(post.attr("title"), null, "null value should be read back as null");
+  equal(post.get("title"), null, "null value should be read back as null")
 
-  post.attr("title", "Foo");
+  post.set("title", "Foo")
   equal(post.attributes.title, "Foo");
   ok(!("title" in post.changes), "unchanged value shouldn't appear in changes");
-  equal(post.attr("title"), "Foo");
+  equal(post.get("title"), "Foo")
 
   post.reset();
   deepEqual(post.attributes, { title: "Foo", body: "..." });
   deepEqual(post.changes, {});
-  deepEqual(post.attr(), { title: "Foo", body: "..." });
+  deepEqual(post.get(), { title: "Foo", body: "..." })
 
   // Set attribute using attr.
-  ok(post.attr("title", "Bar") === post, "returns self");
+  ok(post.set("title", "Bar") === post, "returns self")
 
   // Check attributes and changes.
-  equal(post.attr("title"), "Bar");
+  equal(post.get("title"), "Bar")
   deepEqual(post.attributes, { title: "Foo", body: "..." }, "attributes should be unchanged");
   deepEqual(post.changes, { title: "Bar" });
-  deepEqual(post.attr(), { title: "Bar", body: "..." });
+  deepEqual(post.get(), { title: "Bar", body: "..." })
 
   ok(post.reset() === post, "returns self");
 
-  equal(post.attr("title"), "Foo");
+  equal(post.get("title"), "Foo")
   deepEqual(post.changes, {});
 
   // Set again
-  post.attr("title", "Bar");
+  post.set("title", "Bar")
 
   deepEqual(post.attributes, { title: "Foo", body: "..." });
   deepEqual(post.changes, { title: "Bar" });
@@ -65,7 +65,7 @@ test("attr, attributes, changes, reset, save, destroy", function() {
   deepEqual(post.attributes, { title: "Bar", body: "..." });
   deepEqual(post.changes, {});
 
-  ok(post.attr({ title: "Foo", bar: "Bar" }) === post, "returns self");
+  ok(post.set({ title: "Foo", bar: "Bar" }) === post, "returns self")
 
   deepEqual(post.attributes, { title: "Bar", body: "..." });
   deepEqual(post.changes, { title: "Foo", bar: "Bar" });
@@ -102,12 +102,12 @@ test("custom methods", function() {
 test("valid, validate, errors", function() {
   var Post = Model("post", function() {
     this.prototype.validate = function() {
-      if (!/\S/.test(this.attr("body") || ""))
+      if (!/\S/.test(this.get("body") || ""))
         this.errors.add("body", "can't be blank");
 
-      if (this.attr("title") == "Foo")
+      if (this.get("title") == "Foo")
         this.errors.add("title", "should not be Foo");
-      if (this.attr("title") != "Bar")
+      if (this.get("title") != "Bar")
         this.errors.add("title", "should be Bar");
     }
   });
@@ -123,7 +123,7 @@ test("valid, validate, errors", function() {
     ok(!success);
   });
 
-  post.attr("title", "Foo");
+  post.set("title", "Foo")
 
   ok(!post.valid());
   equal(post.errors.size(), 3);
@@ -136,7 +136,7 @@ test("valid, validate, errors", function() {
   deepEqual(post.errors.on("body"), []);
   deepEqual(post.errors.on("title"), []);
 
-  post.attr({
+  post.set({
     body: "...",
     title: "Bar"
   });
@@ -258,7 +258,7 @@ test("anyInstance events", 14, function() {
   }
 })
 
-test("change event", 5, function() {
+test("change event", function() {
   var Post = Model.Model.extend()
   var post = new Post({ foo: "bar", abc: 123, xyz: 789 })
 
@@ -283,8 +283,8 @@ test("change event", 5, function() {
     ok(false)
   })
 
-  post.attr("foo", "baz")
-  post.attr({ foo: "bob", xyz: 123 })
+  post.set("foo", "baz")
+  post.set({ foo: "bob", xyz: 123 })
 
   same(events, ["change:foo", "change:foo", "change:xyz", "change"])
 })

@@ -7,7 +7,7 @@ test("methods added to Model.Model after an instance has been defined", function
   ok(post.attrUpper === undefined)
 
   Model.Model.prototype.attrUpper = function(attr) {
-    return this.attr(attr).toUpperCase()
+    return this.get(attr).toUpperCase()
   }
 
   equal("UPPER", post.attrUpper("title"))
