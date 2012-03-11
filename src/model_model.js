@@ -18,6 +18,8 @@
   }
 
   function set(name, value) {
+    var from = this.get(name)
+
     // Don't write to attributes yet, store in changes for now.
     if (this.attributes[name] === value) {
       // Clean up any stale changes.
@@ -26,7 +28,7 @@
       this.changes[name] = value
     }
 
-    this.emit("change:" + name, this)
+    this.emit("change:" + name, this, from, value)
   }
 
   Model.Model.prototype = {
