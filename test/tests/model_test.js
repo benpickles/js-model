@@ -1,16 +1,16 @@
 module("Model");
 
-test("defining attributes when instanciating a model", function() {
-  var Post = Model("post")
-  var post
-
-  post = new Post(undefined)
-  deepEqual({}, post.attributes)
-
+test("defining attributes when instantiating a model", function() {
   var attributes = { a: "a", b: "b" }
-  post = new Post(attributes)
+  var model = new Model.Model(attributes)
+
+  deepEqual(attributes, model.attributes, "attributes are set")
+
   attributes.a = "b"
-  deepEqual("a", post.attributes.a)
+
+  equal(model.attributes.a, "a", "attributes are copied")
+
+  deepEqual({}, new Model.Model(undefined).attributes, "attributes is an empty object")
 })
 
 test("get, set, attributes, changes, reset, save, destroy", function() {

@@ -48,7 +48,7 @@
 
     emit: function() {
       var anyInstance = this.constructor.anyInstance
-      anyInstance.emit.apply(anyInstance, arguments)
+      if (anyInstance) anyInstance.emit.apply(anyInstance, arguments)
       Model.EventEmitter.prototype.emit.apply(this, arguments)
     },
 
