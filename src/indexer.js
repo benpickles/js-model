@@ -9,7 +9,7 @@
   }
 
   Model.Indexer.prototype.add = function(model) {
-    this.get(model.get(this.attribute)).add(model)
+    this.get(this.toKey(model)).add(model)
     model.on("change:" + this.attribute, this.change, this)
   }
 
@@ -23,7 +23,11 @@
   }
 
   Model.Indexer.prototype.remove = function(model) {
-    this.get(model.get(this.attribute)).remove(model)
+    this.get(this.toKey(model)).remove(model)
     model.off("change:" + this.attribute, this.change, this)
+  }
+
+  Model.Indexer.prototype.toKey = function(model) {
+    return model.get(this.attribute)
   }
 })(Model);

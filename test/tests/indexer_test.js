@@ -37,3 +37,29 @@ test("manages its index correctly", function() {
   equal(index.get(2).length, 0, "model is removed from the index")
   equal(story2._events["change:project_id"].length, 0, "Indexer callbacks are cleaned up")
 })
+
+test("with a custom #toKey", function() {
+  var Story = Model("story")
+
+  var story1 = new Story({ when: new Date(2012, 2, 3) })
+  var story2 = new Story({ when: new Date(2012, 2, 14) })
+  var story3 = new Story({ when: new Date(2012, 2, 3) })
+
+  var index = new Model.Indexer(Story.collection, "when")
+
+  index.toKey = function(model) {
+    var when = model.get("when")
+    return [when.getFullYear(), when.getMonth(), when.getDate()].join("-")
+  }
+
+  Story.collection.add(story1)
+  Story.collection.add(story2)
+  Story.collection.add(story3)
+
+  equal(index.get("2012-2-3").length, 2)
+  equal(index.get("2012-2-14").length, 1)
+
+  ok(index.get("2012-2-3").first() === story1)
+  ok(index.get("2012-2-3").last() === story3)
+  ok(index.get("2012-2-14").first() === story2)
+})
