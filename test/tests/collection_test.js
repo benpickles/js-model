@@ -356,3 +356,28 @@ test("#toArray", function() {
 
   ok(collection.at(0) == a, "array modification doesn't touch collection")
 })
+
+test("#slice", function() {
+  var Post = Model("post")
+  var collection = new Model.Collection()
+
+  var a = new Post({ title: "a" })
+  var b = new Post({ title: "b" })
+  var c = new Post({ title: "c" })
+
+  collection.push(a, b, c)
+
+  var sliced = collection.slice()
+
+  ok(sliced instanceof Model.Collection, "returns another Collection")
+  equal(sliced.length, 3)
+  ok(sliced.at(0) === a)
+  ok(sliced.at(1) === b)
+  ok(sliced.at(2) === c)
+
+  sliced = collection.slice(1, 2)
+
+  ok(sliced instanceof Model.Collection, "returns another Collection")
+  equal(sliced.length, 1)
+  ok(sliced.at(0) === b)
+})

@@ -26,6 +26,7 @@
     "push",        false,       false,        true,
     "reverse",     true,        false,        false,
     "shift",       false,       false,        true,
+    "slice",       true,        false,        false,
     "some",        false,       true,         false,
     "sort",        true,        false,        false,
     "splice",      true,        false,        true,
