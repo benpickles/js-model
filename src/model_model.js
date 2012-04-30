@@ -3,7 +3,7 @@
     this.attributes = Model.Utils.extend({}, attributes)
     this.changes = {}
     this.errors = new Model.Errors(this)
-    this.uid = [name, Model.UID.generate()].join("-")
+    this.uid = Model.UID()
     if (Model.Utils.isFunction(this.initialize)) this.initialize()
     this.emit("initialize", this)
   }

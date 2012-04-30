@@ -1,12 +1,7 @@
-Model.UID = {
-  counter: 0,
+;(function(Model) {
+  var counter = 0
 
-  generate: function() {
-    return [new Date().valueOf(), this.counter++].join("-")
-  },
-
-  reset: function() {
-    this.counter = 0
-    return this
+  Model.UID = function() {
+    return [counter++, new Date().valueOf()].join("-")
   }
-};
+})(Model)
