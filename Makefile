@@ -8,7 +8,6 @@ SRC = src/header.js \
       src/model_class_methods.js \
       src/model_errors.js \
       src/collection.js \
-      src/model_log.js \
       src/model_rest.js \
       src/null_persistence.js \
       src/model_local_storage.js \

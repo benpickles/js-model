@@ -154,7 +154,9 @@
         jQuery.parseJSON(xhr.responseText) :
         undefined;
     } catch(e) {
-      Model.Log(e);
+      try {
+        console.log(e)
+      } catch(_) {}
     }
   };
 })(Model);
