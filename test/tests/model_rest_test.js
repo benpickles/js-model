@@ -2,7 +2,7 @@ module("Model.REST");
 
 test("read()", 3, function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts")
+    this.use(Model.REST, "/posts")
   })
 
   var server = this.sandbox.useFakeServer()
@@ -13,7 +13,7 @@ test("read()", 3, function() {
     { id: 2, title: "Foo" }
   ])])
 
-  Post.persistence().read(function(models) {
+  Post.persistence.read(function(models) {
     equal(models.length, 2)
 
     var post1 = models[0]
@@ -28,7 +28,7 @@ test("read()", 3, function() {
 
 test("read() with a single instance", 2, function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts")
+    this.use(Model.REST, "/posts")
   })
 
   var server = this.sandbox.useFakeServer()
@@ -36,7 +36,7 @@ test("read() with a single instance", 2, function() {
     "Content-Type": "application/json"
   }, JSON.stringify({ id: 1, title: "Bar" })])
 
-  Post.persistence().read(function(models) {
+  Post.persistence.read(function(models) {
     equal(models.length, 1)
     deepEqual({ id: 1, title: "Bar" }, models[0].attributes)
   })
@@ -46,7 +46,7 @@ test("read() with a single instance", 2, function() {
 
 test("create with named params in resource path", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/root/:root_id/nested/:nested_id/posts")
+    this.use(Model.REST, "/root/:root_id/nested/:nested_id/posts")
   });
   var post = new Post({ title: "Nested", body: "...", root_id: 3, nested_id: 2 });
 
@@ -70,10 +70,10 @@ test("create with named params in resource path", function() {
 
 test("update with named params in resource path", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/root/:root_id/nested/:nested_id/posts")
+    this.use(Model.REST, "/root/:root_id/nested/:nested_id/posts")
   });
   var post = new Post({ id: 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
-  post.attr("title", "Nested amended");
+  post.set("title", "Nested amended")
 
   this.spy(jQuery, "ajax")
 
@@ -98,7 +98,7 @@ test("update with named params in resource path", function() {
 test("update with custom unique_key field", function() {
   var Post = Model("post", function() {
     this.unique_key = '_id'
-    this.persistence(Model.REST, "/posts")
+    this.use(Model.REST, "/posts")
   });
   var post = new Post({ '_id': 1, title: "Foo" });
 
@@ -125,7 +125,7 @@ test("update with custom unique_key field", function() {
 
 test("destroy with named params in resource path", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/root/:root_id/nested/:nested_id/posts")
+    this.use(Model.REST, "/root/:root_id/nested/:nested_id/posts")
   });
   var post = new Post({ id: 1, title: "Nested", body: "...", root_id: 3, nested_id: 2 });
 
@@ -152,11 +152,11 @@ test("destroy with named params in resource path", function() {
 
 test("create", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts")
+    this.use(Model.REST, "/posts")
   });
   var post = new Post({ title: "Foo", body: "..." });
 
-  equal(Post.count(), 0);
+  equal(Post.collection.length, 0);
 
   this.spy(jQuery, "ajax")
 
@@ -172,7 +172,7 @@ test("create", function() {
     ok(this === post);
     deepEqual(post.attributes, { id: 1, title: "Foo amended", body: "...", foo: "bar" });
     equal(post.id(), 1);
-    equal(Post.count(), 1);
+    equal(Post.collection.length, 1);
   });
 
   ok(jQuery.ajax.calledOnce)
@@ -187,10 +187,10 @@ test("create", function() {
 
 test("create - 422 response (failed validations)", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts")
+    this.use(Model.REST, "/posts")
   });
   var post = new Post();
-  post.attr("title", "Foo");
+  post.set("title", "Foo")
 
   var server = this.sandbox.useFakeServer()
   server.respondWith("POST", "/posts", [422, {
@@ -203,7 +203,7 @@ test("create - 422 response (failed validations)", function() {
     ok(!success);
     ok(this === post);
     deepEqual(this.attributes, {}, "changes should not have been merged");
-    deepEqual(this.attr(), { title: "Foo" });
+    deepEqual(this.get(), { title: "Foo" })
     deepEqual(this.errors.on("title"), ['should not be "Foo"', 'should be "Bar"']);
   });
 
@@ -212,12 +212,12 @@ test("create - 422 response (failed validations)", function() {
 
 test("create failure", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts")
+    this.use(Model.REST, "/posts")
   });
   var post = new Post();
-  post.attr({ title: "Foo", body: "..." });
+  post.set({ title: "Foo", body: "..." })
 
-  equal(Post.count(), 0);
+  equal(Post.collection.length, 0);
 
   var server = this.sandbox.useFakeServer()
   server.respondWith("POST", "/posts", [500, {
@@ -228,8 +228,8 @@ test("create failure", function() {
     ok(!success);
     ok(this === post);
     deepEqual(this.attributes, {}, "changes should not have been merged");
-    deepEqual(this.attr(), { title: "Foo", body: "..." });
-    equal(Post.count(), 0);
+    deepEqual(this.get(), { title: "Foo", body: "..." })
+    equal(Post.collection.length, 0);
   });
 
   server.respond()
@@ -243,11 +243,11 @@ test("create with AjaxSetup", function() {
   })
   
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts")
+    this.use(Model.REST, "/posts")
   });
   var post = new Post({ title: "Foo", body: "..." });
 
-  equal(Post.count(), 0);
+  equal(Post.collection.length, 0);
 
   this.spy(jQuery, "ajax")
 
@@ -273,10 +273,10 @@ test("create with AjaxSetup", function() {
 
 test("update", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts")
+    this.use(Model.REST, "/posts")
   });
   var post = new Post({ id: 1, title: "Foo", body: "..." });
-  post.attr("title", "Bar");
+  post.set("title", "Bar")
 
   this.spy(jQuery, "ajax")
 
@@ -304,10 +304,10 @@ test("update", function() {
 
 test("update - blank response (Rails' `head :ok`)", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts")
+    this.use(Model.REST, "/posts")
   });
   var post = new Post({ id: 1, title: "Foo", body: "..." });
-  post.attr("title", "Bar");
+  post.set("title", "Bar")
 
   var server = this.sandbox.useFakeServer()
   server.respondWith("PUT", "/posts/1", [200, {
@@ -323,7 +323,7 @@ test("update - blank response (Rails' `head :ok`)", function() {
 
 test("destroy - blank response (Rails' `head :ok`)", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts")
+    this.use(Model.REST, "/posts")
   });
   var post = new Post({ id: 1, title: "Foo", body: "..." });
 
@@ -341,10 +341,10 @@ test("destroy - blank response (Rails' `head :ok`)", function() {
 
 test("update - 422 response (failed validations)", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts")
+    this.use(Model.REST, "/posts")
   });
   var post = new Post({ id: 1 });
-  post.attr("title", "Foo");
+  post.set("title", "Foo")
 
   var server = this.sandbox.useFakeServer()
   server.respondWith("PUT", "/posts/1", [422, {
@@ -357,7 +357,7 @@ test("update - 422 response (failed validations)", function() {
     ok(!success);
     ok(this === post);
     deepEqual(this.attributes, { id: 1 }, "changes should not have been merged");
-    deepEqual(this.attr(), { id: 1, title: "Foo" });
+    deepEqual(this.get(), { id: 1, title: "Foo" })
     deepEqual(this.errors.on("title"), ['should not be "Foo"', 'should be "Bar"']);
   });
 
@@ -366,10 +366,10 @@ test("update - 422 response (failed validations)", function() {
 
 test("update failure", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts-failure")
+    this.use(Model.REST, "/posts-failure")
   });
   var post = new Post({ id: 1, title: "Foo" });
-  post.attr("title", "Bar");
+  post.set("title", "Bar")
 
   var server = this.sandbox.useFakeServer()
   server.respondWith("PUT", "/posts/1", [500, {
@@ -388,7 +388,7 @@ test("update failure", function() {
 
 test("destroy", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts")
+    this.use(Model.REST, "/posts")
   });
   var post = new Post({ id: 1, title: "Foo", body: "..." });
 
@@ -415,13 +415,13 @@ test("destroy", function() {
 
 test("destroy failure", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts")
+    this.use(Model.REST, "/posts")
   });
   var post = new Post({ id: 1, title: "Foo" });
 
-  Post.add(post);
+  Post.collection.add(post);
 
-  equal(Post.count(), 1);
+  equal(Post.collection.length, 1);
 
   var server = this.sandbox.useFakeServer()
   server.respondWith("DELETE", "/posts/1", [500, {
@@ -431,7 +431,7 @@ test("destroy failure", function() {
   post.destroy(function(success) {
     ok(!success);
     ok(this === post);
-    equal(Post.count(), 1);
+    equal(Post.collection.length, 1);
   });
 
   server.respond()
@@ -439,7 +439,7 @@ test("destroy failure", function() {
 
 test("destroy - 422 response (failed validations)", function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts")
+    this.use(Model.REST, "/posts")
   });
   var post = new Post({ id: 1, title: "Foo" });
 
@@ -461,7 +461,7 @@ test("destroy - 422 response (failed validations)", function() {
 
 test("create event", 1, function() {
   var Post = Model("post", function() {
-    this.persistence(Model.REST, "/posts")
+    this.use(Model.REST, "/posts")
   });
 
   var server = this.sandbox.useFakeServer()
@@ -470,7 +470,7 @@ test("create event", 1, function() {
   }, JSON.stringify({ id: 1 })])
 
   var post = new Post()
-  post.bind("create", function() { ok(true) })
+  post.on("save", function() { ok(true) })
   post.save()
 
   server.respond()
@@ -481,23 +481,16 @@ test("update event", 1, function() {
     this.use(Model.REST, "/posts")
   })
 
-  var events = []
-
-  // Stub trigger and capture its argument.
-  Post.prototype.trigger = function(name) {
-    events.push(name)
-  }
-
   var server = this.sandbox.useFakeServer()
   server.respondWith("PUT", "/posts/1", [200, {
     "Content-Type": "application/json"
   }, JSON.stringify({ id: 1 })])
 
-  new Post({ id: 1 }).save()
+  var post = new Post({ id: 1 })
+  post.on("save", function() { ok(true) })
+  post.save()
 
   server.respond()
-
-  deepEqual(events, ["update"])
 })
 
 test("destroy event", 1, function() {
@@ -505,17 +498,26 @@ test("destroy event", 1, function() {
     this.use(Model.REST, "/posts")
   })
 
-  // Stub trigger and capture its argument.
-  Post.prototype.trigger = function(name) {
-    equal(name, "destroy")
-  }
-
   var server = this.sandbox.useFakeServer()
   server.respondWith("DELETE", "/posts/1", [200, {
     "Content-Type": "application/json"
   }, " "])
 
-  new Post({ id: 1 }).destroy()
+  var post = new Post({ id: 1 })
+  post.on("destroy", function() { ok(true) })
+  post.destroy()
 
   server.respond()
+})
+
+test("custom methods", function() {
+  var Post = Model("post", function() {
+    this.use(Model.REST, "/posts", {
+      newRecord: function() {
+        return "blah"
+      }
+    })
+  })
+
+  equal(new Post().newRecord(), "blah")
 })

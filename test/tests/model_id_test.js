@@ -20,7 +20,7 @@ test("it should find by configured unique_key field", function() {
   var Post = Model("post", function() {
     this.unique_key = '_id'
   }),
-  post = Post.add(new Post({'_id': 222}));
+  post = Post.collection.add(new Post({'_id': 222}));
   
   deepEqual(Post.find(222).id(), 222);
 });

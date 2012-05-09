@@ -7,7 +7,7 @@ require 'toc'
 class Docs
   class << self
     def build
-      @version = File.read(File.expand_path('../../VERSION', __FILE__)).chomp
+      @version = File.read(File.expand_path('../../../VERSION', __FILE__)).chomp
       @file_size = file_size
       @file_size_min = file_size(:min)
       @sections = [
@@ -35,9 +35,7 @@ class Docs
         end
       end
 
-      File.open(File.expand_path('../../index.html', __FILE__), 'w') do |f|
-        f.write doc.to_html
-      end
+      doc.to_html
     end
 
     private
@@ -58,17 +56,17 @@ EOF
       end
 
       def file_size(min = nil)
-        bytes = File.size(File.expand_path("../../dist/js-model-#{@version}#{'.min' if min}.js", __FILE__))
+        bytes = File.size(File.expand_path("../../../js-model#{'.min' if min}.js", __FILE__))
         '%.1f' % (bytes.to_f / 1000)
       end
 
       def markdown(file_name)
-        md = File.expand_path("../../docs/#{file_name}.md", __FILE__)
+        md = File.expand_path("../../#{file_name}.md", __FILE__)
         RDiscount.new(File.read(md), :smart).to_html
       end
 
       def template
-        File.read(File.expand_path('../../docs/template.erb', __FILE__))
+        File.read(File.expand_path('../template.erb', __FILE__))
       end
   end
 end

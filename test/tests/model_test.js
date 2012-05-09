@@ -1,61 +1,61 @@
 module("Model");
 
-test("defining attributes when instanciating a model", function() {
-  var Post = Model("post")
-  var post
-
-  post = new Post(undefined)
-  deepEqual({}, post.attributes)
-
+test("defining attributes when instantiating a model", function() {
   var attributes = { a: "a", b: "b" }
-  post = new Post(attributes)
+  var model = new Model.Model(attributes)
+
+  deepEqual(attributes, model.attributes, "attributes are set")
+
   attributes.a = "b"
-  deepEqual("a", post.attributes.a)
+
+  equal(model.attributes.a, "a", "attributes are copied")
+
+  deepEqual({}, new Model.Model(undefined).attributes, "attributes is an empty object")
 })
 
-test("attr, attributes, changes, reset, save, destroy", function() {
+test("get, set, attributes, changes, reset, save, destroy", function() {
   var Post = Model("post");
   var post = new Post({ title: "Foo", body: "..." });
 
   deepEqual(post.attributes, { title: "Foo", body: "..." });
   deepEqual(post.changes, {});
 
-  var attr = post.attr();
+  var attr = post.get()
   deepEqual(attr, { title: "Foo", body: "..." });
   attr.title = "Bar";
   equal(post.attributes.title, "Foo", "`attr` should return a copy of attributes not the real thing");
 
-  post.attr("title", null);
+  post.set("title", null)
   equal(post.attributes.title, "Foo", "attributes should be unchanged");
   equal(post.changes.title, null);
-  equal(post.attr("title"), null, "null value should be read back as null");
+  equal(post.get("title"), null, "null value should be read back as null")
 
-  post.attr("title", "Foo");
+  post.set("title", "Foo")
   equal(post.attributes.title, "Foo");
   ok(!("title" in post.changes), "unchanged value shouldn't appear in changes");
-  equal(post.attr("title"), "Foo");
+  equal(post.get("title"), "Foo")
 
   post.reset();
   deepEqual(post.attributes, { title: "Foo", body: "..." });
   deepEqual(post.changes, {});
-  deepEqual(post.attr(), { title: "Foo", body: "..." });
+  deepEqual(post.get(), { title: "Foo", body: "..." })
 
   // Set attribute using attr.
-  ok(post.attr("title", "Bar") === post, "returns self");
+  ok(post.set("title", "Bar") === post, "returns self")
 
   // Check attributes and changes.
-  equal(post.attr("title"), "Bar");
+  equal(post.get("title"), "Bar")
   deepEqual(post.attributes, { title: "Foo", body: "..." }, "attributes should be unchanged");
   deepEqual(post.changes, { title: "Bar" });
-  deepEqual(post.attr(), { title: "Bar", body: "..." });
+  deepEqual(post.get(), { title: "Bar", body: "..." })
 
   ok(post.reset() === post, "returns self");
 
-  equal(post.attr("title"), "Foo");
+  equal(post.get("title"), "Foo")
   deepEqual(post.changes, {});
 
   // Set again
-  post.attr("title", "Bar");
+  post.set("title", "Bar")
 
   deepEqual(post.attributes, { title: "Foo", body: "..." });
   deepEqual(post.changes, { title: "Bar" });
@@ -65,7 +65,7 @@ test("attr, attributes, changes, reset, save, destroy", function() {
   deepEqual(post.attributes, { title: "Bar", body: "..." });
   deepEqual(post.changes, {});
 
-  ok(post.attr({ title: "Foo", bar: "Bar" }) === post, "returns self");
+  ok(post.set({ title: "Foo", bar: "Bar" }) === post, "returns self")
 
   deepEqual(post.attributes, { title: "Bar", body: "..." });
   deepEqual(post.changes, { title: "Foo", bar: "Bar" });
@@ -102,12 +102,12 @@ test("custom methods", function() {
 test("valid, validate, errors", function() {
   var Post = Model("post", function() {
     this.prototype.validate = function() {
-      if (!/\S/.test(this.attr("body") || ""))
+      if (!/\S/.test(this.get("body") || ""))
         this.errors.add("body", "can't be blank");
 
-      if (this.attr("title") == "Foo")
+      if (this.get("title") == "Foo")
         this.errors.add("title", "should not be Foo");
-      if (this.attr("title") != "Bar")
+      if (this.get("title") != "Bar")
         this.errors.add("title", "should be Bar");
     }
   });
@@ -123,7 +123,7 @@ test("valid, validate, errors", function() {
     ok(!success);
   });
 
-  post.attr("title", "Foo");
+  post.set("title", "Foo")
 
   ok(!post.valid());
   equal(post.errors.size(), 3);
@@ -136,7 +136,7 @@ test("valid, validate, errors", function() {
   deepEqual(post.errors.on("body"), []);
   deepEqual(post.errors.on("title"), []);
 
-  post.attr({
+  post.set({
     body: "...",
     title: "Bar"
   });
@@ -156,84 +156,31 @@ test("valid, validate, errors", function() {
 test('model collection "class" methods', function() {
   var Post = Model("post");
 
-  ok(Post.first() === undefined, "collection starts empty");
+  ok(Post.collection.first() === undefined, "collection starts empty");
 
   var post = new Post();
-  ok(Post.first() === undefined, "collection is unaffected");
+  ok(Post.collection.first() === undefined, "collection is unaffected");
 
   post.save();
-  ok(Post.first() === post, "post added to collection automatically");
+  ok(Post.collection.first() === post, "post added to collection automatically");
 
   post.destroy();
-  ok(Post.first() === undefined, "post removed from collection automatically");
-});
-
-test("persistence", function() {
-  var results = [];
-  var post;
-
-  var TestPersistence = function() {
-    return {
-      create: function(model, callback) {
-        ok(model === post)
-        results.push("create");
-        results.push(callback());
-      },
-
-      destroy: function(model, callback) {
-        ok(model === post)
-        results.push("destroy");
-        results.push(callback());
-      },
-
-      update: function(model, callback) {
-        ok(model === post)
-        results.push("update");
-        results.push(callback());
-      }
-    }
-  };
-
-  var Post = Model("post", function() {
-    this.persistence(TestPersistence)
-  });
-
-  var callback = function() {
-    return "callback";
-  };
-
-  post = new Post();
-  post.save(callback);
-  post.attributes.id = 1;
-  post.save(callback);
-  post.destroy(callback);
-
-  deepEqual(results, [
-    "create", "callback",
-    "update", "callback",
-    "destroy", "callback"
-  ]);
+  ok(Post.collection.first() === undefined, "post removed from collection automatically");
 });
 
 test("persistence failure", function() {
-  var TestPersistence = function() {
-    return {
-      create: function(model, callback) {
-        callback(false);
-      },
+  var TestPersistence = {
+    destroy: function(model, callback) {
+      callback(false);
+    },
 
-      destroy: function(model, callback) {
-        callback(false);
-      },
-
-      update: function(model, callback) {
-        callback(false);
-      }
+    save: function(model, callback) {
+      callback(false);
     }
   };
 
   var Post = Model("post", function() {
-    this.persistence(TestPersistence)
+    this.persistence = TestPersistence
   });
 
   var events = [];
@@ -247,7 +194,7 @@ test("persistence failure", function() {
   post.save();
 
   deepEqual(events, [], "should not trigger create event if persistence failed");
-  deepEqual(Post.all(), [], "post should not be added to collection");
+  deepEqual(Post.collection.length, 0, "post should not be added to collection");
 
   post.attributes.id = 1;
   post.save();
@@ -275,36 +222,69 @@ test("saving a model with an id should add it to the collection if it isn't alre
   var Post = Model("post")
   var post = new Post({ id: 1 }).save()
 
-  ok(Post.first() === post)
+  ok(Post.collection.first() === post)
 })
 
-test("change event", 5, function() {
+test("anyInstance events", 14, function() {
   var Post = Model("post")
+
+  var results = []
+
+  Post.anyInstance.on("initialize", function(post) { results.push("initialize", post) })
+  Post.anyInstance.on("save", function(post) { results.push("save", post) })
+  Post.anyInstance.on("destroy", function(post) { results.push("destroy", post) })
+
+  var post1 = new Post()
+  var post2 = new Post()
+  var post3 = new Post()
+
+  post1.save()
+  post3.save()
+  post1.destroy()
+  post2.save()
+
+  var expected = [
+    "initialize", post1,
+    "initialize", post2,
+    "initialize", post3,
+    "save", post1,
+    "save", post3,
+    "destroy", post1,
+    "save", post2
+  ]
+
+  for (var i = 0; i < expected.length; i++) {
+    ok(results[i] === expected[i])
+  }
+})
+
+test("change event", function() {
+  var Post = Model.Model.extend()
   var post = new Post({ foo: "bar", abc: 123, xyz: 789 })
 
   var events = []
 
-  post.bind("change", function(p) {
+  post.on("change", function(p) {
     ok(p === post)
     events.push("change")
   })
 
-  post.bind("change:foo", function(p) {
+  post.on("change:foo", function(p) {
     ok(p === post)
     events.push("change:foo")
   })
 
-  post.bind("change:xyz", function(p) {
+  post.on("change:xyz", function(p) {
     ok(p === post)
     events.push("change:xyz")
   })
 
-  post.bind("change:abc", function() {
+  post.on("change:abc", function() {
     ok(false)
   })
 
-  post.attr("foo", "baz")
-  post.attr({ foo: "bob", xyz: 123 })
+  post.set("foo", "baz")
+  post.set({ foo: "bob", xyz: 123 })
 
-  same(events, ["change:foo", "change:foo", "change:xyz", "change"])
+  same(events, ["change:foo", "change", "change:foo", "change:xyz", "change"])
 })

@@ -11,14 +11,18 @@ Model.Utils = {
     return receiver
   },
 
-  inArray: function(array, obj) {
-    if (array.indexOf) return array.indexOf(obj)
+  inherits: function(parent) {
+    var ctor = function() {}
+    ctor.prototype = parent.prototype
 
-    for (var i = 0, length = array.length; i < length; i++) {
-      if (array[i] === obj) return i
+    var child = function() {
+      parent.apply(this, arguments)
     }
 
-    return -1
+    child.prototype = new ctor()
+    child.prototype.constructor = child
+
+    return child
   },
 
   isFunction: function(obj) {
