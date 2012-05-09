@@ -8,10 +8,10 @@ This allows you to create instances of "project" models and also contains an int
 
 ### Manipulating objects
 
-Now you can create and manipulate instances of your new model. Attributes are read and set with the [`attr()`](#attr) method which works in a similar way to jQuery on the DOM.
+Now you can create and manipulate instances of your new model. Attributes are read and set with the [`get()`](#get) and [`set()`](#set) methods.
 
     var project = new Project({ id: 1, title: "stuff" })
-    project.attr("title", "nonsense")
+    project.set("title", "nonsense")
     project.save()
 
 ### Finding objects
@@ -43,7 +43,7 @@ When [creating a model](#model) you can pass a function as the optional second a
       this.extend({
         find_by_title: function(title) {
           return this.detect(function() {
-            return this.attr("title") == title
+            return this.get("title") == title
           })
         }
       })
@@ -59,7 +59,7 @@ You can also "[include](#include)" instance methods on the model's prototype. Th
     var Project = Model("project", function() {
       this.include({
         markAsDone: function() {
-          this.attr("done", true)
+          this.set("done", true)
         }
       })
     })
@@ -74,7 +74,7 @@ Simple associations can be mimicked by adding a couple of instance methods. Here
     var Cat = Model("cat", function() {
       this.include({
         mat: function() {
-          var mat_id = this.attr("mat_id")
+          var mat_id = this.get("mat_id")
 
           return Mat.detect(function() {
             return this.id() == mat_id
@@ -89,7 +89,7 @@ Simple associations can be mimicked by adding a couple of instance methods. Here
           var id = this.id()
 
           return Cat.select(function() {
-            return this.attr("mat_id") == id
+            return this.get("mat_id") == id
           })
         }
       })
@@ -118,7 +118,7 @@ Parts of your application can be bound to changes which happen to a specific ins
     var project = Project.first()
 
     project.bind("update", function() {
-      my_ui_elem.text(this.attr("name"))
+      my_ui_elem.text(this.get("name"))
     })
 
 Including when the instance is destroyed:

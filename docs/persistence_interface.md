@@ -2,11 +2,11 @@
 
 Persistence adapters implement CRUD and return an object with the following interface. You probably don't need to know this but is documented here in case you want to implement your own.
 
-#### `create(model, callback)`
+#### `save(model, callback)`
 
 Calls the supplied callback with a boolean indicating whether the action was a success or not and any further parameters that the persistence adapter sends.
 
-    Project.persistence().create(project, function(success) {
+    Project.persistence().save(project, function(success) {
       // do something...
     })
 
@@ -24,12 +24,4 @@ Calls the supplied callback with an array of models -- models are **not** automa
 
     Project.persistence().read(function(models) {
       // do something with the models...
-    })
-
-#### `update(model, callback)`
-
-Calls the supplied callback with a boolean indicating whether the action was a success or not and any further parameters that the persistence adapter sends.
-
-    Project.persistence().update(project, function(success) {
-      // do something...
     })

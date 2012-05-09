@@ -32,17 +32,8 @@
   }
 
   Model.Model.prototype = {
-    destroy: function(callback) {
-      var self = this
-
-      this.constructor.persistence.destroy(this, function(success) {
-        if (success) {
-          self.emit("destroy", self)
-        }
-
-        if (callback) callback.apply(this, arguments)
-      })
-
+    destroy: function() {
+      this.emit("destroy", this)
       return this
     },
 

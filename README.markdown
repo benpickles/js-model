@@ -11,7 +11,7 @@ Declare a model class:
 Now create and manipulate model instances:
 
     var todo = new Todo({ text: "do it" })
-    todo.attr("when", "now")
+    todo.set("when", "now")
     todo.save()
 
 ## Documentation / download / more

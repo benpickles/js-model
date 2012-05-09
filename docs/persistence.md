@@ -16,7 +16,7 @@ Calling [`save()`](#save) or [`destroy()`](#destroy) on an object now fires a co
 
     var project = new Project({ name: "stuff" })
     project.save()                            //   POST /projects
-    project.attr("name", "nonsense").save()   //    PUT /projects/1
+    project.set("name", "nonsense").save()    //    PUT /projects/1
     project.destroy()                         // DELETE /projects/1
 
 When responding to POST or PUT requests any JSON returned will be [merged](#merge) into the model's [`attributes`](#attributes) -- you should also make sure to include the id in the POST response so it can be assigned to the model. 422 responses from the server will be interpreted as having failed validations, any returned JSON will be assumed to be errors and replace client-side [`errors`](#api-errors).

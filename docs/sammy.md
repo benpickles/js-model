@@ -26,7 +26,7 @@ js-model works really well with Sammy -- you *are* using [Sammy](http://code.qui
 
       this.put("#/projects/:id", function(context) {
         var project = Project.find(this.params.id)
-        project.attr(this.param.project)
+        project.set(this.param.project)
           .save(function(success) {
             if (success) {
               context.redirect("#/projects/" + project.id())

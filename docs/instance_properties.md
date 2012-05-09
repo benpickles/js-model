@@ -1,45 +1,8 @@
-### Instance properties
-
-#### `attr()`
-
-Get and set a model's attribute(s). `attr()` can be used in a few ways:
-
-* `attr(name)` -- Get the value of the named attribute.
-* `attr(name, value)` -- Set the value of the named attribute.
-* `attr()` -- Get an object containing all name/value attribute pairs.
-* `attr(object)` -- Set multiple name/value attribute pairs.
-
-Attributes modified using `attr()` can be reverted -- see [`changes`](#changes) for more information.
-
-    var project = new Project({ title: "Foo", category: "Stuff" })
-
-    // Get attribute
-    project.attr("title")
-    // => "Foo"
-
-    // Set attribute
-    project.attr("title", "Bar")
-
-    // Get attribute again
-    project.attr("title")
-    // => "Bar"
-
-    // Chain setters
-    project.attr("title", "Baz").attr("category", "Nonsense")
-
-    // Set multiple attributes
-    project.attr({
-      title: "Foo again",
-      tags: "stuff nonsense"
-    })
-
-    // Get all attributes
-    project.attr()
-    // => { title: "Foo again", category: "Nonsense", tags: "stuff nonsense" }
+### Model
 
 #### `attributes`
 
-Direct access to a model's attributes object. Most of the time you won't need to use this and should use [`attr()`](#attr) instead.
+Direct access to a model's attributes object. Most of the time you won't need to use this and should use [`get()`](#get) and [`set()`](#set) instead.
 
     var project = new Project({ title: "Foo" })
     project.attributes
@@ -47,25 +10,25 @@ Direct access to a model's attributes object. Most of the time you won't need to
 
 #### `changes`
 
-Attributes set with the [`attr()`](#attr) method are written to the `changes` intermediary object rather than directly to the [`attributes`](#attributes) object. This allows you to see any previous attribute values and enables validations -- see [`validate()`](#validate) for more on validations. `changes` are committed to [`attributes`](#attributes) on successful [`save()`](#save).
+Attributes set with the [`set()`](#set) method are written to the `changes` intermediary object rather than directly to the [`attributes`](#attributes) object. This allows you to see any previous attribute values and enables validations -- see [`validate()`](#validate) for more on validations. `changes` are committed to [`attributes`](#attributes) on successful [`save()`](#save).
 
     var project = new Project({ title: "Foo" })
     project.attributes             // => { title: "Foo" }
     project.changes                // => {}
 
     // Change title
-    project.attr("title", "Bar")
+    project.set("title", "Bar")
     project.attributes             // => { title: "Foo" }
     project.changes                // => { title: "Bar" }
-    project.attr("title")          // => "Bar"
+    project.get("title")           // => "Bar"
 
     // Change it back to what it was
-    project.attr("title", "Foo")
+    project.set("title", "Foo")
     project.attributes             // => { title: "Foo" }
     project.changes                // => {}
 
     // Change title again and reset changes
-    project.attr("title", "Bar")
+    project.set("title", "Bar")
     project.attributes             // => { title: "Foo" }
     project.changes                // => { title: "Bar" }
     project.reset()
@@ -87,9 +50,23 @@ Removes the model from the collection and calls [`destroy()`](#destroy) on the p
 
 Returns an [`Errors`](#api-errors) object containing information about any failed validations -- similar to ActiveRecord's Errors object. See [`Errors`](#api-errors) for more information. 
 
+#### `get([name])`
+
+Returns a model's attribute(s). Can be used to fetch either a specific attribute by passing the attribute name or all name/value attribute pairs by passing nothing.
+
+    var project = new Project({ title: "Foo", category: "Stuff" })
+
+    // Get attribute
+    project.get("title")
+    // => "Foo"
+
+    // Get all attributes
+    project.get()
+    // => { title: "Foo", category: "Stuff" }
+
 #### `id()`
 
-Convenience method, equivalent of calling `attr("id")`.
+Convenience method, equivalent of calling `get("id")`.
 
 #### `initialize()`
 
@@ -98,28 +75,14 @@ If an `initialize()` instance method is defined on a class it is called at the e
     var User = Model("user", function() {
       this.include({
         initialize: function() {
-          this.attr("state", "initialized")
+          this.set("state", "initialized")
         }
       })
     })
     var user = new User()
 
-    user.attr("state")
+    user.get("state")
     // => "initialized"
-
-#### `merge(object)`
-
-Destructivly merges the given object into the [`attributes`](#attributes) object. Used internally when saving and not really required for everyday use.
-
-    var User = Model("user")
-    var user = new User({ name: "Bob", occupation: "Taxidermist" })
-
-    user.attributes
-    // => { name: "Bob", occupation: "Taxidermist" }
-
-    user.merge({ occupation: "Stuffer" })
-    user.attributes
-    // => { name: "Bob", occupation: "Stuffer" }
 
 #### `newRecord()`
 
@@ -165,6 +128,36 @@ If your persistence layer returns any data this will also be [merged](#merge) in
       }
     })
 
+#### `set(name, value | attributes)`
+
+Set a model's attribute(s) passing either a name/value pair or an object containing multiple.
+
+Attributes modified using `set()` can be reverted -- see [`changes`](#changes) for more information.
+
+    var project = new Project({ title: "Foo", category: "Stuff" })
+
+    // Set attribute
+    project.set("title", "Bar")
+
+    // Chain setters
+    project
+      .set("title", "Baz")
+      .set("category", "Nonsense")
+
+    // Set multiple attributes
+    project.set({
+      title: "Foo again",
+      tags: "stuff nonsense"
+    })
+
+    // Get all attributes
+    project.get()
+    // => { title: "Foo again", category: "Nonsense", tags: "stuff nonsense" }
+
+#### `toJSON()`
+
+Hook to allow `JSON.stringify(myModel)` to work, returns a clone of the model's attributes.
+
 #### `uid`
 
 Automatically assigned on instantiation, this is a per-page-load-unique id -- used by the [localStorage persistence adapter](#localstorage).
@@ -180,7 +173,7 @@ Overwrite this method to add client-side validations to your model. This method 
     var Project = Model("project", function() {
       this.include({
         validate: function() {
-          if (this.attr("title") != "Bar") {
+          if (this.get("title") != "Bar") {
             this.errors.add("title", "should be Bar")
           }
         }
@@ -191,6 +184,6 @@ Overwrite this method to add client-side validations to your model. This method 
     project.valid()
     // => false
 
-    project.attr("title", "Bar")
+    project.set("title", "Bar")
     project.valid()
     // => true

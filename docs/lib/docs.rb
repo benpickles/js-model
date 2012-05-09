@@ -18,6 +18,7 @@ class Docs
           markdown('model') +
           markdown('class_properties') +
           markdown('instance_properties') +
+          markdown('collection') +
           markdown('errors') +
           markdown('persistence_interface')
       ]

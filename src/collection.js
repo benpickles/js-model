@@ -41,9 +41,10 @@
           , value
 
         if (enumerable) {
-          // Ensure enumerable method callbacks are passed this collection as
-          // as the third argument instead of the `this.models` array.
           value = models[name](function() {
+            // Ensure enumerable method callbacks are passed this collection
+            // as the third argument instead of the collections internal
+            // `models` array.
             arguments[2] = self
             return callback.apply(this, arguments)
           }, context)

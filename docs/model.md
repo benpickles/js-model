@@ -10,14 +10,14 @@ The optional function is used to define custom methods and properties on your ne
       this.extend({
         find_by_title: function(title) {
           return this.detect(function() {
-            return this.attr("title") == title
+            return this.get("title") == title
           })
         }
       })
 
       this.include({
         markAsDone: function() {
-          this.attr("done", true)
+          this.set("done", true)
         }
       })
     })
@@ -30,12 +30,12 @@ The function is also called with two arguments: the class itself and its prototy
     var Project = Model("project", function(klass, proto) {
       klass.find_by_title = function(title) {
         return this.detect(function() {
-          return this.attr("title") == title
+          return this.get("title") == title
         })
       }
 
       proto.markAsDone = function() {
-        this.attr("done", true)
+        this.set("done", true)
       }
     })
 
