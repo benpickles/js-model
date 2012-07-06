@@ -123,6 +123,37 @@ test("update with custom unique_key field", function() {
   server.respond()
 });
 
+test("update single resource", 3, function() {
+  var User = Model("user", function() {
+    this.use(Model.REST, "/user", {
+      update_path: function () {
+        return this.read_path()
+      }
+    })
+  });
+  var user = new User({ 'id': 1, email: "bob@example.com" });
+
+  this.spy(jQuery, "ajax")
+
+  var server = this.sandbox.useFakeServer()
+  server.respondWith("PUT", "/user", [200, {
+    "Content-Type": "application/json"
+  }, JSON.stringify({
+    id: 1, email: "bob@example.com"
+  })])
+
+  user.save(function(success) {
+    ok(success, "save() wasn't successful");
+  });
+
+  ok(jQuery.ajax.calledOnce)
+  deepEqual(JSON.parse(jQuery.ajax.getCall(0).args[0].data), {
+    user: { email: "bob@example.com" }
+  })
+
+  server.respond()
+})
+
 test("destroy with named params in resource path", function() {
   var Post = Model("post", function() {
     this.use(Model.REST, "/root/:root_id/nested/:nested_id/posts")
