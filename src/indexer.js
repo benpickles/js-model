@@ -19,7 +19,7 @@
   }
 
   Model.Indexer.prototype.get = function(key) {
-    return this.index[key] || (this.index[key] = new Model.Collection())
+    return this.index[key] || (this.index[key] = new this.collection.constructor())
   }
 
   Model.Indexer.prototype.remove = function(model) {

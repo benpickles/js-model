@@ -63,3 +63,21 @@ test("with a custom #toKey", function() {
   ok(index.get("2012-2-3").last() === story3)
   ok(index.get("2012-2-14").first() === story2)
 })
+
+test("creates collections of the same class as its source", function() {
+  var Story = Model("story", function(_, _, collection) {
+    collection.foo = function() {
+      return "foo"
+    }
+  })
+
+  var story1 = new Story({ project_id: 1 })
+  var story2 = new Story({ project_id: 2 })
+  var story3 = new Story({ project_id: 3 })
+
+  Story.collection.push(story1, story2, story3)
+
+  var index = new Model.Indexer(Story.collection, "project_id")
+
+  equal(index.get(1).foo(), "foo")
+})
