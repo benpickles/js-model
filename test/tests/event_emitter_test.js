@@ -50,3 +50,21 @@ test("unbinding by callback and scope", 1, function() {
 
   ee.emit("a")
 })
+
+test("emitting events with callbacks that unbind events", function () {
+  var ee = new Model.EventEmitter,
+      eventName = 'test',
+      callbackCalled = false
+
+  var handler = function () {
+    ee.off(eventName, arguments.callee)
+  }
+
+  ee.on('test', handler)
+  ee.on('test', function () { callbackCalled = true })
+
+  ee.emit('test')
+
+  ok(callbackCalled)
+
+})
