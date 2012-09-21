@@ -33,7 +33,7 @@
 
   EventEmitter.prototype.emit = function(name) {
     var args = Array.prototype.slice.call(arguments, 1)
-    var events = prepareEvent.call(this, name)
+    var events = prepareEvent.call(this, name).slice()
 
     for (var i = 0, length = events.length; i < length; i++) {
       var callback = events[i].callback
