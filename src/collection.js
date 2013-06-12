@@ -120,7 +120,7 @@
   Collection.prototype.sortBy = function(attribute_or_func) {
     var is_func = Model.Utils.isFunction(attribute_or_func)
     var extract = function(model) {
-      return attribute_or_func.call(model)
+      return attribute_or_func.call(model, model)
     }
 
     return this.sort(function(a, b) {
