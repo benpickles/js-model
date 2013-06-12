@@ -118,14 +118,21 @@
   }
 
   Collection.prototype.sortBy = function(attribute_or_func) {
-    var is_func = Model.Utils.isFunction(attribute_or_func)
-    var extract = function(model) {
-      return attribute_or_func.call(model, model)
+    var comparator
+
+    if(Model.Utils.isFunction(attribute_or_func)) {
+      comparator = function(model) {
+        return attribute_or_func.call(model, model)
+      }
+    } else {
+      comparator = function(model) {
+        return model.get(attribute_or_func)
+      }
     }
 
     return this.sort(function(a, b) {
-      var a_attr = is_func ? extract(a) : a.get(attribute_or_func)
-      var b_attr = is_func ? extract(b) : b.get(attribute_or_func)
+      var a_attr = comparator(a)
+      var b_attr = comparator(b)
 
       if (a_attr < b_attr) {
         return -1
