@@ -121,9 +121,7 @@
     var comparator
 
     if(Model.Utils.isFunction(attribute_or_func)) {
-      comparator = function(model) {
-        return attribute_or_func.call(model, model)
-      }
+      comparator = attribute_or_func
     } else {
       comparator = function(model) {
         return model.get(attribute_or_func)

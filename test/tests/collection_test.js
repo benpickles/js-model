@@ -112,15 +112,6 @@ test("#sort, #sortBy", function() {
   ok(sorted.at(1) === b)
   ok(sorted.at(2) === c)
 
-  sorted = collection.sortBy(function() {
-    return this.get("title")
-  })
-
-  ok(sorted instanceof Model.Collection, "returns another Collection")
-  ok(sorted.at(0) === a)
-  ok(sorted.at(1) === b)
-  ok(sorted.at(2) === c)
-
   sorted = collection.sortBy(function(post) {
     return post.get("title")
   })
